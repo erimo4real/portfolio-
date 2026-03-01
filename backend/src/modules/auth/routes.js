@@ -1,0 +1,131 @@
+// Authentication routes module
+// Handles login, logout, password reset, and session verification
+import express from "express";
+import jwt from "jsonwebtoken";
+import { login, bootstrapAdmin, requestPasswordReset, resetPassword } from "./service.js";
+import { getAdminById } from "./repository.js";
+import { z } from "zod";
+import { validate } from "../../middleware/validate.js";
+
+// Export authentication router
+export const authRouter = express.Router();
+
+// Validation schema for login request body
+// identifier: email or phone (min 3 chars)
+// password: minimum 6 chars
+const loginBody = z.object({
+  identifier: z.string().min(3),
+  password: z.string().min(6),
+  rememberMe: z.boolean().optional()
+});
+
+// POST /login - Authenticate admin user
+// Validates credentials and sets auth cookie for 7 days
+authRouter.post("/login", validate(loginBody), async (req, res, next) => {
+  try {
+    const { identifier, password } = req.body;
+    const result = await login(identifier, password);
+    
+    // Set httpOnly cookie - lasts 7 days
+    const maxAge = 7 * 24 * 60 * 60 * 1000;
+    res.cookie("auth_token", result.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: maxAge
+    });
+    
+    res.json({ success: true, admin: result.admin });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Validation schema for register request body
+const registerBody = z.object({
+  identifier: z.string().min(3),
+  password: z.string().min(6),
+  name: z.string().min(1).optional()
+});
+
+// POST /register - Create new admin account
+authRouter.post("/register", validate(registerBody), async (req, res, next) => {
+  try {
+    const { identifier, password, name } = req.body;
+    const { registerAdmin } = await import("./service.js");
+    const admin = await registerAdmin(identifier, password, name);
+    res.json({ success: true, admin });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Validation schema for forgot password request
+const forgotPasswordBody = z.object({
+  identifier: z.string().min(3)
+});
+
+// POST /forgot-password - Send password reset email
+// Takes identifier and sends reset link to user
+authRouter.post("/forgot-password", validate(forgotPasswordBody), async (req, res, next) => {
+  try {
+    const { identifier } = req.body;
+    const result = await requestPasswordReset(identifier);
+    res.json(result); // Return reset request result
+  } catch (err) {
+    next(err); // Pass error to error handler
+  }
+});
+
+// Validation schema for reset password request
+// token: reset token from email
+// password: new password (min 6 chars)
+const resetPasswordBody = z.object({
+  token: z.string(),
+  password: z.string().min(6)
+});
+
+// POST /reset-password - Update user password
+// Verifies reset token and updates password
+authRouter.post("/reset-password", validate(resetPasswordBody), async (req, res, next) => {
+  try {
+    const { token, password } = req.body;
+    const result = await resetPassword(token, password);
+    res.json(result); // Return reset result
+  } catch (err) {
+    next(err); // Pass error to handler
+  }
+});
+
+// GET /me - Verify current session
+// Checks auth token and returns admin info if valid
+authRouter.get("/me", async (req, res, next) => {
+  try {
+    const token = req.cookies?.auth_token;
+    if (!token) {
+      // No token found - not authenticated
+      return res.json({ isAuthenticated: false });
+    }
+    
+    // Verify JWT token
+    const secret = process.env.JWT_SECRET || "dev-secret-change-in-production";
+    const decoded = jwt.verify(token, secret);
+    
+    // Get admin from database using token subject (sub)
+    const admin = await getAdminById(decoded.sub);
+    
+    if (!admin) {
+      // Admin not found in database - not authenticated
+      return res.json({ isAuthenticated: false });
+    }
+    
+    // Return authenticated admin info
+    res.json({ 
+      isAuthenticated: true, 
+      admin: { id: admin.id, name: admin.name, email: admin.email } 
+    });
+  } catch (err) {
+    // Token invalid - not authenticated
+    res.json({ isAuthenticated: false });
+  }
+});
