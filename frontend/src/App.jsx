@@ -22,7 +22,7 @@ import SkillsManagement from "./features/admin/ui/SkillsManagement.jsx";
 import SkillsList from "./features/skills/ui/SkillsList.jsx";
 import ContactsAdmin from "./pages/admin/ContactsAdmin.jsx";
 import NotFound from "./pages/NotFound.jsx";
-import { ProtectedRoute } from "./components/ProtectedRoute.jsx";
+import { ProtectedRoute } from "./shared/components/ProtectedRoute.jsx";
 import { trackEvent } from "./lib/analytics.js";
 import { checkAuth } from "./store/slices/auth.js";
 
