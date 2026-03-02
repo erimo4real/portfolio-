@@ -669,7 +669,6 @@ export default function AdminLogin() {
                 )}
               </button>
             </form>
-            )}
 
             {/* Social Login */}
             <div style={{
