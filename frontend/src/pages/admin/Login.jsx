@@ -771,7 +771,6 @@ export default function AdminLogin() {
                 Register here
               </button>
             </div>
-            )}
           </div>
         </div>
       </div>
