@@ -187,7 +187,9 @@ export default function About() {
                       className="hover-scale"
                       onError={(e) => {
                         e.target.style.display = 'none';
-                        e.target.parentElement.innerHTML = '<span style="font-size: clamp(4rem, 15vw, 8rem);">👨‍💻</span>';
+                        if (e.target.parentElement) {
+                          e.target.parentElement.innerHTML = '<span style="font-size: clamp(4rem, 15vw, 8rem);">👨‍💻</span>';
+                        }
                       }}
                     />
                   </div>
