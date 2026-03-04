@@ -130,3 +130,9 @@ authRouter.get("/me", async (req, res, next) => {
     res.json({ isAuthenticated: false });
   }
 });
+
+// POST /logout - Clear auth cookie
+authRouter.post("/logout", (req, res) => {
+  res.clearCookie("auth_token");
+  res.json({ success: true });
+});
