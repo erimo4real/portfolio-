@@ -21,7 +21,7 @@ services:
     depends_on:
       - mongo
     volumes:
-      - ./backend/src/storage/uploads:/app/src/storage/uploads
+      - ./backend/storage/uploads:/app/storage/uploads
     restart: unless-stopped
 
   mongo:
