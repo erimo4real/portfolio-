@@ -16,15 +16,33 @@ export default function AdminLogin() {
   const [showRegister, setShowRegister] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
+  // Login form state
+  const [loginData, setLoginData] = useState(() => ({
+    identifier: "",
+    password: ""
+  }));
+
   // Register form state
-  const [registerData, setRegisterData] = useState({
+  const [registerData, setRegisterData] = useState(() => ({
     identifier: "",
     password: "",
     confirmPassword: "",
     name: ""
-  });
+  }));
   const [registerStatus, setRegisterStatus] = useState("idle");
   const [registerError, setRegisterError] = useState("");
+  const [googleLoading, setGoogleLoading] = useState(false);
+
+  async function handleGoogleLogin() {
+    setGoogleLoading(true);
+    try {
+      const { url } = await api.get("/auth/google");
+      window.location.href = url;
+    } catch (err) {
+      console.error("Google login error:", err);
+      setGoogleLoading(false);
+    }
+  }
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -38,8 +56,11 @@ export default function AdminLogin() {
 
   function onSubmit(e) {
     e.preventDefault();
-    const { identifier, password } = Object.fromEntries(new FormData(e.target));
-    dispatch(login({ identifier, password, rememberMe }));
+    dispatch(login({ identifier: loginData.identifier, password: loginData.password, rememberMe }));
+  }
+
+  function handleLoginChange(e) {
+    setLoginData({ ...loginData, [e.target.name]: e.target.value });
   }
 
   async function onRegisterSubmit(e) {
@@ -353,7 +374,7 @@ export default function AdminLogin() {
                     Name (optional)
                   </label>
                   <input 
-                    value={registerData.name}
+                    value={registerData.name || ""}
                     onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
                     placeholder="Your name"
                     style={{ width: "100%", padding: "0.875rem 1rem", borderRadius: "12px", border: "2px solid #e2e8f0", fontSize: "1rem", outline: "none" }}
@@ -364,7 +385,7 @@ export default function AdminLogin() {
                 <div style={{ marginBottom: "1rem", position: "relative" }}>
                   <span style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", fontSize: "1.1rem" }}>👤</span>
                   <input 
-                    value={registerData.identifier}
+                    value={registerData.identifier || ""}
                     onChange={(e) => setRegisterData({...registerData, identifier: e.target.value})}
                     placeholder="Email or Phone Number *"
                     required
@@ -384,7 +405,7 @@ export default function AdminLogin() {
                   <span style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", fontSize: "1.1rem" }}>🔒</span>
                   <input 
                     type={showPassword ? "text" : "password"}
-                    value={registerData.password}
+                    value={registerData.password || ""}
                     onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
                     placeholder="Password *"
                     required
@@ -408,7 +429,7 @@ export default function AdminLogin() {
                   <span style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", fontSize: "1.1rem" }}>🔒</span>
                   <input 
                     type={showPassword ? "text" : "password"}
-                    value={registerData.confirmPassword}
+                    value={registerData.confirmPassword || ""}
                     onChange={(e) => setRegisterData({...registerData, confirmPassword: e.target.value})}
                     placeholder="Confirm Password *"
                     required
@@ -459,6 +480,8 @@ export default function AdminLogin() {
                 }}>👤</span>
                 <input 
                   name="identifier" 
+                  value={loginData.identifier || ""}
+                  onChange={handleLoginChange}
                   placeholder="Email or Phone"
                   required
                   autoComplete="username"
@@ -484,6 +507,8 @@ export default function AdminLogin() {
               <div style={{ marginBottom: "1rem", position: "relative" }}>
                 <input 
                   name="password" 
+                  value={loginData.password || ""}
+                  onChange={handleLoginChange}
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   required
@@ -690,6 +715,8 @@ export default function AdminLogin() {
               <div style={{ display: "flex", gap: "0.75rem" }}>
                 <button
                   type="button"
+                  onClick={handleGoogleLogin}
+                  disabled={googleLoading}
                   style={{
                     flex: 1,
                     padding: "0.75rem",
@@ -703,8 +730,9 @@ export default function AdminLogin() {
                     color: "#334155",
                     fontWeight: "600",
                     fontSize: "0.875rem",
-                    cursor: "pointer",
-                    transition: "all 0.3s ease"
+                    cursor: googleLoading ? "not-allowed" : "pointer",
+                    transition: "all 0.3s ease",
+                    opacity: googleLoading ? 0.7 : 1
                   }}
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -713,7 +741,7 @@ export default function AdminLogin() {
                     <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                     <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                   </svg>
-                  Google
+                  {googleLoading ? "Loading..." : "Google"}
                 </button>
                 <button
                   type="button"

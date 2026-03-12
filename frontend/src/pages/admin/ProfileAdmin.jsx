@@ -2,11 +2,26 @@ import React, { useEffect, useState } from "react";
 import { api } from "../../lib/api.js";
 import { Link } from "react-router-dom";
 
+const getApiUrl = () => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl) {
+    return envUrl.replace(/\/api$/, '');
+  }
+  return '';
+};
+
 export default function ProfileAdmin() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
+  const [removedImage, setRemovedImage] = useState(false);
+
+  const getImageUrl = (path) => {
+    if (!path) return null;
+    if (path.startsWith('http')) return path;
+    return getApiUrl() + path;
+  };
 
   useEffect(() => {
     return () => {
@@ -49,6 +64,10 @@ export default function ProfileAdmin() {
     const imageInput = formElement.elements['image'];
     if (!imageInput.files[0]) {
       fd.delete('image');
+    }
+
+    if (removedImage && !imageInput.files[0]) {
+      fd.append('removeImage', 'true');
     }
     
     try {
@@ -190,61 +209,64 @@ export default function ProfileAdmin() {
               <h2 className="text-xl font-bold text-slate-800 mb-6">Profile Image</h2>
               
               <div className="space-y-5">
-                {/* Current Image Preview or Preview of New Image */}
-                {imagePreview ? (
-                  <div className="relative">
-                    <div className="aspect-square max-w-xs mx-auto rounded-2xl overflow-hidden bg-slate-100">
-                      <img 
-                        src={imagePreview} 
-                        alt="Preview" 
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="text-center mt-4 text-sm text-slate-500">
-                      New image preview
-                    </div>
+                {/* Image Preview - Shows new selection, existing image, or placeholder */}
+                <div className="relative">
+                  <div className="aspect-square max-w-xs mx-auto rounded-2xl overflow-hidden bg-slate-100">
+                    {imagePreview ? (
+                      <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                    ) : profile?.imagePath ? (
+                      <img src={getImageUrl(profile.imagePath)} alt="Current profile" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <div className="text-center text-slate-400">
+                          <div className="text-6xl mb-2">👤</div>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                ) : profile?.imagePath ? (
-                  <div className="relative">
-                    <div className="aspect-square max-w-xs mx-auto rounded-2xl overflow-hidden bg-slate-100">
-                      <img 
-                        src={profile.imagePath} 
-                        alt="Current profile" 
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="text-center mt-4 text-sm text-slate-500">
-                      Current profile image
-                    </div>
-                  </div>
-                ) : (
-                  <div className="aspect-square max-w-xs mx-auto rounded-2xl bg-slate-100 flex items-center justify-center">
-                    <div className="text-center text-slate-400">
-                      <div className="text-6xl mb-2">👤</div>
-                      <div className="text-sm">No image uploaded</div>
-                    </div>
+                  <input 
+                    name="image" 
+                    type="file" 
+                    accept="image/*"
+                    className="hidden"
+                    id="profile-image-upload"
+                    onChange={handleImageChange}
+                  />
+                  <label 
+                    htmlFor="profile-image-upload" 
+                    className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium cursor-pointer hover:bg-primary-700 transition-colors shadow-lg"
+                  >
+                    {imagePreview ? "Change Image" : (profile?.imagePath ? "Change Image" : "Upload Image")}
+                  </label>
+                </div>
+
+                {/* Image Status */}
+                <div className="text-center mt-16 text-sm text-slate-500">
+                  {imagePreview ? (
+                    <span className="text-green-600">New image selected</span>
+                  ) : profile?.imagePath ? (
+                    <span>Current image loaded from database</span>
+                  ) : (
+                    <span>No image uploaded yet</span>
+                  )}
+                </div>
+
+                {/* Remove Image Button */}
+                {(imagePreview || profile?.imagePath) && (
+                  <div className="text-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setImagePreview(null);
+                        setRemovedImage(true);
+                        setProfile({ ...profile, imagePath: null });
+                      }}
+                      className="text-red-500 text-sm hover:text-red-700"
+                    >
+                      Remove Image
+                    </button>
                   </div>
                 )}
-
-                {/* Upload New Image */}
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Upload New Image</label>
-                  <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-primary-400 transition-colors cursor-pointer">
-                    <input 
-                      name="image" 
-                      type="file" 
-                      accept="image/*"
-                      className="hidden"
-                      id="profile-image-upload"
-                      onChange={handleImageChange}
-                    />
-                    <label htmlFor="profile-image-upload" className="cursor-pointer">
-                      <div className="text-4xl mb-2">📁</div>
-                      <div className="text-sm font-medium text-slate-600">Click to upload</div>
-                      <div className="text-xs text-slate-400 mt-1">PNG, JPG, GIF up to 5MB</div>
-                    </label>
-                  </div>
-                </div>
 
                 {/* Tips */}
                 <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">

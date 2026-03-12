@@ -2,7 +2,7 @@
 // Contains business logic for login, password reset, and admin management
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { findAdminByEmailOrPhone, createAdmin } from "./repository.js";
+import { findAdminByEmailOrPhone, findAdminByGoogleId, findAdminByEmail, createAdmin, updateAdminGoogleId } from "./repository.js";
 import { sendPasswordResetEmail } from "../../lib/email.js";
 
 // Login function - validates credentials and generates JWT token
@@ -131,4 +131,51 @@ export async function registerAdmin(identifier, password, name) {
   // Create new admin account
   const admin = await createAdmin({ email, phone, name, passwordHash: hash });
   return { id: admin.id, email: admin.email, phone: admin.phone, name: admin.name };
+}
+
+export async function googleLogin(profile) {
+  const { googleId, emails, photos, displayName } = profile;
+  const email = emails?.[0]?.value;
+  const avatar = photos?.[0]?.value;
+  
+  let admin = await findAdminByGoogleId(googleId);
+  
+  if (admin) {
+    if (avatar && admin.avatar !== avatar) {
+      admin.avatar = avatar;
+      await admin.save();
+    }
+  } else if (email) {
+    const existingByEmail = await findAdminByEmail(email);
+    if (existingByEmail) {
+      admin = await updateAdminGoogleId(existingByEmail.id, googleId, avatar);
+    } else {
+      admin = await createAdmin({ 
+        email, 
+        googleId, 
+        name: displayName, 
+        avatar,
+        passwordHash: null
+      });
+    }
+  } else {
+    throw Object.assign(new Error("Google account must have an email"), { status: 400 });
+  }
+  
+  if (!admin) {
+    throw Object.assign(new Error("Failed to process Google login"), { status: 500 });
+  }
+  
+  const secret = process.env.JWT_SECRET || "dev-secret";
+  const token = jwt.sign({ sub: admin.id, role: "admin" }, secret, { expiresIn: "7d" });
+  
+  return { 
+    token, 
+    admin: { 
+      id: admin.id, 
+      email: admin.email, 
+      name: admin.name,
+      avatar: admin.avatar 
+    } 
+  };
 }

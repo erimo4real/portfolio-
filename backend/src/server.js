@@ -9,6 +9,7 @@ import rateLimit from "express-rate-limit";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./docs/swagger.js";
 import cookieParser from "cookie-parser";
+import passport from "passport";
 import { connectDb } from "./config/db.js";
 import { authRouter } from "./modules/auth/routes.js";
 import { profileRouter } from "./modules/profile/routes.js";
@@ -34,6 +35,7 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
 app.use(morgan("dev"));
 
 const apiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 300 });

@@ -2,10 +2,34 @@
 // Handles login, logout, password reset, and session verification
 import express from "express";
 import jwt from "jsonwebtoken";
-import { login, bootstrapAdmin, requestPasswordReset, resetPassword } from "./service.js";
+import { login, bootstrapAdmin, requestPasswordReset, resetPassword, googleLogin } from "./service.js";
 import { getAdminById } from "./repository.js";
 import { z } from "zod";
 import { validate } from "../../middleware/validate.js";
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const GOOGLE_CALLBACK_URL = process.env.GOOGLE_CALLBACK_URL || "http://localhost:4000/auth/google/callback";
+
+if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
+  passport.use(new GoogleStrategy({
+    clientID: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    callbackURL: GOOGLE_CALLBACK_URL
+  }, async (accessToken, refreshToken, profile, done) => {
+    try {
+      const result = await googleLogin(profile);
+      return done(null, result);
+    } catch (err) {
+      return done(err);
+    }
+  }));
+}
+
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((obj, done) => done(null, obj));
 
 // Export authentication router
 export const authRouter = express.Router();
@@ -136,3 +160,44 @@ authRouter.post("/logout", (req, res) => {
   res.clearCookie("auth_token");
   res.json({ success: true });
 });
+
+// GET /google - Get Google OAuth URL
+authRouter.get("/google", (req, res) => {
+  if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
+    return res.status(503).json({ error: "Google OAuth not configured" });
+  }
+  
+  const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+    `client_id=${GOOGLE_CLIENT_ID}` +
+    `&redirect_uri=${encodeURIComponent(GOOGLE_CALLBACK_URL)}` +
+    `&response_type=code` +
+    `&scope=openid profile email` +
+    `&access_type=offline`;
+  
+  res.json({ url: googleAuthUrl });
+});
+
+// GET /google/callback - Handle Google OAuth callback
+authRouter.get("/google/callback", 
+  passport.authenticate("google", { session: false, failureRedirect: "/admin/login?error=google_auth_failed" }),
+  async (req, res) => {
+    try {
+      const result = req.user;
+      const isProduction = process.env.NODE_ENV === "production";
+      const maxAge = 7 * 24 * 60 * 60 * 1000;
+      
+      res.cookie("auth_token", result.token, {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? "strict" : "lax",
+        maxAge: maxAge
+      });
+      
+      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+      res.redirect(`${frontendUrl}/admin`);
+    } catch (err) {
+      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+      res.redirect(`${frontendUrl}/admin/login?error=google_auth_failed`);
+    }
+  }
+);

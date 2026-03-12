@@ -5,7 +5,9 @@ const AdminSchema = new mongoose.Schema(
     name: { type: String },
     email: { type: String, index: true, unique: true, sparse: true },
     phone: { type: String, index: true, unique: true, sparse: true },
-    passwordHash: { type: String, required: true }
+    passwordHash: { type: String },
+    googleId: { type: String, index: true, unique: true, sparse: true },
+    avatar: { type: String }
   },
   { timestamps: true }
 );

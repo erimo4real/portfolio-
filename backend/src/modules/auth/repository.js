@@ -5,9 +5,21 @@ export async function findAdminByEmailOrPhone(identifier) {
   return Admin.findOne(query).exec();
 }
 
-export async function createAdmin({ email, phone, passwordHash }) {
-  const doc = new Admin({ email, phone, passwordHash });
+export async function findAdminByGoogleId(googleId) {
+  return Admin.findOne({ googleId }).exec();
+}
+
+export async function findAdminByEmail(email) {
+  return Admin.findOne({ email }).exec();
+}
+
+export async function createAdmin({ email, phone, passwordHash, googleId, name, avatar }) {
+  const doc = new Admin({ email, phone, passwordHash, googleId, name, avatar });
   return doc.save();
+}
+
+export async function updateAdminGoogleId(adminId, googleId, avatar) {
+  return Admin.findByIdAndUpdate(adminId, { googleId, avatar }, { new: true }).exec();
 }
 
 export async function updateAdminPassword(adminId, passwordHash) {

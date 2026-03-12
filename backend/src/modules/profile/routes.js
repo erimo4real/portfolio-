@@ -125,7 +125,7 @@ const profileUpdateBody = profileCreateBody.partial();
 profileRouter.put("/admin/:id", requireAdmin, upload.single("image"), validate(profileUpdateParams, "params"), async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { headline, bioMarkdown, status, name } = req.body;
+    const { headline, bioMarkdown, status, name, removeImage } = req.body;
     
     try {
       profileUpdateBody.parse({ headline, bioMarkdown, status, name });
@@ -136,10 +136,11 @@ profileRouter.put("/admin/:id", requireAdmin, upload.single("image"), validate(p
     
     const imagePath = req.file ? `/uploads/${req.file.filename}` : undefined;
     
-    // If no new image, don't update imagePath (keep existing)
     const updateData = { headline, bioMarkdown, status, name };
     if (imagePath) {
       updateData.imagePath = imagePath;
+    } else if (removeImage === 'true' || removeImage === true) {
+      updateData.imagePath = null;
     }
     
     const updated = await adminUpdateProfile(id, updateData, req.adminId);

@@ -17,7 +17,7 @@ services:
       - NODE_ENV=production
       - PORT=4000
       - MONGO_URI=mongodb://mongo:27017/portfolio
-      - JWT_SECRET=${JWT_SECRET:-change_this_secret_in_production}
+      - JWT_SECRET=${JWT_SECRET:-cf=sSSvHH1&=QBsdLA_%|q77v8j7v.}
     depends_on:
       - mongo
     volumes:
