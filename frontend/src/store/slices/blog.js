@@ -15,14 +15,17 @@ export const fetchBlogDetail = createAsyncThunk("blog/detail", async (slug) => {
 
 const slice = createSlice({
   name: "blog",
-  initialState: { list: [], detail: null, status: "idle" },
+  initialState: { list: [], detail: null, status: "idle", error: null },
   reducers: {},
   extraReducers: (b) => {
     b.addCase(fetchBlogs.pending, (s) => {
       s.status = "loading";
     }).addCase(fetchBlogs.fulfilled, (s, a) => {
       s.status = "succeeded";
-      s.list = a.payload;
+      s.list = a.payload || [];
+    }).addCase(fetchBlogs.rejected, (s, a) => {
+      s.status = "failed";
+      s.error = a.error.message;
     }).addCase(fetchBlogDetail.fulfilled, (s, a) => {
       s.detail = a.payload;
     });
