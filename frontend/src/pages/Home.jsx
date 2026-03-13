@@ -8,8 +8,8 @@ import { fetchBlogs } from "../store/slices/blog.js";
 import { Link } from "react-router-dom";
 
 const typingRoles = [
-  "Backend & API Developer",
-  "React , Vue & Node.js Developer",
+  "Backend & API Dev",
+  "React , Vue & Node.js Dev",
   "Debugging & Problem Solver",
   "Web Application Builder"
 ];
