@@ -6,19 +6,29 @@ import { getPublicProfile, getMainProfileForAdmin, adminCreateProfile, adminList
 import { requireAdmin } from "../../middleware/auth.js";
 import { z } from "zod";
 import { validate } from "../../middleware/validate.js";
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "..", "..", "..", "storage", "uploads");
-    cb(null, uploadPath);
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "portfolio",
+    allowed_formats: ["jpg", "jpeg", "png", "gif", "webp"],
+    transformation: [{ width: 800, height: 800, crop: "limit" }]
   },
   filename: (req, file, cb) => {
     const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const filename = `${file.fieldname}-${unique}${path.extname(file.originalname)}`;
-    cb(null, filename);
+    cb(null, file.fieldname + "-" + unique);
   }
 });
 
@@ -104,7 +114,7 @@ profileRouter.post("/admin", requireAdmin, upload.single("image"), async (req, r
       return next(validationErr);
     }
     
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : undefined;
+    const imagePath = req.file ? req.file.path : undefined;
     const created = await adminCreateProfile({ 
       headline: validatedHeadline, 
       bioMarkdown, 
@@ -134,7 +144,7 @@ profileRouter.put("/admin/:id", requireAdmin, upload.single("image"), validate(p
       return next(validationErr);
     }
     
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : undefined;
+    const imagePath = req.file ? req.file.path : undefined;
     
     const updateData = { headline, bioMarkdown, status, name };
     if (imagePath) {
