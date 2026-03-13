@@ -18,13 +18,10 @@ const getApiUrl = () => {
 // Create axios instance with default configuration
 export const api = axios.create({
   baseURL: getApiUrl() + "/api",
-  withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json'
-  }
+  withCredentials: true
 });
 
-// Also ensure credentials are sent with every request
+// Also ensure credentials are sent with every request and let browser set Content-Type for FormData
 api.interceptors.request.use((config) => {
   config.withCredentials = true;
   return config;
