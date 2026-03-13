@@ -52,11 +52,11 @@ authRouter.post("/login", validate(loginBody), async (req, res, next) => {
     
     // Set httpOnly cookie - lasts 7 days
     const maxAge = 7 * 24 * 60 * 60 * 1000;
-    const isProduction = process.env.NODE_ENV === "production";
+    
     res.cookie("auth_token", result.token, {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
       maxAge: maxAge,
       path: "/"
     });
