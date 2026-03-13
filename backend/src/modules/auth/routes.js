@@ -160,8 +160,8 @@ authRouter.get("/me", async (req, res, next) => {
 authRouter.post("/logout", (req, res) => {
   res.clearCookie("auth_token", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none",
     path: "/"
   });
   res.json({ success: true });
