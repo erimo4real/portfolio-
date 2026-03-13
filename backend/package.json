@@ -11,6 +11,9 @@
     "seed:complete": "node src/scripts/seed-complete.js",
     "backup": "node src/scripts/backup.js"
   },
+  "npm": {
+    "legacy-peer-deps": true
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.9.0",
