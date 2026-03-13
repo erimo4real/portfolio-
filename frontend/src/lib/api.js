@@ -18,5 +18,14 @@ const getApiUrl = () => {
 // Create axios instance with default configuration
 export const api = axios.create({
   baseURL: getApiUrl() + "/api",
-  withCredentials: true // Enable sending cookies with requests
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+// Also ensure credentials are sent with every request
+api.interceptors.request.use((config) => {
+  config.withCredentials = true;
+  return config;
 });

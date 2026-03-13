@@ -56,8 +56,9 @@ authRouter.post("/login", validate(loginBody), async (req, res, next) => {
     res.cookie("auth_token", result.token, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: isProduction ? "strict" : "lax",
-      maxAge: maxAge
+      sameSite: "lax",
+      maxAge: maxAge,
+      domain: isProduction ? undefined : undefined
     });
     
     res.json({ success: true, admin: result.admin });
