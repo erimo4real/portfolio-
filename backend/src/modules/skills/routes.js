@@ -32,7 +32,7 @@ skillsRouter.get("/admin", requireAdmin, validate(paginationQuery, "query"), asy
 
 const skillCreateBody = z.object({
   name: z.string().min(1),
-  category: z.enum(["Frontend", "Backend", "DevOps", "Tooling"]),
+  category: z.enum(["Frontend", "Backend", "DevOps", "Tooling", "Mobile"]),
   published: z.boolean().optional(),
   order: z.number().int().min(0).optional()
 });
@@ -67,7 +67,7 @@ skillsRouter.delete("/admin/:id", requireAdmin, validate(skillUpdateParams, "par
 });
 
 const reorderBody = z.object({
-  category: z.enum(["Frontend", "Backend", "DevOps", "Tooling"]),
+  category: z.enum(["Frontend", "Backend", "DevOps", "Tooling", "Mobile"]),
   idOrder: z.array(z.string().min(1))
 });
 skillsRouter.post("/admin/reorder", requireAdmin, validate(reorderBody), async (req, res, next) => {
