@@ -3,10 +3,25 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "../../lib/api.js";
 
+// Load persisted auth state
+const loadPersistedAuth = () => {
+  try {
+    const saved = localStorage.getItem('adminAuth');
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (e) {
+    console.error('Failed to load persisted auth:', e);
+  }
+  return { isAuthenticated: false, admin: null };
+};
+
 // Login action - authenticates admin and stores session info
 // Parameters: identifier (email/phone), password, rememberMe (boolean)
 export const login = createAsyncThunk("auth/login", async ({ identifier, password, rememberMe }) => {
   const res = await api.post("/auth/login", { identifier, password, rememberMe });
+  // Persist auth state
+  localStorage.setItem('adminAuth', JSON.stringify({ isAuthenticated: true, admin: res.data.admin }));
   return res.data;
 });
 
@@ -33,6 +48,8 @@ export const resetPassword = createAsyncThunk("auth/resetPassword", async ({ tok
   return res.data;
 });
 
+const persistedAuth = loadPersistedAuth();
+
 const slice = createSlice({
   name: "auth",
   // Initial state for authentication
@@ -44,8 +61,8 @@ const slice = createSlice({
   // resetError: string - password reset error
   // resetMessage: string - password reset success message
   initialState: { 
-    isAuthenticated: false, 
-    admin: null,
+    isAuthenticated: persistedAuth.isAuthenticated, 
+    admin: persistedAuth.admin,
     status: "idle", 
     error: null,
     resetStatus: "idle",
@@ -82,6 +99,7 @@ const slice = createSlice({
       .addCase(logout.fulfilled, (state) => {
         state.isAuthenticated = false;
         state.admin = null;
+        localStorage.removeItem('adminAuth');
       })
       // Handle checkAuth action states
       .addCase(checkAuth.pending, (state) => {
