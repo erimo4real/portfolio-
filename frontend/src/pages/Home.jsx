@@ -7,23 +7,11 @@ import { fetchResume } from "../store/slices/resume.js";
 import { fetchBlogs } from "../store/slices/blog.js";
 import { Link } from "react-router-dom";
 
-// const typingRoles = [
-//   "Full Stack Developer",
-//   "UI/UX Designer",
-//   "Problem Solver",
-//   "Creative Builder"
-// ];
-
 const typingRoles = [
-  "Full Stack Product Engineer",
-  "Scalable System Architect",
-  "API & Backend Specialist",
-  "Performance Optimization Expert",
-  "UI/UX Driven Developer",
-  "Automation & DevOps Engineer",
-  "AI Integration Builder",
-  "MVP & Startup Tech Builder",
-  "Clean Code & Software Craftsmanship Advocate"
+  "Backend & API Developer",
+  "React , Vue & Node.js Developer",
+  "Debugging & Problem Solver",
+  "Web Application Builder"
 ];
 
 
