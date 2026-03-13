@@ -7,6 +7,20 @@ import { fetchResume } from "../store/slices/resume.js";
 import { fetchBlogs } from "../store/slices/blog.js";
 import { Link } from "react-router-dom";
 
+const getApiUrl = () => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl) {
+    return envUrl.replace(/\/api$/, '');
+  }
+  return '';
+};
+
+const getImageUrl = (path) => {
+  if (!path) return null;
+  if (path.startsWith('http')) return path;
+  return getApiUrl() + path;
+};
+
 const typingRoles = [
   "Backend & API Dev",
   "React , Vue & Node.js Dev",
@@ -297,7 +311,7 @@ export default function Home() {
                 <div className="relative w-full max-w-md aspect-square">
                   <div className="absolute inset-0 -m-5 bg-gradient-to-br from-white/30 to-white/10 rounded-full animate-pulse-slow"></div>
                   <img 
-                    src={profile.imagePath} 
+                    src={getImageUrl(profile.imagePath)} 
                     alt="Profile" 
                     className="w-full h-full rounded-full object-cover border-8 border-white/20 relative z-10 shadow-2xl"
                   />

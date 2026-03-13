@@ -6,6 +6,20 @@ import { getSkills } from "../features/skills/application/getSkills.ts";
 import { fetchProjects } from "../store/slices/projects.js";
 import { fetchBlogs } from "../store/slices/blog.js";
 
+const getApiUrl = () => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl) {
+    return envUrl.replace(/\/api$/, '');
+  }
+  return '';
+};
+
+const getImageUrl = (path) => {
+  if (!path) return null;
+  if (path.startsWith('http')) return path;
+  return getApiUrl() + path;
+};
+
 export default function About() {
   const dispatch = useDispatch();
   const profile = useSelector((s) => s.profile.data);
@@ -139,7 +153,7 @@ export default function About() {
                     animation: "pulseRing 3s ease-in-out infinite",
                     animationDelay: "1s"
                   }}></div>
-                  <img src={profile.imagePath} alt="Profile" style={{
+                  <img src={getImageUrl(profile.imagePath)} alt="Profile" style={{
                     width: "100%",
                     height: "100%",
                     borderRadius: "50%",
