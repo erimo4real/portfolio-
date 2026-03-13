@@ -45,7 +45,7 @@ app.use(cors({
   },
   credentials: true
 }));
-app.use(cookieParser());
+app.use(cookieParser(process.env.JWT_SECRET));
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());

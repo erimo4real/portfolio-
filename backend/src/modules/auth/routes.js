@@ -58,7 +58,7 @@ authRouter.post("/login", validate(loginBody), async (req, res, next) => {
       secure: isProduction,
       sameSite: "lax",
       maxAge: maxAge,
-      domain: isProduction ? undefined : undefined
+      path: "/"
     });
     
     res.json({ success: true, admin: result.admin });
@@ -158,7 +158,12 @@ authRouter.get("/me", async (req, res, next) => {
 
 // POST /logout - Clear auth cookie
 authRouter.post("/logout", (req, res) => {
-  res.clearCookie("auth_token");
+  res.clearCookie("auth_token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/"
+  });
   res.json({ success: true });
 });
 
