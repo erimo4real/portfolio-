@@ -7,7 +7,6 @@ import { requireAdmin } from "../../middleware/auth.js";
 import { z } from "zod";
 import { validate } from "../../middleware/validate.js";
 import { v2 as cloudinary } from "cloudinary";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,21 +18,24 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: "portfolio",
-    allowed_formats: ["jpg", "jpeg", "png", "gif", "webp"],
-    transformation: [{ width: 800, height: 800, crop: "limit" }]
-  },
-  filename: (req, file, cb) => {
-    const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + unique);
-  }
-});
+// Custom upload function using Cloudinary
+const uploadToCloudinary = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload_stream(
+      {
+        folder: "portfolio",
+        transformation: [{ width: 800, height: 800, crop: "limit" }]
+      },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    ).end(fileBuffer);
+  });
+};
 
 const upload = multer({ 
-  storage: storage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
@@ -114,7 +116,17 @@ profileRouter.post("/admin", requireAdmin, upload.single("image"), async (req, r
       return next(validationErr);
     }
     
-    const imagePath = req.file ? req.file.path : undefined;
+    let imagePath;
+    if (req.file) {
+      try {
+        const result = await uploadToCloudinary(req.file.buffer);
+        imagePath = result.secure_url;
+      } catch (uploadErr) {
+        console.error('Cloudinary upload error:', uploadErr);
+        return next(uploadErr);
+      }
+    }
+    
     const created = await adminCreateProfile({ 
       headline: validatedHeadline, 
       bioMarkdown, 
@@ -144,11 +156,16 @@ profileRouter.put("/admin/:id", requireAdmin, upload.single("image"), validate(p
       return next(validationErr);
     }
     
-    const imagePath = req.file ? req.file.path : undefined;
-    
     const updateData = { headline, bioMarkdown, status, name };
-    if (imagePath) {
-      updateData.imagePath = imagePath;
+    
+    if (req.file) {
+      try {
+        const result = await uploadToCloudinary(req.file.buffer);
+        updateData.imagePath = result.secure_url;
+      } catch (uploadErr) {
+        console.error('Cloudinary upload error:', uploadErr);
+        return next(uploadErr);
+      }
     } else if (removeImage === 'true' || removeImage === true) {
       updateData.imagePath = null;
     }
