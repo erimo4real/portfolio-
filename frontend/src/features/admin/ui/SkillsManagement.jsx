@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { api } from "../../../lib/api.js";
 import { Link } from "react-router-dom";
 
-const CATEGORIES = ["Frontend", "Backend", "DevOps", "Tooling"];
+const CATEGORIES = ["Frontend", "Backend", "Mobile", "DevOps", "Tooling"];
 
 const CATEGORY_ICONS = {
   Frontend: "🎨",
   Backend: "⚙️",
+  Mobile: "📱",
   DevOps: "🚀",
   Tooling: "🛠️"
 };
@@ -14,6 +15,7 @@ const CATEGORY_ICONS = {
 const CATEGORY_COLORS = {
   Frontend: { bg: "bg-pink-50", border: "border-pink-200", text: "text-pink-700", icon: "bg-pink-100" },
   Backend: { bg: "bg-blue-50", border: "border-blue-200", text: "text-blue-700", icon: "bg-blue-100" },
+  Mobile: { bg: "bg-green-50", border: "border-green-200", text: "text-green-700", icon: "bg-green-100" },
   DevOps: { bg: "bg-purple-50", border: "border-purple-200", text: "text-purple-700", icon: "bg-purple-100" },
   Tooling: { bg: "bg-amber-50", border: "border-amber-200", text: "text-amber-700", icon: "bg-amber-100" }
 };
@@ -23,7 +25,7 @@ export default function SkillsManagement() {
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({ name: "", category: "Frontend", published: true });
-  const [expandedCategories, setExpandedCategories] = useState(["Frontend", "Backend", "DevOps", "Tooling"]);
+  const [expandedCategories, setExpandedCategories] = useState(["Frontend", "Backend", "Mobile", "DevOps", "Tooling"]);
 
   const loadSkills = async () => {
     try {
