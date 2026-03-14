@@ -3,8 +3,12 @@ import { recordAudit } from "../audit/service.js";
 
 export async function getPublicSkillsGrouped() {
   const items = await listPublicSkills();
-  const grouped = { Frontend: [], Backend: [], DevOps: [], Tooling: [] };
-  for (const s of items) grouped[s.category].push({ id: s.id, name: s.name });
+  const grouped = { Frontend: [], Backend: [], DevOps: [], Tooling: [], Mobile: [] };
+  for (const s of items) {
+    if (grouped[s.category]) {
+      grouped[s.category].push({ id: s.id, name: s.name });
+    }
+  }
   return grouped;
 }
 
