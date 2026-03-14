@@ -7,23 +7,36 @@ import { requireAdmin } from "../../middleware/auth.js";
 import { recordAudit } from "../audit/service.js";
 import { z } from "zod";
 import { validate } from "../../middleware/validate.js";
+import { v2 as cloudinary } from "cloudinary";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "..", "..", "..", "storage", "uploads");
-    cb(null, uploadPath);
-  },
-  filename: (req, file, cb) => {
-    const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, `resume-${unique}.pdf`);
-  }
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+// Upload to Cloudinary
+const uploadToCloudinary = (fileBuffer, resourceType = 'image') => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload_stream(
+      {
+        folder: "portfolio/resumes",
+        resource_type: resourceType
+      },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    ).end(fileBuffer);
+  });
+};
+
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (file.mimetype === "application/pdf") return cb(null, true);
@@ -60,7 +73,17 @@ resumeRouter.post("/admin", requireAdmin, upload.single("file"), validate(resume
   try {
     const { version } = req.body;
     if (!req.file) return res.status(400).json({ error: "PDF file required" });
-    const created = await adminCreateResume({ version, path: `/uploads/${req.file.filename}` }, req.adminId);
+    
+    let filePath;
+    try {
+      const result = await uploadToCloudinary(req.file.buffer, 'raw');
+      filePath = result.secure_url;
+    } catch (uploadErr) {
+      console.error('Cloudinary upload error:', uploadErr);
+      return next(uploadErr);
+    }
+    
+    const created = await adminCreateResume({ version, path: filePath }, req.adminId);
     res.json(created);
   } catch (err) {
     next(err);
