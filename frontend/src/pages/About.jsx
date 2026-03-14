@@ -276,7 +276,7 @@ export default function About() {
             </div>
           ) : skills && Object.keys(skills).length > 0 ? (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))", gap: "2rem" }}>
-              {["Frontend", "Backend", "DevOps", "Tooling"].map((category, idx) =>
+              {["Frontend", "Backend", "Mobile", "DevOps", "Tooling"].map((category, idx) =>
                 skills[category] && skills[category].length > 0 && (
                   <div key={category} className="card hover-lift" style={{ padding: "2rem", animationDelay: `${idx * 0.1}s` }}>
                     <h3 style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>

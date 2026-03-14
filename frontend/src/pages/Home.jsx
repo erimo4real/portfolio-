@@ -384,7 +384,7 @@ export default function Home() {
           ) : skills && Object.keys(skills).length > 0 ? (
             <>
               <div className="flex gap-4 justify-center mb-12 flex-wrap">
-                {["Frontend", "Backend", "DevOps", "Tooling"].map((category) => (
+                {["Frontend", "Backend", "Mobile", "DevOps", "Tooling"].map((category) => (
                   skills[category] && skills[category].length > 0 && (
                     <button
                       key={category}
