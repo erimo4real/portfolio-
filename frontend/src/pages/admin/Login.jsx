@@ -455,13 +455,7 @@ export default function AdminLogin() {
                   {registerStatus === "loading" ? "Creating Account..." : "Register"}
                 </button>
 
-                {/* Toggle to Login */}
-                <div style={{ marginTop: "1.5rem", textAlign: "center", fontSize: "0.875rem", color: "#64748b" }}>
-                  Already have an account?{" "}
-                  <button type="button" onClick={() => setShowRegister(false)} style={{ color: "#6366f1", fontWeight: "600", background: "none", border: "none", cursor: "pointer" }}>
-                    Login here
-                  </button>
-                </div>
+                {/* Toggle to Login - hidden */}
               </form>
             ) : (
               // LOGIN FORM
@@ -781,22 +775,7 @@ export default function AdminLogin() {
               <p>🔐 Secure portfolio management</p>
             </div>
 
-            {/* Toggle to Register */}
-            <div style={{
-              marginTop: "1rem",
-              textAlign: "center",
-              fontSize: "0.875rem",
-              color: "#64748b"
-            }}>
-              Don't have an account?{" "}
-              <button type="button" onClick={() => setShowRegister(true)} style={{
-                color: "#6366f1",
-                fontWeight: "600",
-                background: "none",
-                border: "none",
-                cursor: "pointer"
-              }}>
-                Register here
+            {/* Register hidden - already logged in */}
               </button>
             </div>
           </div>
