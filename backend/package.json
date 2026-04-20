@@ -18,7 +18,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^7.1.5",
+    "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "marked": "^12.0.2",
     "mongoose": "^8.4.1",
@@ -33,6 +35,7 @@
     "slugify": "^1.6.6",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
+    "xss-clean": "^0.1.4",
     "zod": "^3.22.4"
   },
   "devDependencies": {

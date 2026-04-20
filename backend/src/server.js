@@ -19,9 +19,24 @@ import { blogRouter } from "./modules/blog/routes.js";
 import { resumeRouter } from "./modules/resume/routes.js";
 import { contactRouter } from "./modules/contact/routes.js";
 import { analyticsRouter } from "./modules/analytics/routes.js";
-import { errorHandler } from "./middleware/error.js";
+import { errorHandler, logger } from "./middleware/error.js";
 
 dotenv.config();
+
+process.on("uncaughtException", (err) => {
+  logger.fatal({ err }, "Uncaught exception");
+  process.exit(1);
+});
+
+process.on("unhandledRejection", (reason) => {
+  logger.fatal({ reason }, "Unhandled rejection");
+  process.exit(1);
+});
+
+if (!process.env.JWT_SECRET) {
+  logger.fatal("JWT_SECRET is not set in environment variables!");
+  process.exit(1);
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -79,10 +94,10 @@ const port = process.env.PORT || 4000;
 connectDb()
   .then(() => {
     app.listen(port, () => {
-      console.log(`Backend server running on port ${port}`);
+      logger.info(`Backend server running on port ${port}`);
     });
   })
   .catch((err) => {
-    console.error("Failed to connect to DB", err);
+    logger.fatal({ err }, "Failed to connect to DB");
     process.exit(1);
   });

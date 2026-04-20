@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { logger } from "../middleware/error.js";
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST || "smtp.gmail.com",
@@ -34,7 +35,7 @@ export async function sendPasswordResetEmail(email, resetToken) {
     await transporter.sendMail(mailOptions);
     return true;
   } catch (error) {
-    console.error("Failed to send email:", error.message);
+    logger.error({ err: error }, "Failed to send email");
     return false;
   }
 }
