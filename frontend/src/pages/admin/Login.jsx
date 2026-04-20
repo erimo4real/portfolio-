@@ -774,10 +774,6 @@ export default function AdminLogin() {
             }}>
               <p>🔐 Secure portfolio management</p>
             </div>
-
-            {/* Register hidden - already logged in */}
-              </button>
-            </div>
           </div>
         </div>
       </div>
