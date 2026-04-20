@@ -507,7 +507,7 @@ export default function Home() {
             </div>
           ) : (
             <div className="text-center py-16">
-              <div className="text-6xl mb-4">💼</div>
+              <div className="text-6xl mb-4"></div>
               <h3 className="mb-2">No projects yet</h3>
               <p className="text-lg text-slate-600">
                 Add your first project from the admin panel!

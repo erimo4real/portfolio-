@@ -188,10 +188,7 @@ function Layout({ children }) {
           {/* Social Links */}
           <div className="flex justify-center gap-6 mb-8">
             {[
-              { icon: "💼", label: "LinkedIn", url: "https://linkedin.com" },
-              { icon: "🐙", label: "GitHub", url: "https://github.com" },
-              { icon: "🐦", label: "Twitter", url: "https://twitter.com" },
-              { icon: "📧", label: "Email", url: "mailto:hello@example.com" }
+              // LinkedIn, GitHub, Twitter, Email removed - add real URLs
             ].map((social, index) => (
               <a
                 key={index}
