@@ -40,7 +40,7 @@ export default function ProjectsList() {
         {projects.map((project) => (
           <Link 
             key={project.slug} 
-            to={`/project/${project.slug}`}
+            to={`/projects/${project.slug}`}
             className="group bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
           >
             <div className="aspect-video bg-slate-100 relative overflow-hidden">

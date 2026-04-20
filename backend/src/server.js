@@ -10,6 +10,9 @@ import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./docs/swagger.js";
 import cookieParser from "cookie-parser";
 import passport from "passport";
+import helmet from "helmet";
+import mongoSanitize from "express-mongo-sanitize";
+import xss from "xss-clean";
 import { connectDb } from "./config/db.js";
 import { authRouter } from "./modules/auth/routes.js";
 import { profileRouter } from "./modules/profile/routes.js";
@@ -60,14 +63,23 @@ app.use(cors({
   },
   credentials: true
 }));
+app.use(helmet());
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
+app.use(mongoSanitize());
+app.use(xss());
 app.use(passport.initialize());
 app.use(morgan("dev"));
 
 const apiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 300 });
 app.use("/api/", apiLimiter);
+
+const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10, message: { error: "Too many attempts, try again later" } });
+app.use("/api/auth/login", authLimiter);
+app.use("/api/auth/register", authLimiter);
+app.use("/api/auth/forgot-password", authLimiter);
+app.use("/api/auth/reset-password", authLimiter);
 
 const uploadDir = path.join(__dirname, "..", "storage", "uploads");
 try {
