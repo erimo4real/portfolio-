@@ -223,7 +223,7 @@ function Layout({ children }) {
           </div>
 
           <p className="text-center text-white/50 text-sm">
-            © {new Date().getFullYear()} Portfolio. Crafted with ❤️ and ☕
+            © {new Date().getFullYear()} Portfolio. Crafted with ❤️ and ☕ by Erimo
           </p>
         </div>
       </footer>
