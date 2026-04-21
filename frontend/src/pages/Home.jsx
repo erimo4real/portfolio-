@@ -78,12 +78,10 @@ export default function Home() {
 
   const services = [
     {
-      icon: "🎨",
       title: "Web Development",
       description: "Custom websites & web apps built with modern technologies"
     },
     {
-      icon: "📱",
       title: "Responsive Design",
       description: "Beautiful experiences that work on any device"
     },
@@ -275,7 +273,7 @@ export default function Home() {
               {/* Social Proof Badges */}
               <div className="flex flex-wrap gap-4 mb-8">
                 <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2">
-                  <span className="text-2xl">🚀</span>
+                  
                   <span className="text-white font-semibold">5+ Projects Completed</span>
                 </div>
                 <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2">
@@ -734,13 +732,13 @@ export default function Home() {
                 to="/contact" 
                 className="inline-flex items-center gap-2 bg-white text-primary-600 px-10 py-5 rounded-xl font-bold text-lg shadow-2xl hover:shadow-3xl hover:-translate-y-1 transition-all"
               >
-                Start a Conversation <span>💬</span>
+                Start a Conversation
               </Link>
               <Link 
                 to="/projects" 
                 className="inline-flex items-center gap-2 bg-white/20 text-white px-10 py-5 rounded-xl font-bold text-lg border-2 border-white/30 backdrop-blur-sm hover:bg-white/30 transition-all"
               >
-                See My Work <span>🚀</span>
+                See My Work
               </Link>
             </div>
           </div>
