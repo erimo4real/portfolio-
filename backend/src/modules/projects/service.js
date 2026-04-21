@@ -19,7 +19,9 @@ export async function listPublic() {
     githubUrl: p.githubUrl,
     demoUrl: p.demoUrl,
     published: p.published,
-    descriptionMarkdown: p.descriptionMarkdown
+    descriptionMarkdown: p.descriptionMarkdown,
+    understanding: p.understanding,
+    contribution: p.contribution
   }));
 }
 
@@ -35,7 +37,9 @@ export async function getPublicBySlug(slug) {
     status: p.status,
     images: p.images,
     githubUrl: p.githubUrl,
-    demoUrl: p.demoUrl
+    demoUrl: p.demoUrl,
+    understanding: p.understanding,
+    contribution: p.contribution
   };
 }
 

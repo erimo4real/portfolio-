@@ -76,12 +76,14 @@ const projectCreateBody = z.object({
   githubUrl: z.string().optional().or(z.string().url()),
   demoUrl: z.string().optional().or(z.string().url()),
   featured: z.union([z.string(), z.boolean()]).optional(),
-  published: z.union([z.string(), z.boolean()]).optional()
+  published: z.union([z.string(), z.boolean()]).optional(),
+  understanding: z.string().optional(),
+  contribution: z.string().optional()
 });
 
 projectsRouter.post("/admin", requireAdmin, upload.array("images"), validate(projectCreateBody), async (req, res, next) => {
   try {
-    const { title, descriptionMarkdown, techStack, status, githubUrl, demoUrl, featured, published } = req.body;
+    const { title, descriptionMarkdown, techStack, status, githubUrl, demoUrl, featured, published, understanding, contribution } = req.body;
     const images = (req.files || []).map((f, i) => ({ path: `/uploads/${f.filename}`, order: i }));
     
     let parsedTechStack = [];
@@ -102,6 +104,8 @@ projectsRouter.post("/admin", requireAdmin, upload.array("images"), validate(pro
       demoUrl,
       featured: featured === "true" || featured === true,
       published: published === "true" || published === true,
+      understanding,
+      contribution,
       images: images.length > 0 ? images : []
     });
     await recordAudit(req.adminId, "create", "project", created.id, { title });
@@ -120,13 +124,15 @@ const projectUpdateBody = z.object({
   githubUrl: z.string().url().optional(),
   demoUrl: z.string().url().optional(),
   featured: z.union([z.string(), z.boolean()]).optional(),
-  published: z.union([z.string(), z.boolean()]).optional()
+  published: z.union([z.string(), z.boolean()]).optional(),
+  understanding: z.string().optional(),
+  contribution: z.string().optional()
 });
 
 projectsRouter.put("/admin/:id", requireAdmin, upload.array("images"), validate(projectUpdateParams, "params"), validate(projectUpdateBody), async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { title, descriptionMarkdown, techStack, status, githubUrl, demoUrl, featured, published, existingImages } = req.body;
+    const { title, descriptionMarkdown, techStack, status, githubUrl, demoUrl, featured, published, understanding, contribution, existingImages } = req.body;
     
     // Parse existing images if provided
     let existingImagesArray = [];
@@ -153,6 +159,8 @@ projectsRouter.put("/admin/:id", requireAdmin, upload.array("images"), validate(
       demoUrl,
       featured: typeof featured !== "undefined" ? featured === "true" || featured === true : undefined,
       published: typeof published !== "undefined" ? published === "true" || published === true : undefined,
+      understanding,
+      contribution,
       images: allImages.length > 0 ? allImages : undefined
     });
     await recordAudit(req.adminId, "update", "project", id, { title });

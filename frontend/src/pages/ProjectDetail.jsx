@@ -165,6 +165,54 @@ export default function ProjectDetail() {
                 />
               </div>
 
+              {/* Understanding */}
+              {detail.understanding && (
+                <div className="card" style={{ padding: "3rem", marginBottom: "2rem" }}>
+                  <h2 style={{ 
+                    marginBottom: "2rem",
+                    fontSize: "2rem",
+                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text"
+                  }}>
+                    Understanding
+                  </h2>
+                  <div 
+                    style={{ 
+                      lineHeight: "1.8",
+                      color: "#475569",
+                      fontSize: "1.125rem"
+                    }}
+                    dangerouslySetInnerHTML={{ __html: marked.parse(detail.understanding || "") }} 
+                  />
+                </div>
+              )}
+
+              {/* Contribution */}
+              {detail.contribution && (
+                <div className="card" style={{ padding: "3rem", marginBottom: "2rem" }}>
+                  <h2 style={{ 
+                    marginBottom: "2rem",
+                    fontSize: "2rem",
+                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text"
+                  }}>
+                    My Contribution
+                  </h2>
+                  <div 
+                    style={{ 
+                      lineHeight: "1.8",
+                      color: "#475569",
+                      fontSize: "1.125rem"
+                    }}
+                    dangerouslySetInnerHTML={{ __html: marked.parse(detail.contribution || "") }} 
+                  />
+                </div>
+              )}
+
               {/* Links */}
               <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
                 {detail.githubUrl && (

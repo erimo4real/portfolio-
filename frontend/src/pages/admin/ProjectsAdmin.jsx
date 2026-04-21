@@ -18,7 +18,9 @@ export default function ProjectsAdmin() {
     githubUrl: "",
     demoUrl: "",
     featured: false,
-    published: true
+    published: true,
+    understanding: "",
+    contribution: ""
   });
 
   async function load() {
@@ -66,6 +68,8 @@ export default function ProjectsAdmin() {
       fd.append("demoUrl", formData.demoUrl);
       fd.append("featured", formData.featured);
       fd.append("published", formData.published);
+      fd.append("understanding", formData.understanding);
+      fd.append("contribution", formData.contribution);
       
       // Add existing images as JSON (for keep/delete logic)
       if (editingId && existingImages.length > 0) {
@@ -118,7 +122,9 @@ export default function ProjectsAdmin() {
       githubUrl: project.githubUrl || "",
       demoUrl: project.demoUrl || "",
       featured: project.featured || false,
-      published: project.published || false
+      published: project.published || false,
+      understanding: project.understanding || "",
+      contribution: project.contribution || ""
     });
     setExistingImages(project.images || []);
     setImagePreviews([]);
@@ -250,6 +256,32 @@ export default function ProjectsAdmin() {
                   value={formData.demoUrl}
                   onChange={(e) => setFormData({...formData, demoUrl: e.target.value})}
                   placeholder="https://demo.example.com"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all"
+                />
+              </div>
+
+              {/* Understanding */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-semibold text-slate-700 mb-2">Understanding</label>
+                <textarea 
+                  name="understanding"
+                  value={formData.understanding}
+                  onChange={(e) => setFormData({...formData, understanding: e.target.value})}
+                  placeholder="Explain what you learned or understood from this project..."
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all"
+                />
+              </div>
+
+              {/* Contribution */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-semibold text-slate-700 mb-2">Contribution</label>
+                <textarea 
+                  name="contribution"
+                  value={formData.contribution}
+                  onChange={(e) => setFormData({...formData, contribution: e.target.value})}
+                  placeholder="Explain your contributions to this project..."
+                  rows={3}
                   className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all"
                 />
               </div>

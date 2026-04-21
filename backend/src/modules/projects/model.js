@@ -20,7 +20,9 @@ const ProjectSchema = new mongoose.Schema(
     githubUrl: String,
     demoUrl: String,
     featured: { type: Boolean, default: false },
-    published: { type: Boolean, default: true }
+    published: { type: Boolean, default: true },
+    understanding: String,
+    contribution: String
   },
   { timestamps: true }
 );
