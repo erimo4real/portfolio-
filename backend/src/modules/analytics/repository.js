@@ -1,4 +1,8 @@
 import { AnalyticsEvent } from "./model.js";
+import { Project } from "../projects/model.js";
+import { Blog } from "../blogs/model.js";
+import { Skill } from "../skills/model.js";
+import { Contact } from "../contacts/model.js";
 
 export function createEvent(data) {
   const doc = new AnalyticsEvent(data);
@@ -11,7 +15,16 @@ export async function getStats() {
     { $project: { _id: 0, type: "$_id.type", slug: "$_id.slug", count: 1 } }
   ];
   const rows = await AnalyticsEvent.aggregate(pipeline).exec();
-  const result = { page_view: 0, project_view: {}, blog_read: {}, resume_download: 0 };
+  const result = { 
+    page_view: 0, 
+    project_view: {}, 
+    blog_read: {}, 
+    resume_download: 0,
+    projects: await Project.countDocuments(),
+    blogs: await Blog.countDocuments(),
+    skills: await Skill.countDocuments(),
+    messages: await Contact.countDocuments()
+  };
   for (const r of rows) {
     if (r.type === "page_view") result.page_view += r.count;
     else if (r.type === "resume_download") result.resume_download += r.count;
