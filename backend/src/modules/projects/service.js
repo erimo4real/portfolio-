@@ -1,5 +1,6 @@
 import slugify from "slugify";
 import { createProject, deleteProject, getProjectBySlug, listAllProjects, listPublicProjects, updateProject, setProjectPublished, setProjectFeatured, reorderProjects } from "./repository.js";
+import { logger } from "../../middleware/error.js";
 
 function makeSlug(title) {
   return slugify(title, { lower: true, strict: true });
@@ -55,7 +56,7 @@ export async function adminCreate(data) {
     const project = await createProject({ ...data, slug });
     return { ...project.toObject(), id: project._id.toString() };
   } catch (err) {
-    console.error("Error in adminCreate:", err);
+    logger.error({ err }, "Error in adminCreate");
     throw err;
   }
 }

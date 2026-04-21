@@ -41,6 +41,11 @@ if (!process.env.JWT_SECRET) {
   process.exit(1);
 }
 
+if (!process.env.MONGO_URI) {
+  logger.fatal("MONGO_URI is not set in environment variables!");
+  process.exit(1);
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -80,6 +85,9 @@ app.use("/api/auth/login", authLimiter);
 app.use("/api/auth/register", authLimiter);
 app.use("/api/auth/forgot-password", authLimiter);
 app.use("/api/auth/reset-password", authLimiter);
+
+const contactLimiter = rateLimit({ windowMs: 60 * 1000, max: 5, message: { error: "Too many requests, try again later" } });
+app.use("/api/contact", contactLimiter);
 
 const uploadDir = path.join(__dirname, "..", "storage", "uploads");
 try {

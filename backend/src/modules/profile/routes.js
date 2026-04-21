@@ -7,6 +7,7 @@ import { requireAdmin } from "../../middleware/auth.js";
 import { z } from "zod";
 import { validate } from "../../middleware/validate.js";
 import { v2 as cloudinary } from "cloudinary";
+import { logger } from "../../middleware/error.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -76,7 +77,7 @@ profileRouter.get("/admin/main", requireAdmin, async (req, res, next) => {
     const profile = await getMainProfileForAdmin(req.adminId);
     res.json(profile || {});
   } catch (err) {
-    console.error('Error in GET /profile/admin/main:', err);
+    logger.error({ err }, 'Error in GET /profile/admin/main');
     res.json({
       id: null,
       name: '',
@@ -122,7 +123,7 @@ profileRouter.post("/admin", requireAdmin, upload.single("image"), async (req, r
         const result = await uploadToCloudinary(req.file.buffer);
         imagePath = result.secure_url;
       } catch (uploadErr) {
-        console.error('Cloudinary upload error:', uploadErr);
+        logger.error('Cloudinary upload error:', uploadErr);
         return next(uploadErr);
       }
     }
@@ -136,7 +137,7 @@ profileRouter.post("/admin", requireAdmin, upload.single("image"), async (req, r
     }, req.adminId);
     res.json(created);
   } catch (err) {
-    console.error('Error in POST /profile/admin:', err);
+    logger.error('Error in POST /profile/admin:', err);
     next(err);
   }
 });
@@ -163,7 +164,7 @@ profileRouter.put("/admin/:id", requireAdmin, upload.single("image"), validate(p
         const result = await uploadToCloudinary(req.file.buffer);
         updateData.imagePath = result.secure_url;
       } catch (uploadErr) {
-        console.error('Cloudinary upload error:', uploadErr);
+        logger.error('Cloudinary upload error:', uploadErr);
         return next(uploadErr);
       }
     } else if (removeImage === 'true' || removeImage === true) {
@@ -173,7 +174,7 @@ profileRouter.put("/admin/:id", requireAdmin, upload.single("image"), validate(p
     const updated = await adminUpdateProfile(id, updateData, req.adminId);
     res.json(updated);
   } catch (err) {
-    console.error('Error in PUT /profile/admin/:id:', err);
+    logger.error('Error in PUT /profile/admin/:id:', err);
     next(err);
   }
 });

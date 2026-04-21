@@ -1,5 +1,6 @@
 import { createOrUpdateProfile, getPublishedProfile, listProfiles, updateProfile, getProfileById, getProfileByAdminId } from "./repository.js";
 import { recordAudit } from "../audit/service.js";
+import { logger } from "../../middleware/error.js";
 
 export async function getPublicProfile() {
   const p = await getPublishedProfile();
@@ -31,7 +32,7 @@ export async function getMainProfileForAdmin(adminId) {
     
     return profile;
   } catch (error) {
-    console.error('Error in getMainProfileForAdmin:', error);
+    logger.error({ err: error }, 'Error in getMainProfileForAdmin');
     return {
       id: null,
       adminId: adminId,
@@ -50,7 +51,7 @@ export async function adminCreateProfile(data, adminId) {
     await recordAudit(adminId, "create", "profile", profile.id, { headline: data.headline || "Profile Updated" });
     return profile;
   } catch (error) {
-    console.error('Error in adminCreateProfile:', error);
+    logger.error({ err: error }, 'Error in adminCreateProfile');
     throw error;
   }
 }
@@ -61,7 +62,7 @@ export async function adminUpdateProfile(id, data, adminId) {
     await recordAudit(adminId, "update", "profile", id, { headline: data.headline || profile?.headline || "Profile Updated" });
     return profile;
   } catch (error) {
-    console.error('Error in adminUpdateProfile:', error);
+    logger.error({ err: error }, 'Error in adminUpdateProfile');
     throw error;
   }
 }
