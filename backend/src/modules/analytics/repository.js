@@ -1,8 +1,8 @@
 import { AnalyticsEvent } from "./model.js";
 import { Project } from "../projects/model.js";
-import { Blog } from "../blogs/model.js";
+import { Blog } from "../blog/model.js";
 import { Skill } from "../skills/model.js";
-import { Contact } from "../contacts/model.js";
+import { Contact } from "../contact/model.js";
 
 export function createEvent(data) {
   const doc = new AnalyticsEvent(data);
