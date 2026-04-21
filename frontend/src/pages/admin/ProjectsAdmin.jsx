@@ -391,6 +391,13 @@ export default function ProjectsAdmin() {
             {list.map((p, idx) => (
               <div key={`project-${p.id}-${idx}`} className="bg-white rounded-xl shadow-sm border border-slate-200 p-5 hover:border-primary-200 transition-colors">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="flex items-center gap-4">
+                    {p.images && p.images[0] ? (
+                      <img src={p.images[0].path} alt={p.title} className="w-16 h-16 rounded-lg object-cover" />
+                    ) : (
+                      <div className="w-16 h-16 rounded-lg bg-slate-100 flex items-center justify-center text-2xl">📷</div>
+                    )}
+                  </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <h3 className="text-lg font-bold text-slate-900">{p.title}</h3>
