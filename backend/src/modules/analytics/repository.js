@@ -2,7 +2,7 @@ import { AnalyticsEvent } from "./model.js";
 import { Project } from "../projects/model.js";
 import { Blog } from "../blog/model.js";
 import { Skill } from "../skills/model.js";
-import { Contact } from "../contact/model.js";
+import { ContactMessage } from "../contact/model.js";
 
 export function createEvent(data) {
   const doc = new AnalyticsEvent(data);
@@ -23,7 +23,7 @@ export async function getStats() {
     projects: await Project.countDocuments(),
     blogs: await Blog.countDocuments(),
     skills: await Skill.countDocuments(),
-    messages: await Contact.countDocuments()
+    messages: await ContactMessage.countDocuments()
   };
   for (const r of rows) {
     if (r.type === "page_view") result.page_view += r.count;
