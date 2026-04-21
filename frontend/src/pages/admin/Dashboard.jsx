@@ -44,11 +44,10 @@ export default function AdminDashboard() {
     navigate("/admin/login");
   };
 
-  const sections = [
+const sections = [
     { 
       title: "Profile", 
       path: "/admin/profile", 
-      icon: "👤", 
       description: "Manage your profile information",
       color: "#6366f1",
       bgColor: "#e0e7ff"
@@ -56,7 +55,6 @@ export default function AdminDashboard() {
     { 
       title: "Skills", 
       path: "/admin/skills", 
-      icon: "🛠️", 
       description: "Add and organize your skills",
       color: "#8b5cf6",
       bgColor: "#ede9fe",
@@ -65,7 +63,6 @@ export default function AdminDashboard() {
     { 
       title: "Projects", 
       path: "/admin/projects", 
-
       description: "Showcase your work",
       color: "#ec4899",
       bgColor: "#fce7f3",
@@ -74,7 +71,6 @@ export default function AdminDashboard() {
     { 
       title: "Blog", 
       path: "/admin/blogs", 
-      icon: "📝", 
       description: "Write and publish blog posts",
       color: "#f59e0b",
       bgColor: "#fef3c7",
@@ -83,7 +79,6 @@ export default function AdminDashboard() {
     { 
       title: "Resume", 
       path: "/admin/resume", 
-      icon: "📄", 
       description: "Upload and manage resumes",
       color: "#10b981",
       bgColor: "#d1fae5"
@@ -91,60 +86,34 @@ export default function AdminDashboard() {
     { 
       title: "Contacts", 
       path: "/admin/contacts", 
-      icon: "✉️", 
-      description: "View contact messages",
-      color: "#ef4444",
-      bgColor: "#fee2e2",
+      description: "View and manage contact messages",
+      color: "#3b82f6",
+      bgColor: "#dbeafe",
       count: stats.messages
     }
   ];
 
   const quickStats = [
-    { label: "Total Views", value: stats.views, icon: "👁️", color: "#6366f1" },
-    { label: "Projects", value: stats.projects, icon: "💼", color: "#ec4899" },
-    { label: "Blog Posts", value: stats.blogs, icon: "📝", color: "#f59e0b" },
-    { label: "Messages", value: stats.messages, icon: "✉️", color: "#ef4444" }
+    { label: "Total Views", value: stats.views, color: "#6366f1" },
+    { label: "Projects", value: stats.projects, color: "#ec4899" },
+    { label: "Blog Posts", value: stats.blogs, color: "#f59e0b" },
+    { label: "Messages", value: stats.messages, color: "#ef4444" }
   ];
 
   return (
     <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)" }}>
       {/* Header */}
-      <div style={{
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        padding: "2rem 0",
-        position: "relative",
-        overflow: "hidden"
-      }}>
-        {/* Decorative Elements */}
-        <div style={{
-          position: "absolute",
-          width: "300px",
-          height: "300px",
-          background: "rgba(255,255,255,0.1)",
-          borderRadius: "50%",
-          top: "-150px",
-          right: "-50px",
-          animation: "float 8s ease-in-out infinite"
-        }}></div>
-        <div style={{
-          position: "absolute",
-          width: "200px",
-          height: "200px",
-          background: "rgba(255,255,255,0.08)",
-          borderRadius: "50%",
-          bottom: "-100px",
-          left: "10%",
-          animation: "float 6s ease-in-out infinite reverse"
-        }}></div>
-
-        <div className="container" style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          position: "relative",
-          zIndex: 1
-        }}>
-          <div>
+<div style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "48px",
+                height: "48px",
+                borderRadius: "12px",
+                background: stat.color + "20"
+              }}>
+              </div>
+              <div>
             <h1 style={{ marginBottom: "0.25rem", color: "white", fontSize: "2rem" }}>
               Welcome back, {admin?.name || 'Admin'}! 👋
             </h1>
@@ -296,7 +265,6 @@ export default function AdminDashboard() {
                     justifyContent: "center",
                     fontSize: "1.75rem"
                   }}>
-                    {section.icon}
                   </div>
                   {section.count !== undefined && (
                     <span style={{
