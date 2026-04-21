@@ -80,7 +80,6 @@ export default function Projects() {
         ) : !projects || projects.length === 0 ? (
           <div className="text-center py-20">
             <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-slate-100 flex items-center justify-center text-5xl">
-              📁
             </div>
             <h2 className="text-2xl font-bold text-slate-900 mb-2">No projects yet</h2>
             <p className="text-slate-500 text-lg">Check back later for exciting projects!</p>
@@ -110,7 +109,7 @@ export default function Projects() {
                       </div>
                       {project.featured && (
                         <div className="absolute top-4 right-4 bg-amber-400 text-white px-4 py-2 rounded-full text-sm font-semibold backdrop-blur-sm">
-                          ⭐ Featured
+                          Featured
                         </div>
                       )}
                     </div>

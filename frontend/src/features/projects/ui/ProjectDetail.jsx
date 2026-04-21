@@ -26,7 +26,7 @@ const ProjectDetail = () => {
 
   if (error) return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <div className="text-4xl mb-4">⚠️</div>
+      <div className="text-4xl mb-4"></div>
       <h2 className="text-2xl font-bold text-slate-900 mb-2">Error Loading Project</h2>
       <p className="text-slate-600 mb-8">{error}</p>
       <Link to="/projects" className="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold">Back to Projects</Link>
@@ -117,7 +117,7 @@ const ProjectDetail = () => {
             ))
           ) : (
             <div className="aspect-square bg-slate-50 rounded-3xl flex flex-col items-center justify-center text-slate-300 border border-dashed border-slate-200">
-              <span className="text-6xl mb-2">🖼️</span>
+              
               <span className="font-medium">No screenshots available</span>
             </div>
           )}

@@ -101,7 +101,7 @@ export default function Register() {
             justifyContent: "center",
             fontSize: "2rem"
           }}>
-            👤
+
           </div>
           <h1 style={{ 
             fontSize: "1.75rem",
@@ -145,7 +145,7 @@ export default function Register() {
               Email or Phone Number *
             </label>
             <div style={{ position: "relative" }}>
-              <span style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", fontSize: "1.1rem" }}>👤</span>
+              
               <input 
                 value={formData.identifier}
                 onChange={(e) => setFormData({...formData, identifier: e.target.value})}

@@ -290,7 +290,7 @@ export default function About() {
                         justifyContent: "center",
                         fontSize: "1.5rem"
                       }}>
-                        {category === "Frontend" ? "🎨" : category === "Backend" ? "⚙️" : category === "DevOps" ? "🚀" : "🛠️"}
+                        {category}
                       </span>
                       {category}
                     </h3>

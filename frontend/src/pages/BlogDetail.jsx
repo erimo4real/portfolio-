@@ -65,7 +65,7 @@ export default function BlogDetail() {
             color: "white",
             fontSize: "0.85rem"
           }}>
-            🖼️ Cover Image
+            Cover Image
           </div>
         </div>
       )}

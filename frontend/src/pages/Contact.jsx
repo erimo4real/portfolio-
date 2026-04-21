@@ -94,7 +94,7 @@ export default function Contact() {
                     fontSize: "1.5rem",
                     flexShrink: 0
                   }}>
-                    ✉
+                    
                   </div>
                   <div>
                     <h3 style={{ marginBottom: "0.5rem", fontSize: "1.25rem" }}>Email</h3>
@@ -114,7 +114,7 @@ export default function Contact() {
                     fontSize: "1.5rem",
                     flexShrink: 0
                   }}>
-                    📱
+                    
                   </div>
                   <div>
                     <h3 style={{ marginBottom: "0.5rem", fontSize: "1.25rem" }}>Phone</h3>
@@ -230,7 +230,7 @@ export default function Contact() {
                       gap: "0.5rem",
                       animation: "shake 0.5s ease-in-out"
                     }}>
-                      <span>⚠️</span>
+                      
                       Failed to send message. Please try again.
                     </div>
                   )}
@@ -279,7 +279,7 @@ export default function Contact() {
                       </>
                     ) : (
                       <>
-                        Send Message 🚀
+                        Send Message
                       </>
                     )}
                   </button>

@@ -157,7 +157,7 @@ export default function BlogsAdmin() {
           <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xl">
-                {editingId ? '✏️' : '✍️'}
+                {editingId ? 'Edit' : 'Write'}
               </div>
               <h2 className="text-xl font-bold text-slate-800">{editingId ? "Edit Post" : "Create New Post"}</h2>
             </div>

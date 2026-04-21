@@ -131,7 +131,7 @@ export default function ForgotPassword() {
               gap: "0.5rem",
               justifyContent: "center"
             }}>
-              <span>✅</span>
+              
               {message}
             </div>
             <p style={{ color: "#64748b", marginBottom: "1.5rem" }}>
@@ -201,7 +201,7 @@ export default function ForgotPassword() {
                 gap: "0.5rem",
                 animation: "shake 0.5s ease-in-out"
               }}>
-                <span>⚠️</span>
+                
                 {message}
               </div>
             )}

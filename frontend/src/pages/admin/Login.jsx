@@ -383,7 +383,7 @@ export default function AdminLogin() {
 
                 {/* Email/Phone Input */}
                 <div style={{ marginBottom: "1rem", position: "relative" }}>
-                  <span style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", fontSize: "1.1rem" }}>👤</span>
+                  
                   <input 
                     value={registerData.identifier || ""}
                     onChange={(e) => setRegisterData({...registerData, identifier: e.target.value})}
@@ -471,7 +471,7 @@ export default function AdminLogin() {
                   transform: "translateY(-50%)",
                   fontSize: "1.1rem",
                   zIndex: 1
-                }}>👤</span>
+                }}>
                 <input 
                   name="identifier" 
                   value={loginData.identifier || ""}
@@ -615,7 +615,7 @@ export default function AdminLogin() {
                   alignItems: "flex-start",
                   gap: "0.5rem"
                 }}>
-                  <span style={{ fontSize: "1rem" }}>⚠️</span>
+                  
                   <div>
                     <strong>Stay logged in for 7 days</strong>
                     <p style={{ margin: "0.25rem 0 0", opacity: 0.9 }}>
@@ -639,7 +639,7 @@ export default function AdminLogin() {
                   gap: "0.5rem",
                   animation: "shake 0.5s ease-in-out"
                 }}>
-                  <span>⚠️</span>
+                  
                   {error}
                 </div>
               )}
@@ -682,7 +682,7 @@ export default function AdminLogin() {
                   </>
                 ) : (
                   <>
-                    <span>🚀</span>
+                    
                     Sign In
                   </>
                 )}

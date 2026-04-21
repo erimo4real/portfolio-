@@ -82,7 +82,7 @@ export default function ContactForm() {
           {status === 'success' ? (
             <div className="h-full flex flex-col items-center justify-center text-center p-12 bg-green-50 rounded-[2.5rem] border border-green-100">
               <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center text-4xl mb-6 shadow-lg shadow-green-200">
-                ✅
+                
               </div>
               <h2 className="text-3xl font-bold text-slate-900 mb-4">Message Sent!</h2>
               <p className="text-slate-600 mb-8 max-w-sm">
@@ -155,7 +155,7 @@ export default function ContactForm() {
 
                 {status === 'error' && (
                   <div className="p-4 bg-red-50 text-red-700 rounded-xl border border-red-100 text-sm font-medium">
-                    ⚠️ {error}
+                    Error: {error}
                   </div>
                 )}
 

@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getSkills } from "../application/getSkills.ts";
 
-const CATEGORY_ICONS = {
-  Frontend: "🎨",
-  Backend: "⚙️",
-  DevOps: "☁️",
-  Tooling: "🛠️"
-};
+const CATEGORY_ICONS = {};
 
 export default function SkillsList() {
   const [groups, setGroups] = useState({});
@@ -71,7 +66,7 @@ export default function SkillsList() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {Object.entries(groups).map(([cat, items]) => (
           <div key={cat} className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
-            <div className="text-4xl mb-4">{CATEGORY_ICONS[cat] || "🚀"}</div>
+            <div className="text-4xl mb-4"></div>
             <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
               {cat}
               <span className="text-xs bg-primary-50 text-primary-600 px-2 py-0.5 rounded-full">

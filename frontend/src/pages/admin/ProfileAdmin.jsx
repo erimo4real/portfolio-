@@ -219,7 +219,7 @@ export default function ProfileAdmin() {
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <div className="text-center text-slate-400">
-                          <div className="text-6xl mb-2">👤</div>
+                          
                         </div>
                       </div>
                     )}

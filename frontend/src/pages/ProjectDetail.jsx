@@ -93,7 +93,7 @@ export default function ProjectDetail() {
                   fontWeight: "600",
                   color: "white"
                 }}>
-                  ⭐ Featured
+                  Featured
                 </span>
               )}
             </div>
@@ -185,7 +185,7 @@ export default function ProjectDetail() {
                       transition: "all 0.3s"
                     }}
                   >
-                    <span style={{ fontSize: "1.25rem" }}>💻</span> View Code
+                    View Code
                   </a>
                 )}
                 {detail.demoUrl && (
@@ -206,7 +206,7 @@ export default function ProjectDetail() {
                       transition: "all 0.3s"
                     }}
                   >
-                    <span style={{ fontSize: "1.25rem" }}>🚀</span> Live Demo
+                    Live Demo
                   </a>
                 )}
               </div>
@@ -224,7 +224,7 @@ export default function ProjectDetail() {
                     alignItems: "center",
                     gap: "0.5rem"
                   }}>
-                    <span>🛠️</span> Tech Stack
+                    Tech Stack
                   </h3>
                   <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                     {detail.techStack.map((tech, i) => (
@@ -263,7 +263,7 @@ export default function ProjectDetail() {
                   </div>
                   {detail.featured && (
                     <div>
-                      <strong>Featured:</strong> Yes ⭐
+                      <strong>Featured:</strong> Yes
                     </div>
                   )}
                 </div>

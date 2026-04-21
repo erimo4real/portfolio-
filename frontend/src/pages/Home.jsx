@@ -235,7 +235,7 @@ export default function Home() {
         to="/contact"
         className="fixed bottom-8 right-8 z-50 bg-gradient-to-r from-primary-600 to-purple-600 text-white px-6 py-4 rounded-full font-bold shadow-2xl hover:shadow-3xl hover:scale-110 transition-all flex items-center gap-2 animate-bounce"
       >
-        <span>💬</span>
+        
         <span className="hidden sm:inline">Let's Talk</span>
       </Link>
 
@@ -277,7 +277,7 @@ export default function Home() {
                   <span className="text-white font-semibold">5+ Projects Completed</span>
                 </div>
                 <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2">
-                  <span className="text-2xl">⭐</span>
+                  
                   <span className="text-white font-semibold">Clean Code</span>
                 </div>
               </div>
@@ -465,7 +465,7 @@ export default function Home() {
                         </div>
                         {p.featured && (
                           <div className="absolute top-4 right-4 bg-amber-400 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                            ⭐ Featured
+                            Featured
                           </div>
                         )}
                       </div>
@@ -545,7 +545,7 @@ export default function Home() {
                   to="/contact"
                   className="inline-flex items-center gap-3 bg-white text-primary-600 px-10 py-5 rounded-xl font-bold text-lg shadow-2xl hover:shadow-3xl hover:-translate-y-1 transition-all relative z-10"
                 >
-                  <span className="text-2xl">✉️</span>
+                  
                   Contact Me
                 </Link>
               </>

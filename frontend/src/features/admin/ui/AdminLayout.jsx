@@ -19,10 +19,10 @@ const AdminLayout = () => {
     { path: '/admin', label: 'Dashboard', icon: '📊' },
     { path: '/admin/projects', label: 'Projects' },
     { path: '/admin/blogs', label: 'Blog Posts', icon: '📝' },
-    { path: '/admin/skills', label: 'Skills', icon: '🛠️' },
-    { path: '/admin/profile', label: 'Profile', icon: '👤' },
+    { path: '/admin/skills', label: 'Skills' },
+    { path: '/admin/profile', label: 'Profile' },
     { path: '/admin/resume', label: 'Resume', icon: '📄' },
-    { path: '/admin/contacts', label: 'Messages', icon: '✉️' },
+    { path: '/admin/contacts', label: 'Messages' },
   ];
 
   const isActive = (path) => {

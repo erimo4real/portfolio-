@@ -128,7 +128,7 @@ export default function ResumeAdmin() {
           <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xl">
-                ⬆️
+                
               </div>
               <h2 className="text-xl font-bold text-slate-800">Upload New Resume</h2>
             </div>
@@ -159,7 +159,7 @@ export default function ResumeAdmin() {
                     {selectedFile ? (
                       <div className="flex flex-col items-center">
                         <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center text-3xl mb-3">
-                          ✅
+                          
                         </div>
                         <div className="text-sm font-semibold text-emerald-700">{selectedFile.name}</div>
                         <div className="text-xs text-emerald-600 mt-1">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB • Click to change</div>
@@ -196,7 +196,7 @@ export default function ResumeAdmin() {
             <h2 className="text-xl font-bold text-slate-800 mb-6">Existing Resumes</h2>
             {list.length === 0 ? (
               <div className="text-center py-12">
-                <div className="text-5xl mb-4">📁</div>
+                
                 <p className="text-slate-500">No resumes uploaded yet</p>
               </div>
             ) : (

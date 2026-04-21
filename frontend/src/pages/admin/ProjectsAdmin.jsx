@@ -309,7 +309,7 @@ export default function ProjectsAdmin() {
                       onChange={handleImageChange}
                     />
                     <label htmlFor="project-images" className="cursor-pointer">
-                      <div className="text-4xl mb-2">🖼️</div>
+                      
                       <div className="text-sm font-medium text-slate-600">Click to upload images</div>
                       <div className="text-xs text-slate-400 mt-1">PNG, JPG up to 5MB each</div>
                     </label>
@@ -337,7 +337,7 @@ export default function ProjectsAdmin() {
                     onChange={(e) => setFormData({...formData, featured: e.target.checked})}
                     className="w-5 h-5 text-primary-600 rounded focus:ring-primary-500" 
                   />
-                  <span className="text-sm font-medium text-slate-700">⭐ Featured Project</span>
+                  <span className="text-sm font-medium text-slate-700">Featured Project</span>
                 </label>
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input 
@@ -383,7 +383,7 @@ export default function ProjectsAdmin() {
           </div>
         ) : list.length === 0 ? (
           <div className="bg-white rounded-2xl shadow-sm border border-dashed border-slate-300 p-12 text-center">
-            <div className="text-5xl mb-4">📁</div>
+            
             <p className="text-slate-500 text-lg">No projects yet. Create your first one above!</p>
           </div>
         ) : (
@@ -401,7 +401,7 @@ export default function ProjectsAdmin() {
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <h3 className="text-lg font-bold text-slate-900">{p.title}</h3>
-                      {p.featured && <span className="text-amber-500">⭐</span>}
+                      {p.featured && <span className="text-amber-500">Featured</span>}
                       <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         p.published ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-600"
                       }`}>
@@ -419,7 +419,7 @@ export default function ProjectsAdmin() {
                     <div className="flex flex-wrap gap-4 text-sm text-slate-500">
                       <span>/{p.slug}</span>
                       {p.techStack && p.techStack.length > 0 && (
-                        <span>🛠️ {p.techStack.slice(0, 4).join(", ")}{p.techStack.length > 4 ? "..." : ""}</span>
+                        <span>{p.techStack.slice(0, 4).join(", ")}{p.techStack.length > 4 ? "..." : ""}</span>
                       )}
                     </div>
                   </div>

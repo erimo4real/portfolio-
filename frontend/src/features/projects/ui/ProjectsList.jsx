@@ -52,7 +52,7 @@ export default function ProjectsList() {
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-slate-300">
-                  <span className="text-4xl">🖼️</span>
+                  
                 </div>
               )}
               <div className="absolute top-4 right-4">
@@ -96,7 +96,7 @@ export default function ProjectsList() {
 
       {projects.length === 0 && status === "succeeded" && (
         <div className="text-center py-24 bg-slate-50 rounded-[3rem] border border-dashed border-slate-200">
-          <div className="text-6xl mb-4">🚀</div>
+          
           <h3 className="text-xl font-bold text-slate-900">No projects yet</h3>
           <p className="text-slate-500">The admin is currently working on some amazing things.</p>
         </div>

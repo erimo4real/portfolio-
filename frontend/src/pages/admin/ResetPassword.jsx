@@ -66,7 +66,7 @@ export default function ResetPassword() {
           textAlign: "center",
           padding: "3rem"
         }}>
-          <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>⚠️</div>
+          <div style={{ fontSize: "4rem", marginBottom: "1rem" }}></div>
           <h2 style={{ marginBottom: "1rem" }}>Invalid Reset Link</h2>
           <p style={{ color: "#64748b", marginBottom: "2rem" }}>
             This password reset link is invalid or has expired.
@@ -186,7 +186,7 @@ export default function ResetPassword() {
               gap: "0.5rem",
               justifyContent: "center"
             }}>
-              <span>✅</span>
+              
               {message}
             </div>
             <p style={{ color: "#64748b", marginBottom: "1.5rem" }}>
