@@ -224,9 +224,9 @@ export default function ProjectsAdmin() {
                   onChange={(e) => setFormData({...formData, status: e.target.value})}
                   className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all"
                 >
-                  <option value="idea">💡 Idea</option>
-                  <option value="in_progress">⚡ In Progress</option>
-                  <option value="completed">✅ Completed</option>
+                  <option value="idea">Idea</option>
+                  <option value="in_progress">In Progress</option>
+                  <option value="completed">Completed</option>
                 </select>
               </div>
 
@@ -347,7 +347,7 @@ export default function ProjectsAdmin() {
                     onChange={(e) => setFormData({...formData, published: e.target.checked})}
                     className="w-5 h-5 text-primary-600 rounded focus:ring-primary-500" 
                   />
-                  <span className="text-sm font-medium text-slate-700">✅ Published</span>
+                  <span className="text-sm font-medium text-slate-700">Published</span>
                 </label>
               </div>
 
@@ -398,14 +398,14 @@ export default function ProjectsAdmin() {
                       <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         p.published ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-600"
                       }`}>
-                        {p.published ? "✅ Published" : "📝 Draft"}
+                        {p.published ? "Published" : "Draft"}
                       </span>
                       <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         p.status === "completed" ? "bg-emerald-100 text-emerald-700" : 
                         p.status === "in_progress" ? "bg-amber-100 text-amber-700" : 
                         "bg-purple-100 text-purple-700"
                       }`}>
-                        {p.status === "in_progress" ? "⚡" : p.status === "completed" ? "✅" : "💡"} {" "}
+                        {p.status}
                         {p.status?.replace("_", " ")}
                       </span>
                     </div>

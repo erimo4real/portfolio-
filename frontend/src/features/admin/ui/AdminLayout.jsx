@@ -17,7 +17,7 @@ const AdminLayout = () => {
 
   const navItems = [
     { path: '/admin', label: 'Dashboard', icon: '📊' },
-    { path: '/admin/projects', label: 'Projects', icon: '💼' },
+    { path: '/admin/projects', label: 'Projects' },
     { path: '/admin/blogs', label: 'Blog Posts', icon: '📝' },
     { path: '/admin/skills', label: 'Skills', icon: '🛠️' },
     { path: '/admin/profile', label: 'Profile', icon: '👤' },

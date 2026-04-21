@@ -270,7 +270,7 @@ export default function ProfileAdmin() {
 
                 {/* Tips */}
                 <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                  <h4 className="font-semibold text-amber-800 mb-2">💡 Tips for a great photo</h4>
+                  <h4 className="font-semibold text-amber-800 mb-2">Tips for a great photo</h4>
                   <ul className="text-sm text-amber-700 space-y-1">
                     <li>• Use a clear, well-lit photo</li>
                     <li>• Show your face clearly</li>

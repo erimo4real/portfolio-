@@ -88,7 +88,6 @@ export default function Home() {
       description: "Beautiful experiences that work on any device"
     },
     {
-      icon: "⚡",
       title: "Performance Optimization",
       description: "Fast, efficient applications that delight users"
     }
@@ -99,36 +98,31 @@ export default function Home() {
       name: "Sarah Johnson",
       role: "Product Manager",
       company: "Tech Corp",
-      text: "Outstanding work! The attention to detail and commitment to quality was exceptional. Delivered ahead of schedule and exceeded expectations.",
-      avatar: "👩‍💼"
+      text: "Outstanding work! The attention to detail and commitment to quality was exceptional. Delivered ahead of schedule and exceeded expectations."
     },
     {
       name: "Michael Chen",
       role: "CTO",
       company: "StartupXYZ",
-      text: "A true professional who brings both technical expertise and creative problem-solving. Would highly recommend for any project.",
-      avatar: "👨‍💻"
+      text: "A true professional who brings both technical expertise and creative problem-solving. Would highly recommend for any project."
     },
     {
       name: "Emily Rodriguez",
       role: "Design Lead",
       company: "Creative Studio",
-      text: "Fantastic collaboration! Great communication skills and ability to translate design concepts into pixel-perfect implementations.",
-      avatar: "👩‍🎨"
+      text: "Fantastic collaboration! Great communication skills and ability to translate design concepts into pixel-perfect implementations."
     },
     {
       name: "David Park",
       role: "Founder",
       company: "InnovateLabs",
-      text: "Exceptional developer with a keen eye for detail. The project was completed on time and the code quality was top-notch.",
-      avatar: "👨‍💼"
+      text: "Exceptional developer with a keen eye for detail. The project was completed on time and the code quality was top-notch."
     },
     {
       name: "Lisa Anderson",
       role: "Marketing Director",
       company: "Digital Agency",
-      text: "Working together was a pleasure! Professional, responsive, and delivered exactly what we needed. Highly recommended!",
-      avatar: "👩‍💼"
+      text: "Working together was a pleasure! Professional, responsive, and delivered exactly what we needed. Highly recommended!"
     }
   ];
 
@@ -223,8 +217,8 @@ export default function Home() {
   const getStatusBadge = (status) => {
     const badges = {
       completed: { label: "✓ Completed", color: "text-emerald-600", bg: "bg-emerald-50" },
-      in_progress: { label: "⚡ In Progress", color: "text-amber-600", bg: "bg-amber-50" },
-      idea: { label: "💡 Idea", color: "text-indigo-600", bg: "bg-indigo-50" }
+      in_progress: { label: "In Progress", color: "text-amber-600", bg: "bg-amber-50" },
+      idea: { label: "Idea", color: "text-indigo-600", bg: "bg-indigo-50" }
     };
     return badges[status] || badges.completed;
   }
@@ -317,8 +311,8 @@ export default function Home() {
                   />
                 </div>
               ) : (
-                <div className="w-full max-w-md aspect-square bg-white/10 rounded-full flex items-center justify-center text-8xl backdrop-blur-sm">
-                  👨‍💻
+                <div className="w-full max-w-md aspect-square bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">
+                  <span className="text-8xl">Profile</span>
                 </div>
               )}
             </div>
@@ -586,7 +580,7 @@ export default function Home() {
                         'from-cyan-500 to-blue-500'
                       } rounded-xl flex items-center justify-center text-3xl mb-6`}
                     >
-                      {index % 3 === 0 ? '💡' : index % 3 === 1 ? '🚀' : '⚡'}
+                      
                     </div>
                     {blog.createdAt && (
                       <div className="text-sm text-slate-500 mb-4">

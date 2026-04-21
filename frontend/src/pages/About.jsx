@@ -202,7 +202,7 @@ export default function About() {
                       onError={(e) => {
                         e.target.style.display = 'none';
                         if (e.target.parentElement) {
-                          e.target.parentElement.innerHTML = '<span style="font-size: clamp(4rem, 15vw, 8rem);">👨‍💻</span>';
+                          e.target.parentElement.innerHTML = '<span style="font-size: clamp(4rem, 15vw, 8rem);">Developer</span>';
                         }
                       }}
                     />
@@ -222,7 +222,7 @@ export default function About() {
                 fontWeight: "600",
                 marginBottom: "1.5rem"
               }}>
-                👨‍💻 My Story
+                My Story
               </div>
               <h2 style={{ marginBottom: "1.5rem" }}>
                 <span className="text-gradient">Passionate About Building Great Software</span>

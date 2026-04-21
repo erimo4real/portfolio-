@@ -163,7 +163,7 @@ export default function BlogList() {
                           style={{ width: "100%", height: "100%", objectFit: "cover" }}
                         />
                       ) : (
-                        <span>{index % 3 === 0 ? '💡' : index % 3 === 1 ? '🚀' : '⚡'}</span>
+                        
                       )}
                     </div>
                   </article>

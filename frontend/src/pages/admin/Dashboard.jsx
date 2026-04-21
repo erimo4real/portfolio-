@@ -65,7 +65,7 @@ export default function AdminDashboard() {
     { 
       title: "Projects", 
       path: "/admin/projects", 
-      icon: "💼", 
+
       description: "Showcase your work",
       color: "#ec4899",
       bgColor: "#fce7f3",

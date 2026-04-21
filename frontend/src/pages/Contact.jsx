@@ -94,7 +94,7 @@ export default function Contact() {
                     fontSize: "1.5rem",
                     flexShrink: 0
                   }}>
-                    📧
+                    ✉
                   </div>
                   <div>
                     <h3 style={{ marginBottom: "0.5rem", fontSize: "1.25rem" }}>Email</h3>
@@ -144,43 +144,24 @@ export default function Contact() {
               </div>
 
               <div style={{ marginTop: "3rem" }}>
-                <h3 style={{ marginBottom: "1rem" }}>Follow Me</h3>
-                <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-                  {[
-                    { icon: "💼", label: "LinkedIn", url: "https://linkedin.com" },
-                    { icon: "🐙", label: "GitHub", url: "https://github.com" },
-                    { icon: "🐦", label: "Twitter", url: "https://twitter.com" }
-                  ].map((social, index) => (
-                    <a
-                      key={index}
-                      href={social.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        background: "#f1f5f9",
-                        borderRadius: "12px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: "1.5rem",
-                        textDecoration: "none",
-                        transition: "all 0.3s"
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.background = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
-                        e.currentTarget.style.transform = "translateY(-5px)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.background = "#f1f5f9";
-                        e.currentTarget.style.transform = "translateY(0)";
-                      }}
-                    >
-                      {social.icon}
-                    </a>
-                  ))}
-                </div>
+                <h3 style={{ marginBottom: "1rem" }}>Contact</h3>
+                <a
+                  href="mailto:eromoxlx@gmail.com"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    padding: "1rem 2rem",
+                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    color: "white",
+                    borderRadius: "12px",
+                    textDecoration: "none",
+                    fontSize: "1.125rem",
+                    fontWeight: "600"
+                  }}
+                >
+                  Email Me
+                </a>
               </div>
             </div>
 
@@ -200,16 +181,9 @@ export default function Contact() {
                     animation: "scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)"
                   }}>
                     <img 
-                      src="/images/success-check.jpg" 
+                      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0iIzEwYjk4MSI+PHBhdGggZD0iTTE2IDJjNi42NyAwIDExLjMzIDUuNjMgMTEuMzMgMTIuMDBMMTYgMjJsLTUuMzMtNS4zM0gxNi41NkMxMC42NyAyNi41NiA2LjMzIDIwLjY3IDYgMTRDMCA3LjMzIDQuMzMgNS42NyA1LjMzIDRWNEM1LjMzIDIgNi42NyAxIDEuMzMgMUMxMCAxIDIuNjcgMi41NiA0LjMzIDQuNTdMMTYgMTJjNy4zNyAwIDEzLjY3IDYuMzAgMTMuNjcgMTMuMDBMMTYgMjJ6Ii8+PC9zdmc+" 
                       alt="Success"
                       style={{ width: "50px", height: "50px", objectFit: "contain" }}
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        if (e.target.parentElement) {
-                          e.target.parentElement.innerHTML = '✅';
-                          e.target.parentElement.style.fontSize = '3rem';
-                        }
-                      }}
                     />
                   </div>
                   <h3 style={{ marginBottom: "1rem", color: "#10b981" }}>Message Sent Successfully!</h3>

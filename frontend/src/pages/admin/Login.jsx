@@ -361,7 +361,7 @@ export default function AdminLogin() {
                 Portfolio Admin
               </h1>
               <p style={{ color: "#64748b", marginBottom: "1.5rem" }}>
-                {showRegister ? "Create your admin account" : isPasswordFocused ? "🔓 Access granted! Unlocking..." : "🔐 Sign in to continue"}
+                {showRegister ? "Create your admin account" : isPasswordFocused ? "Access granted!" : "Sign in to continue"}
               </p>
             </div>
             
@@ -420,7 +420,7 @@ export default function AdminLogin() {
                     }}
                   />
                   <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: "absolute", right: "1rem", top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", fontSize: "1.1rem" }}>
-                    {showPassword ? "👁️" : "👁️‍🗨️"}
+{showPassword ? "Hide" : "Show"}
                   </button>
                 </div>
 
@@ -545,7 +545,7 @@ export default function AdminLogin() {
                     padding: "0.25rem"
                   }}
                 >
-                  {showPassword ? "👁️" : "👁️‍🗨️"}
+                  {showPassword ? "Hide" : "Show"}
                 </button>
               </div>
 
@@ -772,7 +772,7 @@ export default function AdminLogin() {
               color: "#64748b",
               animation: "fadeIn 0.8s ease-out 0.8s both"
             }}>
-              <p>🔐 Secure portfolio management</p>
+              <p>Secure portfolio management</p>
             </div>
           </div>
         </div>
