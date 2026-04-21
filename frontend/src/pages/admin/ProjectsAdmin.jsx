@@ -425,6 +425,12 @@ export default function ProjectsAdmin() {
                   </div>
                   <div className="flex gap-2">
                     <button 
+                      onClick={() => handleEdit(p)}
+                      className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                    >
+                      Edit
+                    </button>
+                    <button 
                       onClick={() => togglePublish(p.id, p.published)} 
                       className="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
                     >
