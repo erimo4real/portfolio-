@@ -381,10 +381,9 @@ export default function AdminLogin() {
                   />
                 </div>
 
-                {/* Email/Phone Input */}
-                <div style={{ marginBottom: "1rem", position: "relative" }}>
-                  
-                  <input 
+{/* Email/Phone Input */}
+                <div style={{ marginBottom: "1rem" }}>
+                  <input
                     value={registerData.identifier || ""}
                     onChange={(e) => setRegisterData({...registerData, identifier: e.target.value})}
                     placeholder="Email or Phone Number *"
@@ -425,8 +424,7 @@ export default function AdminLogin() {
                 </div>
 
                 {/* Confirm Password Input */}
-                <div style={{ marginBottom: "1.5rem", position: "relative" }}>
-                  <span style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", fontSize: "1.1rem" }}>🔒</span>
+                <div style={{ marginBottom: "1.5rem" }}>
                   <input 
                     type={showPassword ? "text" : "password"}
                     value={registerData.confirmPassword || ""}
@@ -464,14 +462,6 @@ export default function AdminLogin() {
             }}>
               {/* Email/Phone Input */}
               <div style={{ marginBottom: "1rem", position: "relative" }}>
-                <span style={{
-                  position: "absolute",
-                  left: "1rem",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  fontSize: "1.1rem",
-                  zIndex: 1
-                }}>
                 <input 
                   name="identifier" 
                   value={loginData.identifier || ""}

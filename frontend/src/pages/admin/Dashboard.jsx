@@ -44,7 +44,7 @@ export default function AdminDashboard() {
     navigate("/admin/login");
   };
 
-const sections = [
+  const sections = [
     { 
       title: "Profile", 
       path: "/admin/profile", 
@@ -101,53 +101,45 @@ const sections = [
   ];
 
   return (
-    <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)" }}>
+    <div style={{ minHeight: "100vh", background: "#f1f5f9" }}>
       {/* Header */}
-<div style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "48px",
-                height: "48px",
-                borderRadius: "12px",
-                background: stat.color + "20"
-              }}>
-              </div>
-              <div>
-            <h1 style={{ marginBottom: "0.25rem", color: "white", fontSize: "2rem" }}>
-              Welcome back, {admin?.name || 'Admin'}! 👋
+      <div style={{
+        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        padding: "2rem"
+      }}>
+        <div style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center"
+        }}>
+          <div>
+            <h1 style={{ color: "white", fontSize: "2rem", margin: 0 }}>
+              Welcome back, {admin?.name || 'Admin'}
             </h1>
-            <p style={{ color: "rgba(255,255,255,0.8)", fontSize: "1rem" }}>
-              Manage your portfolio content and track your progress
+            <p style={{ color: "rgba(255,255,255,0.8)", marginTop: "0.5rem" }}>
+              Manage your portfolio content
             </p>
           </div>
           <div style={{ display: "flex", gap: "1rem" }}>
             <Link to="/" style={{
               padding: "0.75rem 1.5rem",
-              borderRadius: "12px",
-              fontWeight: "600",
               background: "rgba(255,255,255,0.2)",
-              backdropFilter: "blur(10px)",
-              textDecoration: "none",
+              borderRadius: "12px",
               color: "white",
-              border: "1px solid rgba(255,255,255,0.3)",
-              transition: "all 0.3s ease"
+              textDecoration: "none"
             }}>
               View Site
             </Link>
-            <button 
-              onClick={handleLogout}
-              style={{
-                padding: "0.75rem 1.5rem",
-                borderRadius: "12px",
-                fontWeight: "600",
-                background: "rgba(239, 68, 68, 0.9)",
-                color: "white",
-                border: "none",
-                cursor: "pointer",
-                transition: "all 0.3s ease"
-              }}
-            >
+            <button onClick={handleLogout} style={{
+              padding: "0.75rem 1.5rem",
+              background: "#ef4444",
+              borderRadius: "12px",
+              color: "white",
+              border: "none",
+              cursor: "pointer"
+            }}>
               Logout
             </button>
           </div>
@@ -155,44 +147,35 @@ const sections = [
       </div>
 
       {/* Quick Stats */}
-      <div className="container" style={{ marginTop: "-2rem", position: "relative", zIndex: 2 }}>
+      <div style={{ maxWidth: "1200px", margin: "-2rem auto 2rem", padding: "0 2rem", position: "relative", zIndex: 2 }}>
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
           gap: "1.5rem"
         }}>
-          {quickStats.map((stat, index) => (
+          {quickStats.map((stat) => (
             <div key={stat.label} style={{
               background: "white",
               borderRadius: "16px",
               padding: "1.5rem",
-              boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
+              boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
               display: "flex",
               alignItems: "center",
-              gap: "1rem",
-              animation: `slideInUp 0.5s ease-out ${index * 0.1}s both`
+              gap: "1rem"
             }}>
               <div style={{
                 width: "56px",
                 height: "56px",
                 borderRadius: "14px",
-                background: `${stat.color}15`,
+                background: stat.color + "20",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                fontSize: "1.75rem"
-              }}>
-                {stat.icon}
-              </div>
+                justifyContent: "center"
+              }}></div>
               <div>
                 <p style={{ color: "#64748b", fontSize: "0.875rem", margin: 0 }}>{stat.label}</p>
-                <p style={{ 
-                  color: "#0f172a", 
-                  fontSize: "1.75rem", 
-                  fontWeight: "800",
-                  margin: "0.25rem 0 0 0"
-                }}>
-                  {loading ? '...' : stat.value.toLocaleString()}
+                <p style={{ color: "#0f172a", fontSize: "1.75rem", fontWeight: "800", margin: 0 }}>
+                  {loading ? '...' : stat.value}
                 </p>
               </div>
             </div>
@@ -200,72 +183,44 @@ const sections = [
         </div>
       </div>
 
-      {/* Dashboard Grid */}
-      <div className="container" style={{ padding: "3rem 0" }}>
+      {/* Management Sections */}
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 2rem 3rem" }}>
         <h2 style={{ marginBottom: "1.5rem", fontSize: "1.5rem", fontWeight: "700", color: "#0f172a" }}>
           Management Sections
         </h2>
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
           gap: "1.5rem"
         }}>
-          {sections.map((section, index) => (
-            <Link 
-              key={section.path}
-              to={section.path}
-              style={{ textDecoration: "none" }}
-            >
+          {sections.map((section) => (
+            <Link key={section.path} to={section.path} style={{ textDecoration: "none" }}>
               <div style={{
                 background: "white",
                 borderRadius: "20px",
                 padding: "1.75rem",
-                height: "100%",
                 cursor: "pointer",
-                transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-                border: "1px solid rgba(0,0,0,0.04)",
-                animation: `fadeInUp 0.5s ease-out ${index * 0.08}s both`,
-                position: "relative",
-                overflow: "hidden"
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-8px) scale(1.02)";
-                e.currentTarget.style.boxShadow = "0 20px 40px rgba(0,0,0,0.15)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0) scale(1)";
-                e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.08)";
-              }}
-              >
-                {/* Background Gradient on Hover */}
+                transition: "all 0.3s",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.08)"
+              }}>
                 <div style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
                   height: "4px",
                   background: section.color,
-                  opacity: 0.8
+                  borderRadius: "4px",
+                  marginBottom: "1rem"
                 }}></div>
-
                 <div style={{
                   display: "flex",
-                  alignItems: "flex-start",
                   justifyContent: "space-between",
+                  alignItems: "flex-start",
                   marginBottom: "1rem"
                 }}>
                   <div style={{
                     width: "60px",
                     height: "60px",
                     borderRadius: "16px",
-                    background: section.bgColor,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "1.75rem"
-                  }}>
-                  </div>
+                    background: section.bgColor
+                  }}></div>
                   {section.count !== undefined && (
                     <span style={{
                       background: section.bgColor,
@@ -279,59 +234,15 @@ const sections = [
                     </span>
                   )}
                 </div>
-                <h3 style={{ marginBottom: "0.5rem", color: "#0f172a", fontSize: "1.25rem", fontWeight: "700" }}>
+                <h3 style={{ color: "#0f172a", fontSize: "1.25rem", fontWeight: "700", margin: "0 0 0.5rem" }}>
                   {section.title}
                 </h3>
-                <p style={{ color: "#64748b", fontSize: "0.9375rem", lineHeight: "1.5" }}>
-                  {section.description}
-                </p>
-                <div style={{
-                  marginTop: "1rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  color: section.color,
-                  fontWeight: "600",
-                  fontSize: "0.875rem"
-                }}>
-                  Manage {section.title}
-                  <span>→</span>
-                </div>
+                <p style={{ color: "#64748b", margin: 0 }}>{section.description}</p>
               </div>
             </Link>
           ))}
         </div>
       </div>
-
-      {/* CSS Animations */}
-      <style>{`
-        @keyframes slideInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
-        }
-      `}</style>
     </div>
   );
 }
