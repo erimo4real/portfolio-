@@ -9,6 +9,13 @@
   status = 200
   force = true
 
+# Proxy uploads to backend
+[[redirects]]
+  from = "/uploads/*"
+  to = "https://portfolio-backend-0g6g.onrender.com/uploads/:splat"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
