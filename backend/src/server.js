@@ -72,7 +72,8 @@ app.use(cors({
 }));
 app.use(helmet({
   contentSecurityPolicy: false,
-  crossOriginEmbedderPolicy: false
+  crossOriginEmbedderPolicy: false,
+  crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 app.use(csrfProtection);
 app.use(cookieParser(process.env.JWT_SECRET));

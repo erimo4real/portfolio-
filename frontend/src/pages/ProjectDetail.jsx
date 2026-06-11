@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import { fetchProjectDetail } from "../store/slices/projects.js";
-import { getApiUrl } from "../lib/api.js";
 import { marked } from "marked";
 
 export default function ProjectDetail() {
@@ -123,7 +122,7 @@ export default function ProjectDetail() {
                 onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.02)"}
                 onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}>
                   <img 
-                    src={img.path?.startsWith('http') ? img.path : getApiUrl() + img.path} 
+                    src={img.path} 
                     alt={`${detail.title} screenshot ${i + 1}`}
                     style={{
                       width: "100%",

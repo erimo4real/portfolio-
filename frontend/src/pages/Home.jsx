@@ -456,7 +456,7 @@ export default function Home() {
                         className="w-full h-64 bg-cover bg-center relative"
                         style={{
                           backgroundImage: p.images?.[0]?.path 
-                            ? `url(${getImageUrl(p.images[0].path)})` 
+                            ? `url(${p.images[0].path})` 
                             : `linear-gradient(135deg, ${index % 2 === 0 ? '#667eea' : '#f093fb'} 0%, ${index % 2 === 0 ? '#764ba2' : '#f5576c'} 100%)`
                         }}
                       >
