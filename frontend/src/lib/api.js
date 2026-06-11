@@ -18,7 +18,8 @@ const getApiUrl = () => {
 // Create axios instance with default configuration
 export const api = axios.create({
   baseURL: getApiUrl() + "/api",
-  withCredentials: true
+  withCredentials: true,
+  headers: { "X-Requested-With": "XMLHttpRequest" }
 });
 
 // Also ensure credentials are sent with every request and let browser set Content-Type for FormData

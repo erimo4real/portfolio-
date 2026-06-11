@@ -2,7 +2,8 @@
 // Contains business logic for login, password reset, and admin management
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { findAdminByEmailOrPhone, findAdminByGoogleId, findAdminByEmail, createAdmin, updateAdminGoogleId } from "./repository.js";
+import crypto from "crypto";
+import { findAdminByEmailOrPhone, findAdminByGoogleId, findAdminByEmail, createAdmin, updateAdminGoogleId, findAdminByResetTokenHash, updateAdminResetToken, clearAdminResetToken } from "./repository.js";
 import { sendPasswordResetEmail } from "../../lib/email.js";
 
 // Login function - validates credentials and generates JWT token
@@ -15,79 +16,53 @@ export async function login(identifier, password) {
   // Compare provided password with stored hash
   const ok = await bcrypt.compare(password, admin.passwordHash);
   if (!ok) throw Object.assign(new Error("Invalid credentials"), { status: 401 });
-  // Generate JWT token with admin ID and role
-  const secret = process.env.JWT_SECRET || "dev-secret";
-  const token = jwt.sign({ sub: admin.id, role: "admin" }, secret, { expiresIn: "7d" });
+  const token = jwt.sign({ sub: admin.id, role: "admin" }, process.env.JWT_SECRET, { expiresIn: "7d" });
   // Return token and sanitized admin data
   return { token, admin: { id: admin.id, email: admin.email, phone: admin.phone } };
 }
 
-// Request password reset - generates reset token
-// Parameters: identifier (email or phone)
-// Returns: confirmation message (doesn't reveal if user exists)
 export async function requestPasswordReset(identifier) {
-  // Find admin by identifier
   const admin = await findAdminByEmailOrPhone(identifier);
   if (!admin) {
-    // Don't reveal if user exists - security best practice
     return { message: "If an account exists, a reset link has been sent" };
   }
   
-  // Determine reset destination
-  // If identifier is email → use that email
-  // If identifier is phone → use admin's email if available
   let resetEmail = null;
   const isEmailInput = identifier.includes("@");
   
   if (isEmailInput) {
     resetEmail = identifier;
   } else {
-    // Phone number entered - need email on file
     if (!admin.email) {
-      // No email on file - can't send reset
       return { message: "If an account exists, a reset link has been sent" };
     }
     resetEmail = admin.email;
   }
   
-  // Generate temporary reset token (expires in 1 hour)
-  const secret = process.env.JWT_SECRET || "dev-secret";
-  const resetToken = jwt.sign({ sub: admin.id, type: "reset" }, secret, { expiresIn: "1h" });
+  const rawToken = crypto.randomBytes(32).toString("hex");
+  const tokenHash = crypto.createHash("sha256").update(rawToken).digest("hex");
+  const expiry = new Date(Date.now() + 15 * 60 * 1000);
   
-  // Send email with reset link
-  const emailSent = await sendPasswordResetEmail(resetEmail, resetToken);
-  
-  // In development, return token if email fails
-  if (!emailSent && process.env.NODE_ENV !== "production") {
-    return { message: "If an account exists, a reset link has been sent", resetToken };
-  }
+  await updateAdminResetToken(admin.id, tokenHash, expiry);
+  await sendPasswordResetEmail(resetEmail, rawToken);
   
   return { message: "If an account exists, a reset link has been sent" };
 }
 
-// Reset password - validates token and updates password
-// Parameters: resetToken (JWT), newPassword
-// Returns: success message
-export async function resetPassword(resetToken, newPassword) {
-  const secret = process.env.JWT_SECRET || "dev-secret";
+export async function resetPassword(rawToken, newPassword) {
+  const tokenHash = crypto.createHash("sha256").update(rawToken).digest("hex");
+  const admin = await findAdminByResetTokenHash(tokenHash);
   
-  try {
-    // Verify reset token
-    const payload = jwt.verify(resetToken, secret);
-    if (payload.type !== "reset") {
-      throw new Error("Invalid token type");
-    }
-    
-    // Hash new password and update in database
-    const hash = await bcrypt.hash(newPassword, 10);
-    const { updateAdminPassword } = await import("./repository.js");
-    await updateAdminPassword(payload.sub, hash);
-    
-    return { message: "Password reset successful" };
-  } catch (err) {
-    // Invalid or expired token
+  if (!admin) {
     throw Object.assign(new Error("Invalid or expired reset token"), { status: 400 });
   }
+  
+  const hash = await bcrypt.hash(newPassword, 10);
+  await clearAdminResetToken(admin.id);
+  const { updateAdminPassword } = await import("./repository.js");
+  await updateAdminPassword(admin.id, hash);
+  
+  return { message: "Password reset successful" };
 }
 
 // Bootstrap admin - creates initial admin account if none exists
@@ -166,8 +141,7 @@ export async function googleLogin(profile) {
     throw Object.assign(new Error("Failed to process Google login"), { status: 500 });
   }
   
-  const secret = process.env.JWT_SECRET || "dev-secret";
-  const token = jwt.sign({ sub: admin.id, role: "admin" }, secret, { expiresIn: "7d" });
+  const token = jwt.sign({ sub: admin.id, role: "admin" }, process.env.JWT_SECRET, { expiresIn: "7d" });
   
   return { 
     token, 

@@ -6,6 +6,7 @@ import { login, bootstrapAdmin, requestPasswordReset, resetPassword, googleLogin
 import { getAdminById } from "./repository.js";
 import { z } from "zod";
 import { validate } from "../../middleware/validate.js";
+import { requireAdmin } from "../../middleware/auth.js";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
@@ -34,11 +35,13 @@ passport.deserializeUser((obj, done) => done(null, obj));
 // Export authentication router
 export const authRouter = express.Router();
 
-// Validation schema for login request body
-// identifier: email or phone (min 3 chars)
-// password: minimum 6 chars
+const identifierSchema = z.string().min(3).refine(
+  val => val.includes("@") || /^\+?[\d\s\-()]{7,}$/.test(val),
+  { message: "Identifier must be a valid email or phone number" }
+);
+
 const loginBody = z.object({
-  identifier: z.string().min(3),
+  identifier: identifierSchema,
   password: z.string().min(6),
   rememberMe: z.boolean().optional()
 });
@@ -53,10 +56,11 @@ authRouter.post("/login", validate(loginBody), async (req, res, next) => {
     // Set httpOnly cookie - lasts 7 days
     const maxAge = 7 * 24 * 60 * 60 * 1000;
     
+    const isProduction = process.env.NODE_ENV === "production";
     res.cookie("auth_token", result.token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: isProduction,
+      sameSite: isProduction ? "strict" : "lax",
       maxAge: maxAge,
       path: "/"
     });
@@ -67,15 +71,13 @@ authRouter.post("/login", validate(loginBody), async (req, res, next) => {
   }
 });
 
-// Validation schema for register request body
 const registerBody = z.object({
-  identifier: z.string().min(3),
-  password: z.string().min(6),
+  identifier: identifierSchema,
+  password: z.string().min(8),
   name: z.string().min(1).optional()
 });
 
-// POST /register - Create new admin account
-authRouter.post("/register", validate(registerBody), async (req, res, next) => {
+authRouter.post("/register", requireAdmin, validate(registerBody), async (req, res, next) => {
   try {
     const { identifier, password, name } = req.body;
     const { registerAdmin } = await import("./service.js");
@@ -86,9 +88,8 @@ authRouter.post("/register", validate(registerBody), async (req, res, next) => {
   }
 });
 
-// Validation schema for forgot password request
 const forgotPasswordBody = z.object({
-  identifier: z.string().min(3)
+  identifier: identifierSchema
 });
 
 // POST /forgot-password - Send password reset email
@@ -133,9 +134,7 @@ authRouter.get("/me", async (req, res, next) => {
       return res.json({ isAuthenticated: false });
     }
     
-    // Verify JWT token
-    const secret = process.env.JWT_SECRET || "dev-secret-change-in-production";
-    const decoded = jwt.verify(token, secret);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
     // Get admin from database using token subject (sub)
     const admin = await getAdminById(decoded.sub);
@@ -156,12 +155,12 @@ authRouter.get("/me", async (req, res, next) => {
   }
 });
 
-// POST /logout - Clear auth cookie
 authRouter.post("/logout", (req, res) => {
+  const isProduction = process.env.NODE_ENV === "production";
   res.clearCookie("auth_token", {
     httpOnly: true,
-    secure: true,
-    sameSite: "none",
+    secure: isProduction,
+    sameSite: isProduction ? "strict" : "lax",
     path: "/"
   });
   res.json({ success: true });

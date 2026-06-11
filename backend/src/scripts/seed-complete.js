@@ -26,10 +26,18 @@ async function seedComplete() {
     await Resume.deleteMany({});
 
     // 1. Create Admin User
-    console.log("Creating admin user...");
-    const hashedPassword = await bcrypt.hash("admin123", 10);
+    const adminEmail = process.argv[2] || "admin@example.com";
+    const adminPassword = process.argv[3] || "replace_with_secure_password";
+    
+    if (adminPassword.length < 8) {
+      console.error("Password must be at least 8 characters");
+      process.exit(1);
+    }
+    
+    console.log(`Creating admin user (${adminEmail})...`);
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
     await Admin.create({
-      email: "admin@example.com",
+      email: adminEmail,
       phone: "+1234567890",
       passwordHash: hashedPassword,
       role: "admin"
@@ -884,9 +892,9 @@ Performance optimization is an ongoing process. Profile your queries, add approp
       active: true
     });
 
-    console.log("\n✅ Database seeded successfully!");
+    console.log("\nDatabase seeded successfully!");
     console.log("\nCreated:");
-    console.log("- 1 Admin user (admin@example.com / admin123)");
+    console.log(`- 1 Admin user (${adminEmail})`);
     console.log("- 1 Profile");
     console.log("- 23 Skills (across 4 categories)");
     console.log("- 6 Projects (2 featured, 1 in progress, 1 idea)");

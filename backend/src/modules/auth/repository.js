@@ -1,7 +1,8 @@
 import { Admin } from "./model.js";
 
 export async function findAdminByEmailOrPhone(identifier) {
-  const query = { $or: [{ email: identifier }, { phone: identifier }] };
+  const escaped = identifier.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const query = { $or: [{ email: escaped }, { phone: escaped }] };
   return Admin.findOne(query).exec();
 }
 
@@ -28,4 +29,16 @@ export async function updateAdminPassword(adminId, passwordHash) {
 
 export async function getAdminById(adminId) {
   return Admin.findById(adminId).select('-passwordHash').exec();
+}
+
+export async function findAdminByResetTokenHash(hash) {
+  return Admin.findOne({ resetTokenHash: hash, resetTokenExpiry: { $gt: new Date() } }).exec();
+}
+
+export async function updateAdminResetToken(adminId, resetTokenHash, resetTokenExpiry) {
+  return Admin.findByIdAndUpdate(adminId, { resetTokenHash, resetTokenExpiry }, { new: true }).exec();
+}
+
+export async function clearAdminResetToken(adminId) {
+  return Admin.findByIdAndUpdate(adminId, { $unset: { resetTokenHash: "", resetTokenExpiry: "" } }, { new: true }).exec();
 }

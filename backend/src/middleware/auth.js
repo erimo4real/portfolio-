@@ -12,8 +12,7 @@ export function requireAdmin(req, res, next) {
   if (!token) return res.status(401).json({ error: "Unauthorized" });
   
   try {
-    const secret = process.env.JWT_SECRET || "dev-secret";
-    const payload = jwt.verify(token, secret);
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
     if (payload.role !== "admin") return res.status(403).json({ error: "Forbidden" });
     req.adminId = payload.sub;
     next();

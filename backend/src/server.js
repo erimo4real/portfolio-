@@ -12,7 +12,8 @@ import cookieParser from "cookie-parser";
 import passport from "passport";
 import helmet from "helmet";
 import mongoSanitize from "express-mongo-sanitize";
-import xss from "xss-clean";
+import { sanitizeInput } from "./middleware/sanitize.js";
+import { csrfProtection } from "./middleware/csrf.js";
 import { connectDb } from "./config/db.js";
 import { authRouter } from "./modules/auth/routes.js";
 import { profileRouter } from "./modules/profile/routes.js";
@@ -23,6 +24,7 @@ import { resumeRouter } from "./modules/resume/routes.js";
 import { contactRouter } from "./modules/contact/routes.js";
 import { analyticsRouter } from "./modules/analytics/routes.js";
 import { errorHandler, logger } from "./middleware/error.js";
+import { requireAdmin } from "./middleware/auth.js";
 
 dotenv.config();
 
@@ -51,29 +53,33 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL?.replace(/\/$/, ''),
+  "http://localhost:5173",
+  "http://localhost:5174"
+].filter(Boolean);
+
 app.use(cors({
   origin: (origin, callback) => {
-    const allowedOrigins = [
-      process.env.FRONTEND_URL,
-      process.env.FRONTEND_URL?.replace(/\/$/, ''),
-      "http://localhost:5173",
-      "http://localhost:5174"
-    ].filter(Boolean);
-    
     if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes(origin.replace(/\/$/, ''))) {
       callback(null, true);
     } else {
-      callback(null, true);
+      callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true
 }));
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false
+}));
+app.use(csrfProtection);
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(mongoSanitize());
-app.use(xss());
+app.use(sanitizeInput);
 app.use(passport.initialize());
 app.use(morgan("dev"));
 
@@ -89,6 +95,9 @@ app.use("/api/auth/reset-password", authLimiter);
 const contactLimiter = rateLimit({ windowMs: 60 * 1000, max: 5, message: { error: "Too many requests, try again later" } });
 app.use("/api/contact", contactLimiter);
 
+const analyticsLimiter = rateLimit({ windowMs: 60 * 1000, max: 30, message: { error: "Too many requests, try again later" } });
+app.use("/api/analytics/track", analyticsLimiter);
+
 const uploadDir = path.join(__dirname, "..", "storage", "uploads");
 try {
   fs.mkdirSync(uploadDir, { recursive: true });
@@ -103,7 +112,7 @@ app.use("/api/blog", blogRouter);
 app.use("/api/resume", resumeRouter);
 app.use("/api/contact", contactRouter);
 app.use("/api/analytics", analyticsRouter);
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api/docs", requireAdmin, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.get("/api/health", (req, res) => {
   res.json({ ok: true, uptime: process.uptime() });
 });

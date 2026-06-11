@@ -7,7 +7,9 @@ const AdminSchema = new mongoose.Schema(
     phone: { type: String, index: true, unique: true, sparse: true },
     passwordHash: { type: String },
     googleId: { type: String, index: true, unique: true, sparse: true },
-    avatar: { type: String }
+    avatar: { type: String },
+    resetTokenHash: { type: String },
+    resetTokenExpiry: { type: Date }
   },
   { timestamps: true }
 );
