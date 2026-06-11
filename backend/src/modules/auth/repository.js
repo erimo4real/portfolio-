@@ -1,8 +1,7 @@
 import { Admin } from "./model.js";
 
 export async function findAdminByEmailOrPhone(identifier) {
-  const escaped = identifier.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const query = { $or: [{ email: escaped }, { phone: escaped }] };
+  const query = { $or: [{ email: identifier }, { phone: identifier }] };
   return Admin.findOne(query).exec();
 }
 
