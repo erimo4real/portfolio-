@@ -29,6 +29,13 @@ export default function ProjectDetail() {
 
   return (
     <div>
+      <style>{`
+        @media (max-width: 768px) {
+          .project-content-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
       {/* Hero Section */}
       <section style={{
         minHeight: "60vh",
@@ -65,7 +72,7 @@ export default function ProjectDetail() {
             <h1 style={{ 
               color: "white", 
               marginBottom: "1.5rem",
-              fontSize: "3.5rem"
+              fontSize: "clamp(2rem, 5vw, 3.5rem)"
             }}>
               {detail.title}
             </h1>
@@ -106,9 +113,9 @@ export default function ProjectDetail() {
         <div className="container" style={{ maxWidth: "1200px" }}>
           {/* Images Gallery */}
           {detail.images && detail.images.length > 0 && (
-            <div style={{
+            <div className="project-image-grid" style={{
               display: "grid",
-              gridTemplateColumns: detail.images.length === 1 ? "1fr" : "repeat(auto-fit, minmax(400px, 1fr))",
+              gridTemplateColumns: detail.images.length === 1 ? "1fr" : "repeat(auto-fit, minmax(min(280px, 100%), 1fr))",
               gap: "2rem",
               marginBottom: "4rem"
             }}>
@@ -124,6 +131,7 @@ export default function ProjectDetail() {
                   <img 
                     src={img.path} 
                     alt={`${detail.title} screenshot ${i + 1}`}
+                    loading="lazy"
                     style={{
                       width: "100%",
                       height: "100%",
@@ -136,7 +144,7 @@ export default function ProjectDetail() {
             </div>
           )}
 
-          <div style={{
+          <div className="project-content-grid" style={{
             display: "grid",
             gridTemplateColumns: "2fr 1fr",
             gap: "3rem"

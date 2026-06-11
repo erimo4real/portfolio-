@@ -32,13 +32,14 @@ export default function BlogDetail() {
       {/* Cover Image */}
       {detail.image && (
         <div style={{
-          height: "500px",
+          height: "clamp(250px, 50vh, 500px)",
           overflow: "hidden",
           position: "relative"
         }}>
           <img 
             src={detail.image} 
             alt={detail.title}
+            loading="lazy"
             style={{
               width: "100%",
               height: "100%",
@@ -122,7 +123,7 @@ export default function BlogDetail() {
             <h1 style={{ 
               color: "white", 
               marginBottom: "1.5rem",
-              fontSize: "3.5rem",
+              fontSize: "clamp(2rem, 5vw, 3.5rem)",
               lineHeight: "1.1"
             }}>
               {detail.title}
@@ -170,7 +171,7 @@ export default function BlogDetail() {
             </Link>
             <h1 style={{ 
               color: "white", 
-              fontSize: "3rem",
+              fontSize: "clamp(1.75rem, 4vw, 3rem)",
               lineHeight: "1.1"
             }}>
               {detail.title}
@@ -297,8 +298,8 @@ export default function BlogDetail() {
       <section style={{ background: "#f8fafc", padding: "5rem 0" }}>
         <div className="container" style={{ maxWidth: "800px" }}>
           <article className="card" style={{
-            padding: "4rem",
-            fontSize: "1.125rem",
+            padding: "clamp(1.5rem, 4vw, 4rem)",
+            fontSize: "clamp(1rem, 1.5vw, 1.125rem)",
             lineHeight: "1.9"
           }}>
             <style>{`

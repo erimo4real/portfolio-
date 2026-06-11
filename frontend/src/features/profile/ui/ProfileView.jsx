@@ -55,6 +55,7 @@ export default function ProfileView() {
                 <img 
                   alt="profile" 
                   src={data.imagePath} 
+                  loading="lazy"
                   className="w-full h-full object-cover"
                 />
               ) : (

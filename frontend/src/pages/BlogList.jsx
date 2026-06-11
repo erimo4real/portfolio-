@@ -14,6 +14,13 @@ export default function BlogList() {
 
   return (
     <div>
+      <style>{`
+        @media (max-width: 768px) {
+          .blog-card-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
       {/* Hero Section */}
       <section style={{
         minHeight: "60vh",
@@ -36,7 +43,7 @@ export default function BlogList() {
           }}>
             📝 Blog
           </div>
-          <h1 style={{ color: "white", marginBottom: "1.5rem" }}>
+          <h1 style={{ color: "white", marginBottom: "1.5rem", fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>
             Thoughts & Insights
           </h1>
           <p style={{ 
@@ -82,11 +89,11 @@ export default function BlogList() {
                   to={`/blog/${b.slug}`}
                   style={{ textDecoration: "none" }}
                 >
-                  <article className="card" style={{
-                    padding: "3rem",
+                  <article className="card blog-card-grid" style={{
+                    padding: "clamp(1.5rem, 3vw, 3rem)",
                     display: "grid",
                     gridTemplateColumns: index % 2 === 0 ? "2fr 1fr" : "1fr 2fr",
-                    gap: "3rem",
+                    gap: "clamp(1rem, 3vw, 3rem)",
                     alignItems: "center"
                   }}>
                     <div style={{ order: index % 2 === 0 ? 1 : 2 }}>
@@ -121,7 +128,7 @@ export default function BlogList() {
                       <h2 style={{ 
                         color: "#0f172a",
                         marginBottom: "1rem",
-                        fontSize: "2rem",
+                        fontSize: "clamp(1.25rem, 3vw, 2rem)",
                         lineHeight: "1.2"
                       }}>
                         {b.title}
@@ -160,6 +167,7 @@ export default function BlogList() {
                         <img 
                           src={b.image} 
                           alt={b.title}
+                          loading="lazy"
                           style={{ width: "100%", height: "100%", objectFit: "cover" }}
                         />
                       ) : (

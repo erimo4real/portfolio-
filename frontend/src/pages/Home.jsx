@@ -305,6 +305,7 @@ export default function Home() {
                   <img 
                     src={getImageUrl(profile.imagePath)} 
                     alt="Profile" 
+                    loading="lazy"
                     className="w-full h-full rounded-full object-cover border-8 border-white/20 relative z-10 shadow-2xl"
                   />
                 </div>

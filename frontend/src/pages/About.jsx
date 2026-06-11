@@ -153,7 +153,7 @@ export default function About() {
                     animation: "pulseRing 3s ease-in-out infinite",
                     animationDelay: "1s"
                   }}></div>
-                  <img src={getImageUrl(profile.imagePath)} alt="Profile" style={{
+                  <img loading="lazy" src={getImageUrl(profile.imagePath)} alt="Profile" style={{
                     width: "100%",
                     height: "100%",
                     borderRadius: "50%",
@@ -197,6 +197,7 @@ export default function About() {
                     <img 
                       src="/images/about-profile.jpg" 
                       alt="Profile"
+                      loading="lazy"
                       style={{ width: "100%", height: "100%", objectFit: "cover" }}
                       className="hover-scale"
                       onError={(e) => {

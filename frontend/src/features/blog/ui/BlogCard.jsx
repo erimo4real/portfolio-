@@ -8,6 +8,7 @@ const BlogCard = ({ post }) => {
         <img 
           src={post.coverImage} 
           alt={post.title} 
+          loading="lazy"
           className="w-full h-48 object-cover"
         />
       )}

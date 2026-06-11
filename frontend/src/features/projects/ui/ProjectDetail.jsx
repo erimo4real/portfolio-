@@ -111,6 +111,7 @@ const ProjectDetail = () => {
                 <img 
                   src={img.path} 
                   alt={`${project.title} screenshot ${index + 1}`} 
+                  loading="lazy"
                   className="w-full h-auto group-hover:scale-[1.02] transition-transform duration-500"
                 />
               </div>
