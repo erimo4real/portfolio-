@@ -16,8 +16,10 @@ async function getTransporter() {
     });
     try {
       await transporter.verify();
+      console.log("[email] SMTP verify OK");
       logger.info("SMTP transporter verified successfully");
     } catch (verifyErr) {
+      console.log("[email] SMTP verify FAILED:", verifyErr.message, verifyErr.code);
       logger.error({ err: verifyErr }, "SMTP transporter verification failed");
     }
   }
@@ -27,6 +29,12 @@ async function getTransporter() {
 export async function sendPasswordResetEmail(email, resetToken) {
   const domain = email.split("@")[1];
   const resetUrl = `${process.env.FRONTEND_URL || "http://localhost:5173"}/admin/reset-password?token=${resetToken}`;
+  
+  console.log("[email] SMTP_USER:", process.env.SMTP_USER?.substring(0, 3) + "***");
+  console.log("[email] SMTP_HOST:", process.env.SMTP_HOST);
+  console.log("[email] SMTP_PORT:", process.env.SMTP_PORT);
+  console.log("[email] SMTP_FROM:", process.env.SMTP_FROM);
+  console.log("[email] FRONTEND_URL:", process.env.FRONTEND_URL);
   
   const mailOptions = {
     from: process.env.SMTP_FROM || process.env.SMTP_USER || '"Portfolio Admin" <noreply@example.com>',
@@ -46,12 +54,15 @@ export async function sendPasswordResetEmail(email, resetToken) {
   };
 
   try {
-    logger.info({ domain, from: mailOptions.from }, "Sending password reset email");
+    console.log("[email] Calling getTransporter()...");
     const transport = await getTransporter();
-    await transport.sendMail(mailOptions);
+    console.log("[email] Transporter obtained, calling sendMail...");
+    const info = await transport.sendMail(mailOptions);
+    console.log("[email] sendMail result:", info.messageId);
     logger.info("Password reset email sent successfully");
     return true;
   } catch (error) {
+    console.log("[email] ERROR:", error.message, error.code);
     logger.error({ err: error, domain }, "Failed to send email");
     return false;
   }
