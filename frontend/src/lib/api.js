@@ -5,7 +5,7 @@ import axios from "axios";
 // Get API URL from environment variable (for production) or use proxy (for local dev)
 // In production: https://portfolio-backend.onrender.com
 // In dev: /api (proxied to localhost:4000)
-const getApiUrl = () => {
+export const getApiUrl = () => {
   const envUrl = import.meta.env.VITE_API_URL;
   if (envUrl) {
     // Production: use full URL (remove /api suffix if present)
