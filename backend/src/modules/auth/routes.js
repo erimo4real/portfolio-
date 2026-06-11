@@ -109,7 +109,7 @@ authRouter.post("/forgot-password", validate(forgotPasswordBody), async (req, re
 // password: new password (min 6 chars)
 const resetPasswordBody = z.object({
   token: z.string(),
-  password: z.string().min(6)
+  password: z.string().min(8)
 });
 
 // POST /reset-password - Update user password

@@ -3,7 +3,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import { findAdminByEmailOrPhone, findAdminByGoogleId, findAdminByEmail, createAdmin, updateAdminGoogleId, findAdminByResetTokenHash, updateAdminResetToken, clearAdminResetToken } from "./repository.js";
+import { findAdminByEmailOrPhone, findAdminByGoogleId, findAdminByEmail, createAdmin, updateAdminGoogleId, findAdminByResetTokenHash, updateAdminResetToken, clearAdminResetToken, updateAdminPassword } from "./repository.js";
 import { sendPasswordResetEmail } from "../../lib/email.js";
 
 // Login function - validates credentials and generates JWT token
@@ -44,7 +44,11 @@ export async function requestPasswordReset(identifier) {
   const expiry = new Date(Date.now() + 15 * 60 * 1000);
   
   await updateAdminResetToken(admin.id, tokenHash, expiry);
-  await sendPasswordResetEmail(resetEmail, rawToken);
+  const emailSent = await sendPasswordResetEmail(resetEmail, rawToken);
+  if (!emailSent) {
+    const { logger } = await import("../../middleware/error.js");
+    logger.warn({ resetEmail }, "Password reset email failed to send");
+  }
   
   return { message: "If an account exists, a reset link has been sent" };
 }
@@ -59,7 +63,6 @@ export async function resetPassword(rawToken, newPassword) {
   
   const hash = await bcrypt.hash(newPassword, 10);
   await clearAdminResetToken(admin.id);
-  const { updateAdminPassword } = await import("./repository.js");
   await updateAdminPassword(admin.id, hash);
   
   return { message: "Password reset successful" };

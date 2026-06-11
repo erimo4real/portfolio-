@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { api } from "../../lib/api.js";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -11,15 +12,10 @@ export default function ForgotPassword() {
     setStatus("loading");
     
     try {
-      const response = await fetch("/api/auth/forgot-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier: email })
-      });
+      const response = await api.post("/auth/forgot-password", { identifier: email });
+      const data = response.data;
       
-      const data = await response.json();
-      
-      if (response.ok) {
+      if (response.status >= 200 && response.status < 300) {
         setStatus("success");
         setMessage("Password reset link sent! Check your email.");
       } else {

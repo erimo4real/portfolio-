@@ -1,10 +1,18 @@
 import React, { useState } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { api } from "../../lib/api.js";
 
 export default function ResetPassword() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const token = searchParams.get("token");
+
+  // Clear token from URL after reading it
+  React.useEffect(() => {
+    if (token) {
+      navigate("/admin/reset-password", { replace: true });
+    }
+  }, []);
   
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -20,24 +28,19 @@ export default function ResetPassword() {
       return;
     }
 
-    if (password.length < 6) {
+    if (password.length < 8) {
       setStatus("error");
-      setMessage("Password must be at least 6 characters");
+      setMessage("Password must be at least 8 characters");
       return;
     }
 
     setStatus("loading");
     
     try {
-      const response = await fetch("/api/auth/reset-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, password })
-      });
+      const response = await api.post("/auth/reset-password", { token, password });
+      const data = response.data;
       
-      const data = await response.json();
-      
-      if (response.ok) {
+      if (response.status >= 200 && response.status < 300) {
         setStatus("success");
         setMessage("Password reset successful!");
         setTimeout(() => navigate("/admin/login"), 2000);
@@ -220,48 +223,48 @@ export default function ResetPassword() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••" 
-                  required
-                  minLength={6}
-                  autoComplete="new-password"
-                  style={{
-                    paddingLeft: "3rem",
-                    transition: "all 0.3s",
-                    border: "2px solid #e2e8f0"
-                  }}
-                />
+                    placeholder="••••••••" 
+                    required
+                    minLength={8}
+                    autoComplete="new-password"
+                    style={{
+                      paddingLeft: "3rem",
+                      transition: "all 0.3s",
+                      border: "2px solid #e2e8f0"
+                    }}
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Confirm Password Input */}
-            <div style={{ marginBottom: "1.5rem" }}>
-              <label style={{
-                display: "block",
-                marginBottom: "0.5rem",
-                color: "#0f172a",
-                fontWeight: "600",
-                fontSize: "0.875rem"
-              }}>
-                Confirm Password
-              </label>
-              <div style={{ position: "relative" }}>
-                <span style={{
-                  position: "absolute",
-                  left: "1rem",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  fontSize: "1.25rem"
+              {/* Confirm Password Input */}
+              <div style={{ marginBottom: "1.5rem" }}>
+                <label style={{
+                  display: "block",
+                  marginBottom: "0.5rem",
+                  color: "#0f172a",
+                  fontWeight: "600",
+                  fontSize: "0.875rem"
                 }}>
-                  🔒
-                </span>
-                <input 
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="••••••••" 
-                  required
-                  minLength={6}
-                  autoComplete="new-password"
+                  Confirm Password
+                </label>
+                <div style={{ position: "relative" }}>
+                  <span style={{
+                    position: "absolute",
+                    left: "1rem",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    fontSize: "1.25rem"
+                  }}>
+                    🔒
+                  </span>
+                  <input 
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="••••••••" 
+                    required
+                    minLength={8}
+                    autoComplete="new-password"
                   style={{
                     paddingLeft: "3rem",
                     transition: "all 0.3s",
@@ -282,8 +285,8 @@ export default function ResetPassword() {
             }}>
               <div style={{ fontWeight: "600", marginBottom: "0.5rem" }}>Password must:</div>
               <ul style={{ paddingLeft: "1.25rem", margin: 0 }}>
-                <li style={{ color: password.length >= 6 ? "#10b981" : "#475569" }}>
-                  Be at least 6 characters long
+                <li style={{ color: password.length >= 8 ? "#10b981" : "#475569" }}>
+                  Be at least 8 characters long
                 </li>
                 <li style={{ color: password && confirmPassword && password === confirmPassword ? "#10b981" : "#475569" }}>
                   Match the confirmation
