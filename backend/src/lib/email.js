@@ -47,7 +47,8 @@ export async function sendPasswordResetEmail(email, resetToken) {
 
   try {
     logger.info({ domain, from: mailOptions.from }, "Sending password reset email");
-    await getTransporter().sendMail(mailOptions);
+    const transport = await getTransporter();
+    await transport.sendMail(mailOptions);
     logger.info("Password reset email sent successfully");
     return true;
   } catch (error) {
