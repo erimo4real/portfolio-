@@ -7,16 +7,18 @@ import { findAdminByEmailOrPhone, findAdminByGoogleId, findAdminByEmail, createA
 import { sendPasswordResetEmail } from "../../lib/email.js";
 
 // Login function - validates credentials and generates JWT token
-// Parameters: identifier (email or phone), password
+// Parameters: identifier (email or phone), password, rememberMe (boolean)
+// rememberMe=true: 7-day token, rememberMe=false: 1-hour token
 // Returns: JWT token and admin info
-export async function login(identifier, password) {
+export async function login(identifier, password, rememberMe) {
   // Find admin by email or phone
   const admin = await findAdminByEmailOrPhone(identifier);
   if (!admin) throw Object.assign(new Error("Invalid credentials"), { status: 401 });
   // Compare provided password with stored hash
   const ok = await bcrypt.compare(password, admin.passwordHash);
   if (!ok) throw Object.assign(new Error("Invalid credentials"), { status: 401 });
-  const token = jwt.sign({ sub: admin.id, role: "admin" }, process.env.JWT_SECRET, { expiresIn: "7d" });
+  const expiresIn = rememberMe ? "7d" : "1h";
+  const token = jwt.sign({ sub: admin.id, role: "admin" }, process.env.JWT_SECRET, { expiresIn });
   // Return token and sanitized admin data
   return { token, admin: { id: admin.id, email: admin.email, phone: admin.phone } };
 }

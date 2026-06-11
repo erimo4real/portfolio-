@@ -47,23 +47,26 @@ const loginBody = z.object({
 });
 
 // POST /login - Authenticate admin user
-// Validates credentials and sets auth cookie for 7 days
+// Validates credentials and sets auth cookie
+// rememberMe=true: 7-day cookie, rememberMe=false: session cookie
 authRouter.post("/login", validate(loginBody), async (req, res, next) => {
   try {
-    const { identifier, password } = req.body;
-    const result = await login(identifier, password);
-    
-    // Set httpOnly cookie - lasts 7 days
-    const maxAge = 7 * 24 * 60 * 60 * 1000;
+    const { identifier, password, rememberMe } = req.body;
+    const result = await login(identifier, password, rememberMe);
     
     const isProduction = process.env.NODE_ENV === "production";
-    res.cookie("auth_token", result.token, {
+    const cookieOptions = {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? "strict" : "lax",
-      maxAge: maxAge,
       path: "/"
-    });
+    };
+    
+    if (rememberMe) {
+      cookieOptions.maxAge = 7 * 24 * 60 * 60 * 1000;
+    }
+    
+    res.cookie("auth_token", result.token, cookieOptions);
     
     res.json({ success: true, admin: result.admin });
   } catch (err) {
