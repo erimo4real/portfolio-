@@ -1,30 +1,32 @@
 import express from "express";
 import multer from "multer";
-import path from "path";
-import { fileURLToPath } from "url";
 import { listPublic, getPublicBySlug, adminCreate, adminDelete, adminList, adminUpdate, adminPublish, adminUnpublish, adminFeature, adminUnfeature, adminReorder } from "./service.js";
 import { requireAdmin } from "../../middleware/auth.js";
 import { recordAudit } from "../audit/service.js";
 import { z } from "zod";
 import { validate } from "../../middleware/validate.js";
+import { v2 as cloudinary } from "cloudinary";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "..", "..", "..", "storage", "uploads");
-    cb(null, uploadPath);
-  },
-  filename: (req, file, cb) => {
-    const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const ext = path.extname(file.originalname);
-    cb(null, `project-${unique}${ext}`);
-  }
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+const uploadToCloudinary = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload_stream(
+      { folder: "portfolio/projects" },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    ).end(fileBuffer);
+  });
+};
+
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const ok = ["image/jpeg", "image/png", "image/webp"].includes(file.mimetype);
@@ -84,7 +86,13 @@ const projectCreateBody = z.object({
 projectsRouter.post("/admin", requireAdmin, upload.array("images"), validate(projectCreateBody), async (req, res, next) => {
   try {
     const { title, descriptionMarkdown, techStack, status, githubUrl, demoUrl, featured, published, understanding, contribution } = req.body;
-    const images = (req.files || []).map((f, i) => ({ path: `/uploads/${f.filename}`, order: i }));
+    const images = [];
+    if (req.files && req.files.length > 0) {
+      for (let i = 0; i < req.files.length; i++) {
+        const result = await uploadToCloudinary(req.files[i].buffer);
+        images.push({ path: result.secure_url, order: i });
+      }
+    }
     
     let parsedTechStack = [];
     if (techStack) {
@@ -145,7 +153,13 @@ projectsRouter.put("/admin/:id", requireAdmin, upload.array("images"), validate(
     }
     
     // Get new uploaded images
-    const newImages = (req.files || []).map((f, i) => ({ path: `/uploads/${f.filename}`, order: existingImagesArray.length + i }));
+    const newImages = [];
+    if (req.files && req.files.length > 0) {
+      for (let i = 0; i < req.files.length; i++) {
+        const result = await uploadToCloudinary(req.files[i].buffer);
+        newImages.push({ path: result.secure_url, order: existingImagesArray.length + i });
+      }
+    }
     
     // Combine existing and new images
     const allImages = [...existingImagesArray, ...newImages];
