@@ -1,29 +1,31 @@
 import express from "express";
 import multer from "multer";
-import path from "path";
-import { fileURLToPath } from "url";
 import { listPublicBlogs, getPublicBlog, adminCreateBlog, adminDeleteBlog, adminListBlogs, adminUpdateBlog, adminPublishBlog, adminUnpublishBlog, adminReorderBlogs } from "./service.js";
 import { requireAdmin } from "../../middleware/auth.js";
 import { z } from "zod";
 import { validate } from "../../middleware/validate.js";
+import { v2 as cloudinary } from "cloudinary";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "..", "..", "..", "storage", "uploads");
-    cb(null, uploadPath);
-  },
-  filename: (req, file, cb) => {
-    const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const ext = path.extname(file.originalname);
-    cb(null, `blog-${unique}${ext}`);
-  }
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+const uploadToCloudinary = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload_stream(
+      { folder: "portfolio/blogs" },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    ).end(fileBuffer);
+  });
+};
+
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const ok = ["image/jpeg", "image/png", "image/webp"].includes(file.mimetype);
@@ -78,7 +80,11 @@ const blogCreateBody = z.object({
 blogRouter.post("/admin", requireAdmin, upload.single("image"), validate(blogCreateBody), async (req, res, next) => {
   try {
     const { title, slug, markdown, videoUrl, published, order } = req.body;
-    const image = req.file ? `/uploads/${req.file.filename}` : req.body.image;
+    let image = req.body.image;
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer);
+      image = result.secure_url;
+    }
     const publishedVal = published === true || published === "true" ? true : published === false || published === "false" ? false : undefined;
     const orderVal = order ? parseInt(order, 10) : undefined;
     const created = await adminCreateBlog({ 
@@ -101,7 +107,11 @@ const blogUpdateBody = blogCreateBody.partial();
 blogRouter.put("/admin/:id", requireAdmin, upload.single("image"), validate(blogUpdateParams, "params"), validate(blogUpdateBody), async (req, res, next) => {
   try {
     const { title, slug, markdown, videoUrl, published, order } = req.body;
-    const image = req.file ? `/uploads/${req.file.filename}` : req.body.image;
+    let image = req.body.image;
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer);
+      image = result.secure_url;
+    }
     const updateData = { title, slug, markdown, videoUrl, order };
     if (image) updateData.image = image;
     if (published !== undefined) {
