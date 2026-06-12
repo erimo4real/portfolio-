@@ -12,10 +12,12 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+let uploadCounter = 0;
 const uploadToCloudinary = (fileBuffer) => {
   return new Promise((resolve, reject) => {
+    const publicId = `portfolio_site_${Date.now()}_${uploadCounter++}`;
     cloudinary.uploader.upload_stream(
-      { folder: "portfolio/blogs" },
+      { folder: "portfolio/blogs", public_id: publicId },
       (error, result) => {
         if (error) reject(error);
         else resolve(result);
