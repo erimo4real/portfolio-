@@ -105,40 +105,46 @@ export default function AdminDashboard() {
       {/* Header */}
       <div style={{
         background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        padding: "2rem"
+        padding: "clamp(1rem, 3vw, 2rem)"
       }}>
         <div style={{
           maxWidth: "1200px",
           margin: "0 auto",
           display: "flex",
+          flexWrap: "wrap",
+          gap: "1rem",
           justifyContent: "space-between",
           alignItems: "center"
         }}>
           <div>
-            <h1 style={{ color: "white", fontSize: "2rem", margin: 0 }}>
+            <h1 style={{ color: "white", fontSize: "clamp(1.25rem, 4vw, 2rem)", margin: 0 }}>
               Welcome back, {admin?.name || 'Admin'}
             </h1>
             <p style={{ color: "rgba(255,255,255,0.8)", marginTop: "0.5rem" }}>
               Manage your portfolio content
             </p>
           </div>
-          <div style={{ display: "flex", gap: "1rem" }}>
+          <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
             <Link to="/" style={{
-              padding: "0.75rem 1.5rem",
+              padding: "0.75rem 1.25rem",
               background: "rgba(255,255,255,0.2)",
               borderRadius: "12px",
               color: "white",
-              textDecoration: "none"
+              textDecoration: "none",
+              fontSize: "0.875rem",
+              whiteSpace: "nowrap"
             }}>
               View Site
             </Link>
             <button onClick={handleLogout} style={{
-              padding: "0.75rem 1.5rem",
+              padding: "0.75rem 1.25rem",
               background: "#ef4444",
               borderRadius: "12px",
               color: "white",
               border: "none",
-              cursor: "pointer"
+              cursor: "pointer",
+              fontSize: "0.875rem",
+              whiteSpace: "nowrap"
             }}>
               Logout
             </button>

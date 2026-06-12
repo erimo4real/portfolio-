@@ -157,7 +157,7 @@ export default function BlogDetail() {
           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
           padding: "3rem 0 4rem"
         }}>
-          <div className="container" style={{ maxWidth: "900px", position: "relative", zIndex: 1, padding: "0 1.5rem" }}>
+          <div className="container" style={{ maxWidth: "900px", position: "relative", zIndex: 1 }}>
             <Link to="/blog" style={{ 
               color: "rgba(255,255,255,0.9)", 
               marginBottom: "1.5rem", 

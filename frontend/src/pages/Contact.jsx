@@ -167,7 +167,7 @@ export default function Contact() {
 
             <div>
               {contactStatus === "success" ? (
-                <div className="card scale-in" style={{ padding: "4rem 3rem", textAlign: "center" }}>
+                <div className="card scale-in" style={{ padding: "clamp(2rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3rem)", textAlign: "center" }}>
                   <div style={{
                     width: "100px",
                     height: "100px",

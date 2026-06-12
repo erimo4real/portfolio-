@@ -152,10 +152,10 @@ export default function ProjectDetail() {
             {/* Main Content */}
             <div>
               {/* Description */}
-              <div className="card" style={{ padding: "3rem", marginBottom: "2rem" }}>
+              <div className="card" style={{ padding: "clamp(1.5rem, 3vw, 3rem)", marginBottom: "2rem" }}>
                 <h2 style={{ 
                   marginBottom: "2rem",
-                  fontSize: "2rem",
+                  fontSize: "clamp(1.5rem, 4vw, 2rem)",
                   background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -175,10 +175,10 @@ export default function ProjectDetail() {
 
               {/* Understanding */}
               {detail.understanding && (
-                <div className="card" style={{ padding: "3rem", marginBottom: "2rem" }}>
+                <div className="card" style={{ padding: "clamp(1.5rem, 3vw, 3rem)", marginBottom: "2rem" }}>
                   <h2 style={{ 
                     marginBottom: "2rem",
-                    fontSize: "2rem",
+                    fontSize: "clamp(1.5rem, 4vw, 2rem)",
                     background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -199,10 +199,10 @@ export default function ProjectDetail() {
 
               {/* Contribution */}
               {detail.contribution && (
-                <div className="card" style={{ padding: "3rem", marginBottom: "2rem" }}>
+                <div className="card" style={{ padding: "clamp(1.5rem, 3vw, 3rem)", marginBottom: "2rem" }}>
                   <h2 style={{ 
                     marginBottom: "2rem",
-                    fontSize: "2rem",
+                    fontSize: "clamp(1.5rem, 4vw, 2rem)",
                     background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",

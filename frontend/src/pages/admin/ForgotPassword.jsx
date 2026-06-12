@@ -35,7 +35,7 @@ export default function ForgotPassword() {
       alignItems: "center",
       justifyContent: "center",
       background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-      padding: "2rem",
+      padding: "clamp(1rem, 3vw, 2rem)",
       position: "relative",
       overflow: "hidden"
     }}>
@@ -71,7 +71,7 @@ export default function ForgotPassword() {
           backdropFilter: "blur(20px)",
           position: "relative",
           zIndex: 1,
-          padding: "3rem",
+          padding: "clamp(1.5rem, 5vw, 3rem)",
           boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
           animation: "slideInUp 0.6s ease-out"
         }}
@@ -98,7 +98,7 @@ export default function ForgotPassword() {
           
           <h1 style={{ 
             marginBottom: "0.5rem",
-            fontSize: "2rem",
+            fontSize: "clamp(1.5rem, 4vw, 2rem)",
             background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",

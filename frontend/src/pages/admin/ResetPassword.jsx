@@ -62,12 +62,12 @@ export default function ResetPassword() {
         alignItems: "center",
         justifyContent: "center",
         background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        padding: "2rem"
+        padding: "clamp(1rem, 3vw, 2rem)"
       }}>
         <div className="card" style={{
           maxWidth: "450px",
           textAlign: "center",
-          padding: "3rem"
+          padding: "clamp(1.5rem, 5vw, 3rem)"
         }}>
           <div style={{ fontSize: "4rem", marginBottom: "1rem" }}></div>
           <h2 style={{ marginBottom: "1rem" }}>Invalid Reset Link</h2>
@@ -97,7 +97,7 @@ export default function ResetPassword() {
       alignItems: "center",
       justifyContent: "center",
       background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-      padding: "2rem",
+      padding: "clamp(1rem, 3vw, 2rem)",
       position: "relative",
       overflow: "hidden"
     }}>
@@ -133,7 +133,7 @@ export default function ResetPassword() {
           backdropFilter: "blur(20px)",
           position: "relative",
           zIndex: 1,
-          padding: "3rem",
+          padding: "clamp(1.5rem, 5vw, 3rem)",
           boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
           animation: "slideInUp 0.6s ease-out"
         }}
@@ -160,7 +160,7 @@ export default function ResetPassword() {
           
           <h1 style={{ 
             marginBottom: "0.5rem",
-            fontSize: "2rem",
+            fontSize: "clamp(1.5rem, 4vw, 2rem)",
             background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
