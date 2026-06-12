@@ -58,7 +58,7 @@ authRouter.post("/login", validate(loginBody), async (req, res, next) => {
     const cookieOptions = {
       httpOnly: true,
       secure: isProduction,
-      sameSite: isProduction ? "strict" : "lax",
+      sameSite: isProduction ? "none" : "lax",
       path: "/"
     };
     
@@ -163,7 +163,7 @@ authRouter.post("/logout", (req, res) => {
   res.clearCookie("auth_token", {
     httpOnly: true,
     secure: isProduction,
-    sameSite: isProduction ? "strict" : "lax",
+    sameSite: isProduction ? "none" : "lax",
     path: "/"
   });
   res.json({ success: true });
@@ -197,7 +197,7 @@ authRouter.get("/google/callback",
       res.cookie("auth_token", result.token, {
         httpOnly: true,
         secure: isProduction,
-        sameSite: isProduction ? "strict" : "lax",
+        sameSite: isProduction ? "none" : "lax",
         maxAge: maxAge
       });
       
