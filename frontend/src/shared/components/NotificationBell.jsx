@@ -6,7 +6,9 @@ export default function NotificationBell() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [messages, setMessages] = useState([]);
   const [open, setOpen] = useState(false);
+  const [selectedMsg, setSelectedMsg] = useState(null);
   const ref = useRef(null);
+  const modalRef = useRef(null);
   const navigate = useNavigate();
 
   const fetchAll = useCallback(async () => {
@@ -36,6 +38,22 @@ export default function NotificationBell() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  useEffect(() => {
+    if (!selectedMsg) return;
+    function handleModalClick(e) {
+      if (modalRef.current && !modalRef.current.contains(e.target)) setSelectedMsg(null);
+    }
+    function handleKey(e) {
+      if (e.key === "Escape") setSelectedMsg(null);
+    }
+    document.addEventListener("mousedown", handleModalClick);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleModalClick);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [selectedMsg]);
+
   async function markRead(id) {
     try {
       await api.put(`/contact/admin/${id}`, { read: true });
@@ -55,7 +73,7 @@ export default function NotificationBell() {
   }
 
   return (
-    <div ref={ref} style={{ position: "relative" }}>
+    <><div ref={ref} style={{ position: "relative" }}>
       <button
         onClick={() => setOpen(!open)}
         style={{
@@ -170,7 +188,7 @@ export default function NotificationBell() {
                     transition: "background 0.15s",
                     background: "#fefce8"
                   }}
-                  onClick={() => navigate("/admin/contacts")}
+                  onClick={() => { setOpen(false); setSelectedMsg(msg); }}
                   onMouseEnter={e => e.currentTarget.style.background = "#f1f5f9"}
                   onMouseLeave={e => e.currentTarget.style.background = "#fefce8"}
                 >
@@ -210,23 +228,6 @@ export default function NotificationBell() {
                         {msg.message}
                       </p>
                     </div>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); markRead(msg.id); }}
-                      style={{
-                        padding: "0.25rem 0.5rem",
-                        fontSize: "0.7rem",
-                        fontWeight: "600",
-                        color: "#6366f1",
-                        background: "transparent",
-                        border: "1px solid #c7d2fe",
-                        borderRadius: "6px",
-                        cursor: "pointer",
-                        marginLeft: "0.5rem",
-                        flexShrink: 0
-                      }}
-                    >
-                      Read
-                    </button>
                   </div>
                 </div>
               ))
@@ -259,5 +260,145 @@ export default function NotificationBell() {
         </div>
       )}
     </div>
+
+      {selectedMsg && (
+        <div style={{
+          position: "fixed",
+          inset: 0,
+          background: "rgba(0,0,0,0.5)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 2000,
+          padding: "1rem"
+        }}>
+          <div ref={modalRef} style={{
+            background: "white",
+            borderRadius: "20px",
+            width: "100%",
+            maxWidth: "520px",
+            maxHeight: "90vh",
+            overflowY: "auto",
+            boxShadow: "0 25px 80px rgba(0,0,0,0.3)"
+          }}>
+            <div style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "1.25rem 1.5rem",
+              borderBottom: "1px solid #e2e8f0"
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <span style={{
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "10px",
+                  background: "#6366f1",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "0.9rem",
+                  fontWeight: "700"
+                }}>
+                  {selectedMsg.name?.charAt(0)?.toUpperCase() || "?"}
+                </span>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: "700", color: "#0f172a" }}>
+                    {selectedMsg.name}
+                  </h3>
+                  <a href={`mailto:${selectedMsg.email}`} style={{ fontSize: "0.85rem", color: "#6366f1", textDecoration: "none" }}>
+                    {selectedMsg.email}
+                  </a>
+                </div>
+              </div>
+              <button
+                onClick={() => setSelectedMsg(null)}
+                style={{
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "8px",
+                  border: "none",
+                  background: "#f1f5f9",
+                  cursor: "pointer",
+                  fontSize: "1.1rem",
+                  color: "#64748b",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div style={{ padding: "1.5rem" }}>
+              <div style={{
+                display: "flex",
+                gap: "1rem",
+                marginBottom: "1.25rem",
+                fontSize: "0.85rem",
+                color: "#64748b"
+              }}>
+                <span>{new Date(selectedMsg.createdAt).toLocaleDateString("en-US", { weekday: "short", month: "long", day: "numeric", year: "numeric" })}</span>
+                <span>•</span>
+                <span>{new Date(selectedMsg.createdAt).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</span>
+              </div>
+
+              <div style={{
+                background: "#f8fafc",
+                borderRadius: "12px",
+                padding: "1.25rem",
+                marginBottom: "1.5rem",
+                whiteSpace: "pre-wrap",
+                lineHeight: "1.7",
+                fontSize: "0.95rem",
+                color: "#1e293b"
+              }}>
+                {selectedMsg.message}
+              </div>
+
+              <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+                {!selectedMsg.read && (
+                  <button
+                    onClick={async () => {
+                      await markRead(selectedMsg.id);
+                      setSelectedMsg(null);
+                    }}
+                    style={{
+                      padding: "0.625rem 1.25rem",
+                      background: "#6366f1",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "10px",
+                      fontWeight: "600",
+                      fontSize: "0.875rem",
+                      cursor: "pointer"
+                    }}
+                  >
+                    Mark as read
+                  </button>
+                )}
+                <button
+                  onClick={() => { setSelectedMsg(null); navigate("/admin/contacts"); }}
+                  style={{
+                    padding: "0.625rem 1.25rem",
+                    background: "#eef2ff",
+                    color: "#6366f1",
+                    border: "none",
+                    borderRadius: "10px",
+                    fontWeight: "600",
+                    fontSize: "0.875rem",
+                    cursor: "pointer"
+                  }}
+                >
+                  View in Messages →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
