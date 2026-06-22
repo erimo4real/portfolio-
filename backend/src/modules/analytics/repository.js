@@ -23,7 +23,10 @@ export async function getStats() {
     projects: await Project.countDocuments(),
     blogs: await Blog.countDocuments(),
     skills: await Skill.countDocuments(),
-    messages: await ContactMessage.countDocuments()
+    messages: {
+      total: await ContactMessage.countDocuments(),
+      unread: await ContactMessage.countDocuments({ read: false })
+    }
   };
   for (const r of rows) {
     if (r.type === "page_view") result.page_view += r.count;

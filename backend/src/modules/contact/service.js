@@ -1,4 +1,4 @@
-import { createMessage, listMessages, getMessageById, updateMessage, deleteMessage } from "./repository.js";
+import { createMessage, listMessages, listUnreadMessages, getMessageById, updateMessage, deleteMessage } from "./repository.js";
 
 export function submitContact(data) {
   return createMessage(data);
@@ -22,4 +22,9 @@ export async function adminUpdateContact(id, data) {
 
 export async function adminDeleteContact(id) {
   await deleteMessage(id);
+}
+
+export async function adminGetUnread() {
+  const docs = await listUnreadMessages();
+  return docs.map(c => ({ ...c.toObject(), id: c._id.toString() }));
 }

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/slices/auth.js";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../lib/api.js";
+import NotificationBell from "../../shared/components/NotificationBell.jsx";
 
 export default function AdminDashboard() {
   const dispatch = useDispatch();
@@ -13,7 +14,7 @@ export default function AdminDashboard() {
     projects: 0,
     blogs: 0,
     skills: 0,
-    messages: 0,
+    messages: { total: 0, unread: 0 },
     views: 0
   });
   const [loading, setLoading] = useState(true);
@@ -25,12 +26,13 @@ export default function AdminDashboard() {
   const fetchStats = async () => {
     try {
       const response = await api.get('/analytics/admin/stats');
+      const d = response.data;
       setStats({
-        projects: response.data?.projects || 0,
-        blogs: response.data?.blogs || 0,
-        skills: response.data?.skills || 0,
-        messages: response.data?.messages || 0,
-        views: response.data?.page_view || 0
+        projects: d?.projects || 0,
+        blogs: d?.blogs || 0,
+        skills: d?.skills || 0,
+        messages: d?.messages || { total: 0, unread: 0 },
+        views: d?.page_view || 0
       });
     } catch (error) {
       console.error('Failed to fetch stats:', error);
@@ -89,7 +91,7 @@ export default function AdminDashboard() {
       description: "View and manage contact messages",
       color: "#3b82f6",
       bgColor: "#dbeafe",
-      count: stats.messages
+      count: stats.messages.total
     }
   ];
 
@@ -97,7 +99,7 @@ export default function AdminDashboard() {
     { label: "Total Views", value: stats.views, color: "#6366f1" },
     { label: "Projects", value: stats.projects, color: "#ec4899" },
     { label: "Blog Posts", value: stats.blogs, color: "#f59e0b" },
-    { label: "Messages", value: stats.messages, color: "#ef4444" }
+    { label: "Messages", value: stats.messages.total, color: "#ef4444" }
   ];
 
   return (
@@ -124,7 +126,8 @@ export default function AdminDashboard() {
               Manage your portfolio content
             </p>
           </div>
-          <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", alignItems: "center" }}>
+            <NotificationBell />
             <Link to="/" style={{
               padding: "0.75rem 1.25rem",
               background: "rgba(255,255,255,0.2)",

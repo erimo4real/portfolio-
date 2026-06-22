@@ -8,9 +8,11 @@ export function createMessage(data) {
 export async function listMessages(opts = {}) {
   const page = Math.max(1, Number(opts.page) || 1);
   const pageSize = Math.min(1000, Math.max(1, Number(opts.pageSize) || 1000));
+  const filter = {};
+  if (opts.read !== undefined) filter.read = opts.read === "true";
   
-  const totalDocs = await ContactMessage.countDocuments();
-  const docs = await ContactMessage.find()
+  const totalDocs = await ContactMessage.countDocuments(filter);
+  const docs = await ContactMessage.find(filter)
     .sort({ createdAt: -1 })
     .skip((page - 1) * pageSize)
     .limit(pageSize)
@@ -23,6 +25,13 @@ export async function listMessages(opts = {}) {
     pageSize,
     totalPages: Math.ceil(totalDocs / pageSize)
   };
+}
+
+export async function listUnreadMessages() {
+  return ContactMessage.find({ read: false })
+    .sort({ createdAt: -1 })
+    .limit(5)
+    .exec();
 }
 
 export async function getMessageById(id) {

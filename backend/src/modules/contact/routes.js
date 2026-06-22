@@ -1,5 +1,5 @@
 import express from "express";
-import { submitContact, adminListContacts, adminUpdateContact, adminDeleteContact } from "./service.js";
+import { submitContact, adminListContacts, adminUpdateContact, adminDeleteContact, adminGetUnread } from "./service.js";
 import { requireAdmin } from "../../middleware/auth.js";
 import { z } from "zod";
 import { validate } from "../../middleware/validate.js";
@@ -25,6 +25,15 @@ const paginationQuery = z.object({
   page: z.coerce.number().int().min(1).optional(),
   pageSize: z.coerce.number().int().min(1).max(100).optional()
 });
+contactRouter.get("/admin/unread", requireAdmin, async (req, res, next) => {
+  try {
+    const list = await adminGetUnread();
+    res.json(list);
+  } catch (err) {
+    next(err);
+  }
+});
+
 contactRouter.get("/admin", requireAdmin, validate(paginationQuery, "query"), async (req, res, next) => {
   try {
     const list = await adminListContacts(req.query);
