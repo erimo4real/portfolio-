@@ -260,7 +260,7 @@ export default function BlogsAdmin() {
             <h2 className="text-xl font-bold text-slate-800 mb-6">Existing Posts</h2>
             {list.length === 0 ? (
               <div className="text-center py-12">
-                <div className="text-5xl mb-4">📝</div>
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center"></div>
                 <p className="text-slate-500">No blog posts yet</p>
                 <p className="text-slate-400 text-sm mt-2">Create your first post using the form</p>
               </div>

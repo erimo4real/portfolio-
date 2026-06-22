@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { api } from "../../lib/api.js";
+import { Lock, Shield, AlertTriangle, ArrowLeft, Check } from "../../shared/components/Icons.jsx";
 
 export default function ResetPassword() {
   const [searchParams] = useSearchParams();
@@ -69,7 +70,7 @@ export default function ResetPassword() {
           textAlign: "center",
           padding: "clamp(1.5rem, 5vw, 3rem)"
         }}>
-          <div style={{ fontSize: "4rem", marginBottom: "1rem" }}></div>
+          <div style={{ fontSize: "4rem", marginBottom: "1rem", display: "flex", justifyContent: "center" }}><AlertTriangle width="48" height="48" style={{ color: "#ef4444" }} /></div>
           <h2 style={{ marginBottom: "1rem" }}>Invalid Reset Link</h2>
           <p style={{ color: "#64748b", marginBottom: "2rem" }}>
             This password reset link is invalid or has expired.
@@ -155,7 +156,7 @@ export default function ResetPassword() {
             fontSize: "2.5rem",
             boxShadow: "0 10px 30px rgba(102, 126, 234, 0.4)"
           }}>
-            🔐
+            <Shield width="40" height="40" style={{ color: "white" }} />
           </div>
           
           <h1 style={{ 
@@ -189,7 +190,7 @@ export default function ResetPassword() {
               gap: "0.5rem",
               justifyContent: "center"
             }}>
-              
+              <Check width="18" height="18" />
               {message}
             </div>
             <p style={{ color: "#64748b", marginBottom: "1.5rem" }}>
@@ -217,7 +218,7 @@ export default function ResetPassword() {
                   transform: "translateY(-50%)",
                   fontSize: "1.25rem"
                 }}>
-                  🔒
+                  <Lock width="18" height="18" />
                 </span>
                 <input 
                   type="password"
@@ -255,7 +256,7 @@ export default function ResetPassword() {
                     transform: "translateY(-50%)",
                     fontSize: "1.25rem"
                   }}>
-                    🔒
+                    <Lock width="18" height="18" />
                   </span>
                   <input 
                     type="password"
@@ -308,7 +309,7 @@ export default function ResetPassword() {
                 gap: "0.5rem",
                 animation: "shake 0.5s ease-in-out"
               }}>
-                <span>⚠️</span>
+                <AlertTriangle width="16" height="16" />
                 {message}
               </div>
             )}
@@ -370,7 +371,7 @@ export default function ResetPassword() {
                 alignItems: "center",
                 gap: "0.5rem"
               }}>
-                ← Back to Login
+                <ArrowLeft width="14" height="14" /> Back to Login
               </Link>
             </div>
           </form>

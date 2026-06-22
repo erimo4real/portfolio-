@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../store/slices/auth.js";
 import { Navigate, Link } from "react-router-dom";
 import { api } from "../../lib/api.js";
+import { Lock, Unlock, AlertTriangle, ArrowLeft, Shield } from "../../shared/components/Icons.jsx";
 
 export default function AdminLogin() {
   const dispatch = useDispatch();
@@ -291,7 +292,7 @@ export default function AdminLogin() {
                   animation: "slideInRight 0.3s ease-out",
                   boxShadow: "0 4px 15px rgba(16, 185, 129, 0.4)"
                 }}>
-                  🔓 Unlocked
+                  <Unlock width="16" height="16" /> Unlocked
                 </div>
               )}
             </div>
@@ -335,7 +336,7 @@ export default function AdminLogin() {
               e.target.style.background = "transparent";
               e.target.style.borderColor = "rgba(255,255,255,0.3)";
             }}>
-              ← Back to Portfolio
+              <ArrowLeft width="16" height="16" /> Back to Portfolio
             </Link>
           </div>
 
@@ -401,7 +402,7 @@ export default function AdminLogin() {
 
                 {/* Password Input */}
                 <div style={{ marginBottom: "1rem", position: "relative" }}>
-                  <span style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", fontSize: "1.1rem" }}>🔒</span>
+                  <span style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", fontSize: "1.1rem", display: "flex" }}><Lock width="18" height="18" /></span>
                   <input 
                     type={showPassword ? "text" : "password"}
                     value={registerData.password || ""}
@@ -518,8 +519,9 @@ export default function AdminLogin() {
                   left: "1rem",
                   top: "50%",
                   transform: "translateY(-50%)",
-                  fontSize: "1.1rem"
-                }}>🔒</span>
+                  fontSize: "1.1rem",
+                  display: "flex"
+                }}><Lock width="18" height="18" /></span>
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -605,7 +607,7 @@ export default function AdminLogin() {
                   alignItems: "flex-start",
                   gap: "0.5rem"
                 }}>
-                  
+                  <AlertTriangle width="16" height="16" style={{ flexShrink: 0, marginTop: "2px" }} />
                   <div>
                     <strong>Stay logged in for 7 days</strong>
                     <p style={{ margin: "0.25rem 0 0", opacity: 0.9 }}>
@@ -629,7 +631,7 @@ export default function AdminLogin() {
                   gap: "0.5rem",
                   animation: "shake 0.5s ease-in-out"
                 }}>
-                  
+                  <AlertTriangle width="16" height="16" style={{ flexShrink: 0 }} />
                   {error}
                 </div>
               )}
@@ -672,7 +674,7 @@ export default function AdminLogin() {
                   </>
                 ) : (
                   <>
-                    
+                    <Shield width="18" height="18" />
                     Sign In
                   </>
                 )}

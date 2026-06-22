@@ -26,7 +26,7 @@ const ProjectDetail = () => {
 
   if (error) return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <div className="text-4xl mb-4"></div>
+      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center"></div>
       <h2 className="text-2xl font-bold text-slate-900 mb-2">Error Loading Project</h2>
       <p className="text-slate-600 mb-8">{error}</p>
       <Link to="/projects" className="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold">Back to Projects</Link>
@@ -35,7 +35,7 @@ const ProjectDetail = () => {
 
   if (!project) return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <div className="text-4xl mb-4">🔍</div>
+      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center"></div>
       <h2 className="text-2xl font-bold text-slate-900 mb-2">Project Not Found</h2>
       <p className="text-slate-600 mb-8">The project you're looking for doesn't exist or has been moved.</p>
       <Link to="/projects" className="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold">Back to Projects</Link>

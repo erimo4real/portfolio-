@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { submitContact } from "../store/slices/contact.js";
+import { Mail, Phone, MapPin, AlertTriangle } from "../shared/components/Icons.jsx";
 
 export default function Contact() {
   const dispatch = useDispatch();
@@ -94,7 +95,7 @@ export default function Contact() {
                     fontSize: "1.5rem",
                     flexShrink: 0
                   }}>
-                    
+                    <Mail width="24" height="24" style={{ color: "white" }} />
                   </div>
                   <div>
                     <h3 style={{ marginBottom: "0.5rem", fontSize: "1.25rem" }}>Email</h3>
@@ -114,7 +115,7 @@ export default function Contact() {
                     fontSize: "1.5rem",
                     flexShrink: 0
                   }}>
-                    
+                    <Phone width="24" height="24" style={{ color: "white" }} />
                   </div>
                   <div>
                     <h3 style={{ marginBottom: "0.5rem", fontSize: "1.25rem" }}>Phone</h3>
@@ -134,7 +135,7 @@ export default function Contact() {
                     fontSize: "1.5rem",
                     flexShrink: 0
                   }}>
-                    📍
+                    <MapPin width="24" height="24" style={{ color: "white" }} />
                   </div>
                   <div>
                     <h3 style={{ marginBottom: "0.5rem", fontSize: "1.25rem" }}>Location</h3>
@@ -230,7 +231,7 @@ export default function Contact() {
                       gap: "0.5rem",
                       animation: "shake 0.5s ease-in-out"
                     }}>
-                      
+                      <AlertTriangle width="18" height="18" />
                       Failed to send message. Please try again.
                     </div>
                   )}
@@ -247,7 +248,7 @@ export default function Contact() {
                   
                   <div style={{ marginBottom: "2rem" }}>
                     <label>Message</label>
-                    <textarea name="message" placeholder="Tell me about your project or just say hi! 👋" rows={6} required />
+                    <textarea name="message" placeholder="Tell me about your project or just say hi!" rows={6} required />
                   </div>
                   
                   <button 

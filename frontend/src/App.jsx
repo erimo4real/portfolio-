@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { GitHub, Mail, X, Menu } from "./shared/components/Icons.jsx";
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
@@ -85,7 +86,7 @@ function Layout({ children }) {
               className="md:hidden text-3xl transition-colors text-slate-900"
               aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? "✕" : "☰"}
+              {mobileMenuOpen ? <X width="24" height="24" /> : <Menu width="24" height="24" />}
             </button>
           </div>
         </div>
@@ -109,8 +110,8 @@ function Layout({ children }) {
         <div className="container">
           <div className="flex justify-center gap-6 mb-8">
             {[
-              { label: "GitHub", url: "https://github.com/erimo4real", icon: "🐙" },
-              { label: "Email", url: "mailto:eromoxlx@gmail.com", icon: "✉️" }
+              { label: "GitHub", url: "https://github.com/erimo4real", icon: GitHub },
+              { label: "Email", url: "mailto:eromoxlx@gmail.com", icon: Mail }
             ].map((social, index) => (
               <a
                 key={index}
@@ -120,7 +121,7 @@ function Layout({ children }) {
                 aria-label={social.label}
                 className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center text-2xl transition-all duration-300 border-2 border-transparent hover:bg-white/20 hover:border-white/30 hover:-translate-y-1"
               >
-                {social.icon}
+                <social.icon width="22" height="22" />
               </a>
             ))}
           </div>

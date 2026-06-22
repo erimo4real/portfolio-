@@ -83,17 +83,15 @@ export default function ProfileView() {
 
           <div className="mt-12 pt-12 border-t border-slate-100 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center p-6 bg-slate-50 rounded-2xl">
-              
               <h3 className="font-bold text-slate-900">Passion</h3>
               <p className="text-sm text-slate-500">Building scalable & beautiful web apps</p>
             </div>
             <div className="text-center p-6 bg-slate-50 rounded-2xl">
-              
               <h3 className="font-bold text-slate-900">Innovation</h3>
               <p className="text-sm text-slate-500">Exploring new tech & patterns</p>
             </div>
             <div className="text-center p-6 bg-slate-50 rounded-2xl">
-              <div className="text-3xl mb-2">🤝</div>
+              <div className="text-3xl mb-2"></div>
               <h3 className="font-bold text-slate-900">Collaboration</h3>
               <p className="text-sm text-slate-500">Team player with strong ownership</p>
             </div>

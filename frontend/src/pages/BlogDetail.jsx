@@ -118,7 +118,7 @@ export default function BlogDetail() {
               textTransform: "uppercase",
               letterSpacing: "0.05em"
             }}>
-              📝 Blog Post
+              Blog Post
             </div>
             <h1 style={{ 
               color: "white", 
@@ -136,14 +136,11 @@ export default function BlogDetail() {
                 color: "rgba(255,255,255,0.9)",
                 fontSize: "1rem"
               }}>
-                <span>📅</span>
-                <span>
-                  {new Date(detail.createdAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </span>
+                {new Date(detail.createdAt).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
               </div>
             )}
           </div>
@@ -185,14 +182,11 @@ export default function BlogDetail() {
                 fontSize: "1rem",
                 marginTop: "1rem"
               }}>
-                <span>📅</span>
-                <span>
-                  {new Date(detail.createdAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </span>
+                {new Date(detail.createdAt).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
               </div>
             )}
           </div>
@@ -263,7 +257,6 @@ export default function BlogDetail() {
                 fontSize: "0.8rem",
                 color: "#64748b"
               }}>
-                <span>🎬</span>
                 <span>Embedded Video</span>
               </div>
             </div>

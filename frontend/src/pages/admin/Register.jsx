@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../../lib/api.js";
+import { Lock, User, Mail } from "../../shared/components/Icons.jsx";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -101,7 +102,7 @@ export default function Register() {
             justifyContent: "center",
             fontSize: "2rem"
           }}>
-
+            <User width="28" height="28" style={{ color: "white" }} />
           </div>
           <h1 style={{ 
             fontSize: "1.75rem",
@@ -145,7 +146,7 @@ export default function Register() {
               Email or Phone Number *
             </label>
             <div style={{ position: "relative" }}>
-              
+              <span style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", fontSize: "1.1rem", display: "flex" }}><Mail width="18" height="18" /></span>
               <input 
                 value={formData.identifier}
                 onChange={(e) => setFormData({...formData, identifier: e.target.value})}
@@ -170,7 +171,7 @@ export default function Register() {
               Password *
             </label>
             <div style={{ position: "relative" }}>
-              <span style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", fontSize: "1.1rem" }}>🔒</span>
+              <span style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", fontSize: "1.1rem", display: "flex" }}><Lock width="18" height="18" /></span>
               <input 
                 type="password"
                 value={formData.password}
@@ -197,7 +198,7 @@ export default function Register() {
               Confirm Password *
             </label>
             <div style={{ position: "relative" }}>
-              <span style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", fontSize: "1.1rem" }}>🔒</span>
+              <span style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", fontSize: "1.1rem", display: "flex" }}><Lock width="18" height="18" /></span>
               <input 
                 type="password"
                 value={formData.confirmPassword}

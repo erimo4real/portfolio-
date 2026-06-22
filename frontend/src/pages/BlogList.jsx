@@ -41,7 +41,7 @@ export default function BlogList() {
             marginBottom: "1.5rem",
             backdropFilter: "blur(10px)"
           }}>
-            📝 Blog
+            Blog
           </div>
           <h1 style={{ color: "white", marginBottom: "1.5rem", fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>
             Thoughts & Insights
@@ -73,7 +73,7 @@ export default function BlogList() {
               background: "white",
               borderRadius: "24px"
             }}>
-              <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>📝</div>
+              <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center text-4xl"></div>
               <h3 style={{ marginBottom: "0.5rem" }}>No posts yet</h3>
               <p style={{ color: "#64748b" }}>
                 Check back soon for new content!
@@ -149,7 +149,7 @@ export default function BlogList() {
                         gap: "0.5rem",
                         fontSize: "1rem"
                       }}>
-                        Read Article <span style={{ fontSize: "1.25rem" }}>→</span>
+                        Read Article →
                       </div>
                     </div>
                     <div style={{ 

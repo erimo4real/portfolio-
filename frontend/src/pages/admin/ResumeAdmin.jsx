@@ -101,7 +101,7 @@ export default function ResumeAdmin() {
             to="/admin" 
             className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition-all"
           >
-            ← Back to Dashboard
+            <span className="mr-1">←</span> Back to Dashboard
           </Link>
         </div>
       </div>
@@ -127,9 +127,7 @@ export default function ResumeAdmin() {
           {/* Upload Form */}
           <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xl">
-                
-              </div>
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center"></div>
               <h2 className="text-xl font-bold text-slate-800">Upload New Resume</h2>
             </div>
             <form onSubmit={onUpload} className="space-y-5">
@@ -158,15 +156,14 @@ export default function ResumeAdmin() {
                   <label htmlFor="resume-upload" className="cursor-pointer">
                     {selectedFile ? (
                       <div className="flex flex-col items-center">
-                        <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center text-3xl mb-3">
-                          
+                        <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mb-3">
                         </div>
                         <div className="text-sm font-semibold text-emerald-700">{selectedFile.name}</div>
                         <div className="text-xs text-emerald-600 mt-1">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB • Click to change</div>
                       </div>
                       ) : (
                       <div className="flex flex-col items-center">
-                        <div className="text-4xl mb-2">📄</div>
+                        <div className="w-12 h-12 mb-2 rounded-full bg-slate-100 flex items-center justify-center"></div>
                         <div className="text-sm font-medium text-slate-600">Click to upload PDF</div>
                         <div className="text-xs text-slate-400 mt-1">PDF files only, up to 5MB</div>
                       </div>
@@ -204,8 +201,7 @@ export default function ResumeAdmin() {
                 {list.map((r, idx) => (
                   <div key={`resume-${r.id}-${idx}`} className="flex items-center justify-between p-4 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors">
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center text-xl">
-                        📄
+                      <div className="w-10 h-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center">
                       </div>
                       <div>
                         <div className="font-semibold text-slate-900">{r.version}</div>
@@ -263,8 +259,7 @@ export default function ResumeAdmin() {
             {/* Modal Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center text-xl">
-                  📄
+                <div className="w-10 h-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center">
                 </div>
                 <div>
                   <div className="font-semibold text-slate-900">{previewResume.version}</div>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../../lib/api.js";
+import { Key, Mail, AlertTriangle, ArrowLeft, Check } from "../../shared/components/Icons.jsx";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -93,7 +94,7 @@ export default function ForgotPassword() {
             fontSize: "2.5rem",
             boxShadow: "0 10px 30px rgba(102, 126, 234, 0.4)"
           }}>
-            🔑
+            <Key width="40" height="40" style={{ color: "white" }} />
           </div>
           
           <h1 style={{ 
@@ -127,7 +128,7 @@ export default function ForgotPassword() {
               gap: "0.5rem",
               justifyContent: "center"
             }}>
-              
+              <Check width="18" height="18" />
               {message}
             </div>
             <p style={{ color: "#64748b", marginBottom: "1.5rem" }}>
@@ -141,7 +142,7 @@ export default function ForgotPassword() {
               fontWeight: "600",
               textDecoration: "none"
             }}>
-              ← Back to Login
+              <ArrowLeft width="14" height="14" /> Back to Login
             </Link>
           </div>
         ) : (
@@ -165,7 +166,7 @@ export default function ForgotPassword() {
                   transform: "translateY(-50%)",
                   fontSize: "1.25rem"
                 }}>
-                  📧
+                  <Mail width="20" height="20" />
                 </span>
                 <input 
                   type="email"
@@ -197,7 +198,7 @@ export default function ForgotPassword() {
                 gap: "0.5rem",
                 animation: "shake 0.5s ease-in-out"
               }}>
-                
+                <AlertTriangle width="16" height="16" />
                 {message}
               </div>
             )}
@@ -259,9 +260,9 @@ export default function ForgotPassword() {
                 alignItems: "center",
                 gap: "0.5rem"
               }}>
-                ← Back to Login
-              </Link>
-            </div>
+              <ArrowLeft width="14" height="14" /> Back to Login
+            </Link>
+          </div>
           </form>
         )}
       </div>

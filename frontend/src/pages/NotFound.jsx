@@ -54,12 +54,13 @@ export default function NotFound() {
         </div>
         
         <div style={{
-          fontSize: "3rem",
-          marginBottom: "1.5rem",
+          width: "80px",
+          height: "80px",
+          margin: "0 auto 1.5rem",
+          borderRadius: "50%",
+          background: "rgba(255,255,255,0.15)",
           animation: "fadeInUp 0.6s ease-out 0.2s both"
-        }}>
-          🤔
-        </div>
+        }}></div>
 
         <h1 style={{
           color: "white",
@@ -101,7 +102,7 @@ export default function NotFound() {
             boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
             transition: "all 0.3s"
           }}>
-            <span>←</span> Back to Home
+            ← Back to Home
           </Link>
 
           <Link to="/blog" style={{

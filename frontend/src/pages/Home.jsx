@@ -7,6 +7,7 @@ import { fetchResume } from "../store/slices/resume.js";
 import { fetchBlogs } from "../store/slices/blog.js";
 import { Link } from "react-router-dom";
 import { getApiUrl } from "../lib/api.js";
+import { FileText, ArrowRight, Code, Monitor, Zap, Star, Check, User } from "../shared/components/Icons.jsx";
 
 const getImageUrl = (path) => {
   if (!path) return null;
@@ -72,15 +73,18 @@ export default function Home() {
   const services = [
     {
       title: "Web Development",
-      description: "Custom websites & web apps built with modern technologies"
+      description: "Custom websites & web apps built with modern technologies",
+      icon: Code
     },
     {
       title: "Responsive Design",
-      description: "Beautiful experiences that work on any device"
+      description: "Beautiful experiences that work on any device",
+      icon: Monitor
     },
     {
       title: "Performance Optimization",
-      description: "Fast, efficient applications that delight users"
+      description: "Fast, efficient applications that delight users",
+      icon: Zap
     }
   ];
 
@@ -243,7 +247,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div className="fade-in-up">
               <div className="inline-block bg-white/20 px-4 py-2 rounded-full text-white text-sm font-semibold mb-6 backdrop-blur-sm">
-                👋 Hey, I'm {profile?.name?.split(' ')[0] || "there"}!
+                Hey, I'm {profile?.name?.split(' ')[0] || "there"}!
               </div>
               
               <h1 className="text-white mb-2 leading-tight text-4xl md:text-5xl lg:text-6xl font-bold">
@@ -266,11 +270,11 @@ export default function Home() {
               {/* Social Proof Badges */}
               <div className="flex flex-wrap gap-4 mb-8">
                 <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2">
-                  
+                  <Star width="18" height="18" />
                   <span className="text-white font-semibold">5+ Projects Completed</span>
                 </div>
                 <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2">
-                  
+                  <Check width="18" height="18" />
                   <span className="text-white font-semibold">Clean Code</span>
                 </div>
               </div>
@@ -280,7 +284,7 @@ export default function Home() {
                   onClick={() => scrollToSection('projects')}
                   className="bg-white text-primary-600 px-8 py-4 rounded-xl font-semibold inline-flex items-center gap-2 hover:shadow-2xl hover:-translate-y-1 transition-all"
                 >
-                  View My Work <span>→</span>
+                  View My Work <ArrowRight width="18" height="18" />
                 </button>
                 <Link 
                   to="/contact" 
@@ -336,8 +340,8 @@ export default function Home() {
                 key={index}
                 className="group p-8 rounded-2xl bg-gradient-to-br from-slate-50 to-white border-2 border-transparent hover:border-primary-200 hover:shadow-2xl transition-all hover:-translate-y-2"
               >
-                <div className="text-5xl mb-4 transform group-hover:scale-110 transition-transform">
-                  {service.icon}
+                <div className="text-primary-600 mb-4 transform group-hover:scale-110 transition-transform">
+                  <service.icon width="40" height="40" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-3">{service.title}</h3>
                 <p className="text-slate-600 leading-relaxed">{service.description}</p>
@@ -483,7 +487,7 @@ export default function Home() {
                           </div>
                         )}
                         <div className="text-primary-600 font-semibold flex items-center gap-2 group-hover:gap-4 transition-all">
-                          View Project <span>→</span>
+                          View Project <ArrowRight width="16" height="16" />
                         </div>
                       </div>
                     </div>
@@ -523,7 +527,7 @@ export default function Home() {
                   download 
                   className="inline-flex items-center gap-3 bg-white text-primary-600 px-6 sm:px-10 py-4 sm:py-5 rounded-xl font-bold text-lg shadow-2xl hover:shadow-3xl hover:-translate-y-1 transition-all relative z-10"
                 >
-                  <span className="text-2xl">📄</span>
+                  <FileText width="24" height="24" />
                   Download Resume
                 </a>
               </>
@@ -590,7 +594,7 @@ export default function Home() {
                       {blog.markdown?.substring(0, 120)}...
                     </p>
                     <div className="text-primary-600 font-semibold inline-flex items-center gap-2 group-hover:gap-4 transition-all">
-                      Read More <span>→</span>
+                      Read More <ArrowRight width="16" height="16" />
                     </div>
                   </article>
                 </Link>
@@ -602,7 +606,7 @@ export default function Home() {
                 to="/blog" 
                 className="inline-flex items-center gap-2 px-8 py-4 bg-white text-primary-600 rounded-xl font-semibold border-2 border-slate-200 hover:border-primary-600 hover:shadow-lg transition-all"
               >
-                View All Posts <span>→</span>
+                View All Posts <ArrowRight width="16" height="16" />
               </Link>
             </div>
           </div>

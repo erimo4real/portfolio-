@@ -33,14 +33,14 @@ export default function BlogDetail() {
           </Link>
           <div>
             <div className="inline-block bg-white/20 px-4 py-2 rounded-full text-white text-xs font-bold mb-6 backdrop-blur-md uppercase tracking-wider">
-              📝 Blog Post
+              Blog Post
             </div>
             <h1 className="text-white mb-6 text-4xl md:text-6xl font-bold leading-tight">
               {detail.title}
             </h1>
             {detail.createdAt && (
               <div className="flex items-center gap-4 text-white/90 text-lg">
-                <span>📅</span>
+                
                 <span>
                   {new Date(detail.createdAt).toLocaleDateString('en-US', {
                     year: 'numeric',

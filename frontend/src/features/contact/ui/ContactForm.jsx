@@ -43,27 +43,21 @@ export default function ContactForm() {
 
             <div className="space-y-8">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-xl">
-                  📧
-                </div>
+                <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center"></div>
                 <div>
                   <h4 className="font-bold text-slate-300">Email</h4>
                   <p className="text-white">hello@example.com</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-xl">
-                  📍
-                </div>
+                <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center"></div>
                 <div>
                   <h4 className="font-bold text-slate-300">Location</h4>
                   <p className="text-white">Remote / Worldwide</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-xl">
-                  🤝
-                </div>
+                <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center"></div>
                 <div>
                   <h4 className="font-bold text-slate-300">Social</h4>
                   <div className="flex gap-4 mt-2">
@@ -81,8 +75,7 @@ export default function ContactForm() {
         <div className="lg:col-span-3">
           {status === 'success' ? (
             <div className="h-full flex flex-col items-center justify-center text-center p-12 bg-green-50 rounded-[2.5rem] border border-green-100">
-              <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center text-4xl mb-6 shadow-lg shadow-green-200">
-                
+              <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mb-6 shadow-lg shadow-green-200">
               </div>
               <h2 className="text-3xl font-bold text-slate-900 mb-4">Message Sent!</h2>
               <p className="text-slate-600 mb-8 max-w-sm">

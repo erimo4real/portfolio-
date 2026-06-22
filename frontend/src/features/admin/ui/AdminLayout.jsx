@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../store/slices/auth';
+import { BarChart, FileText, File, Shield, LogOut, ArrowLeft, ArrowRight, Code, User, MessageSquare, Star } from '../../../shared/components/Icons.jsx';
 
 const AdminLayout = () => {
   const dispatch = useDispatch();
@@ -16,13 +17,13 @@ const AdminLayout = () => {
   };
 
   const navItems = [
-    { path: '/admin', label: 'Dashboard', icon: '📊' },
-    { path: '/admin/projects', label: 'Projects' },
-    { path: '/admin/blogs', label: 'Blog Posts', icon: '📝' },
-    { path: '/admin/skills', label: 'Skills' },
-    { path: '/admin/profile', label: 'Profile' },
-    { path: '/admin/resume', label: 'Resume', icon: '📄' },
-    { path: '/admin/contacts', label: 'Messages' },
+    { path: '/admin', label: 'Dashboard', icon: BarChart },
+    { path: '/admin/projects', label: 'Projects', icon: Star },
+    { path: '/admin/blogs', label: 'Blog Posts', icon: FileText },
+    { path: '/admin/skills', label: 'Skills', icon: Code },
+    { path: '/admin/profile', label: 'Profile', icon: User },
+    { path: '/admin/resume', label: 'Resume', icon: File },
+    { path: '/admin/contacts', label: 'Messages', icon: MessageSquare },
   ];
 
   const isActive = (path) => {
@@ -42,7 +43,7 @@ const AdminLayout = () => {
         <div className="p-6 border-b border-slate-800">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xl shadow-lg">
-              🔐
+              <Shield width="22" height="22" />
             </div>
             {isSidebarOpen && (
               <div>
@@ -65,7 +66,7 @@ const AdminLayout = () => {
                   : 'text-slate-400 hover:bg-slate-800 hover:text-white'
               }`}
             >
-              <span className="text-xl">{item.icon}</span>
+              <span className="text-xl"><item.icon width="20" height="20" style={{ strokeWidth: 1.5 }} /></span>
               {isSidebarOpen && (
                 <span className="font-medium">{item.label}</span>
               )}
@@ -95,7 +96,7 @@ const AdminLayout = () => {
               isSidebarOpen ? 'w-full' : 'w-full justify-center'
             }`}
           >
-            <span>🚪</span>
+            <LogOut width="18" height="18" />
             {isSidebarOpen && <span className="font-medium">Logout</span>}
           </button>
         </div>
@@ -105,7 +106,7 @@ const AdminLayout = () => {
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           className="absolute -right-3 top-20 w-6 h-6 bg-indigo-600 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-indigo-700 transition-colors"
         >
-          {isSidebarOpen ? '◀' : '▶'}
+          {isSidebarOpen ? <ArrowLeft width="14" height="14" /> : <ArrowRight width="14" height="14" />}
         </button>
       </aside>
 

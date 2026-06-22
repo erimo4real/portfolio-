@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../lib/api.js";
+import { ArrowRight, X, Check } from "./Icons.jsx";
 
 export default function NotificationBell() {
   const [unreadCount, setUnreadCount] = useState(0);
@@ -173,7 +174,7 @@ export default function NotificationBell() {
           <div style={{ maxHeight: "360px", overflowY: "auto" }}>
             {messages.length === 0 ? (
               <div style={{ padding: "2.5rem 1.25rem", textAlign: "center", color: "#94a3b8" }}>
-                <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🎉</div>
+                <Check width="32" height="32" style={{ color: "#10b981", margin: "0 auto 0.5rem", display: "block" }} />
                 <p style={{ margin: 0, fontWeight: "500" }}>All caught up!</p>
                 <p style={{ margin: "0.25rem 0 0", fontSize: "0.85rem" }}>No unread messages</p>
               </div>
@@ -254,7 +255,7 @@ export default function NotificationBell() {
               onMouseEnter={e => e.currentTarget.style.background = "#eef2ff"}
               onMouseLeave={e => e.currentTarget.style.background = "transparent"}
             >
-              View all messages →
+                View all messages <ArrowRight width="14" height="14" />
             </button>
           </div>
         </div>
@@ -328,7 +329,7 @@ export default function NotificationBell() {
                   justifyContent: "center"
                 }}
               >
-                ✕
+                <X width="16" height="16" />
               </button>
             </div>
 
@@ -392,7 +393,7 @@ export default function NotificationBell() {
                     cursor: "pointer"
                   }}
                 >
-                  View in Messages →
+                  View in Messages <ArrowRight width="14" height="14" />
                 </button>
               </div>
             </div>

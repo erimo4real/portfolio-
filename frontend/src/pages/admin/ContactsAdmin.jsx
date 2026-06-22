@@ -93,8 +93,7 @@ export default function ContactsAdmin() {
       <div className="max-w-7xl mx-auto px-8 py-8">
         {list.length === 0 ? (
           <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-12 text-center">
-            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center text-4xl">
-              📭
+            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center">
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-2">No messages yet</h3>
             <p className="text-slate-500">Contact form submissions will appear here</p>

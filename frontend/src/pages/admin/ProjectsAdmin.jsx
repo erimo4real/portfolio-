@@ -427,7 +427,7 @@ export default function ProjectsAdmin() {
                     {p.images && p.images[0] ? (
                       <img src={p.images[0].path} alt={p.title} className="w-16 h-16 rounded-lg object-cover" />
                     ) : (
-                      <div className="w-16 h-16 rounded-lg bg-slate-100 flex items-center justify-center text-2xl">📷</div>
+                      <div className="w-16 h-16 rounded-lg bg-slate-100 flex items-center justify-center"></div>
                     )}
                   </div>
                   <div className="flex-1">

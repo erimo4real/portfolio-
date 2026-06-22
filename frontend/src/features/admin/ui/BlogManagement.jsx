@@ -178,8 +178,8 @@ export default function BlogManagement() {
                     </div>
                     <p className="text-slate-500 text-sm font-mono mb-4">/blog/{blog.slug}</p>
                     <div className="flex gap-4 text-sm text-slate-400">
-                      <span>📅 {new Date(blog.createdAt).toLocaleDateString()}</span>
-                      <span>📝 {blog.markdown?.length || 0} characters</span>
+                      <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
+                      <span>{blog.markdown?.length || 0} characters</span>
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
