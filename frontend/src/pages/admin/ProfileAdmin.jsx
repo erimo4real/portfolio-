@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { api } from "../../lib/api.js";
+import { api, getApiUrl } from "../../lib/api.js";
 import { Link } from "react-router-dom";
-
-const getApiUrl = () => {
-  const envUrl = import.meta.env.VITE_API_URL;
-  if (envUrl) {
-    return envUrl.replace(/\/api$/, '');
-  }
-  return '';
-};
 
 export default function ProfileAdmin() {
   const [profile, setProfile] = useState(null);

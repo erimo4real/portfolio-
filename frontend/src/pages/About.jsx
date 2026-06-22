@@ -5,14 +5,7 @@ import { fetchProfile } from "../store/slices/profile.js";
 import { getSkills } from "../features/skills/application/getSkills.ts";
 import { fetchProjects } from "../store/slices/projects.js";
 import { fetchBlogs } from "../store/slices/blog.js";
-
-const getApiUrl = () => {
-  const envUrl = import.meta.env.VITE_API_URL;
-  if (envUrl) {
-    return envUrl.replace(/\/api$/, '');
-  }
-  return '';
-};
+import { getApiUrl } from "../lib/api.js";
 
 const getImageUrl = (path) => {
   if (!path) return null;

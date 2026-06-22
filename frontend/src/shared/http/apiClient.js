@@ -1,9 +1,9 @@
 import axios from "axios";
-import { config } from "../config.js";
 
 export const api = axios.create({
-  baseURL: config.apiBase,
-  headers: { "Content-Type": "application/json" }
+  baseURL: "/api",
+  withCredentials: true,
+  headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
 });
 
 export async function get(path, params) {

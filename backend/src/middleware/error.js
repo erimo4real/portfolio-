@@ -75,7 +75,7 @@ async function sendErrorEmail(err, req) {
 
 export function errorHandler(err, req, res, next) {
   const status = err.status || 500;
-  const message = err.message || "Internal Server Error";
+  const message = status >= 500 ? "Internal Server Error" : (err.message || "Error");
   
   logger.error({ err, url: req.url, method: req.method }, "Request error");
   

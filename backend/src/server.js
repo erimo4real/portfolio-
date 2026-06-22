@@ -72,14 +72,29 @@ app.use(cors({
   credentials: true
 }));
 app.use(helmet({
-  contentSecurityPolicy: false,
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:", "https://res.cloudinary.com", "https://*.supabase.co"],
+      connectSrc: ["'self'"],
+      frameSrc: ["'none'"],
+      objectSrc: ["'none'"]
+    }
+  },
   crossOriginEmbedderPolicy: false,
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
+app.use((req, res, next) => {
+  res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+  next();
+});
 app.use(csrfProtection);
 app.use(cookieParser(process.env.JWT_SECRET));
-app.use(express.json({ limit: "2mb" }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "50kb" }));
+app.use(express.urlencoded({ extended: true, limit: "50kb" }));
 app.use(mongoSanitize());
 app.use(sanitizeInput);
 app.use(passport.initialize());
@@ -96,6 +111,9 @@ app.use("/api/auth/reset-password", authLimiter);
 
 const contactLimiter = rateLimit({ windowMs: 60 * 1000, max: 5, message: { error: "Too many requests, try again later" } });
 app.use("/api/contact", contactLimiter);
+
+const adminLimiter = rateLimit({ windowMs: 60 * 1000, max: 60, message: { error: "Too many requests, try again later" } });
+app.use("/api/contact/admin", adminLimiter);
 
 const analyticsLimiter = rateLimit({ windowMs: 60 * 1000, max: 30, message: { error: "Too many requests, try again later" } });
 app.use("/api/analytics/track", analyticsLimiter);

@@ -8,9 +8,18 @@ const options = {
       version: "1.0.0",
       description: "API documentation for the portfolio backend"
     },
-    servers: [{ url: "/api" }]
+    servers: [{ url: "/api" }],
+    components: {
+      securitySchemes: {
+        cookieAuth: {
+          type: "apiKey",
+          in: "cookie",
+          name: "auth_token"
+        }
+      }
+    }
   },
-  apis: []
+  apis: ["./src/modules/**/*.js"]
 };
 
 export const swaggerSpec = swaggerJsdoc(options);

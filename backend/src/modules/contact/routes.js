@@ -11,6 +11,34 @@ const contactBody = z.object({
   email: z.string().email(),
   message: z.string().min(1).max(5000)
 });
+/**
+ * POST /contact
+ * @openapi
+ * /contact:
+ *   post:
+ *     tags: [Contact]
+ *     summary: Submit a contact message
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [name, email, message]
+ *             properties:
+ *               name: { type: string }
+ *               email: { type: string, format: email }
+ *               message: { type: string, maxLength: 5000 }
+ *     responses:
+ *       200:
+ *         description: Message sent
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id: { type: string }
+ */
 contactRouter.post("/", validate(contactBody), async (req, res, next) => {
   try {
     const { name, email, message } = req.body;

@@ -6,14 +6,7 @@ import { fetchProjects } from "../store/slices/projects.js";
 import { fetchResume } from "../store/slices/resume.js";
 import { fetchBlogs } from "../store/slices/blog.js";
 import { Link } from "react-router-dom";
-
-const getApiUrl = () => {
-  const envUrl = import.meta.env.VITE_API_URL;
-  if (envUrl) {
-    return envUrl.replace(/\/api$/, '');
-  }
-  return '';
-};
+import { getApiUrl } from "../lib/api.js";
 
 const getImageUrl = (path) => {
   if (!path) return null;
