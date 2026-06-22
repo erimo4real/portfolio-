@@ -65,15 +65,15 @@ function Layout({ children }) {
         scrolled ? '-translate-y-full' : 'translate-y-0'
       } bg-white/95 backdrop-blur-lg border-b border-slate-200 shadow-sm`}>
         <div className="container">
-          <div className="flex justify-between items-center py-6">
+          <div className="flex justify-between items-center py-4 md:py-6">
             <Link 
               to="/" 
-              className="text-2xl font-extrabold bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent hover:scale-105 transition-transform"
+              className="text-xl md:text-2xl font-extrabold bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent hover:scale-105 transition-transform"
             >
               Portfolio
             </Link>
           
-            <div className="hidden md:flex items-center gap-10">
+            <div className="hidden md:flex items-center gap-6 lg:gap-10">
               <Link to="/" className="font-semibold text-slate-900 transition-colors hover:text-primary-600">Home</Link>
               <Link to="/about" className="font-semibold text-slate-900 transition-colors hover:text-primary-600">About</Link>
               <Link to="/blog" className="font-semibold text-slate-900 transition-colors hover:text-primary-600">Blog</Link>
@@ -83,32 +83,32 @@ function Layout({ children }) {
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden text-3xl transition-colors text-slate-900"
+              className="md:hidden p-2 -mr-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-900"
               aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? <X width="24" height="24" /> : <Menu width="24" height="24" />}
+              {mobileMenuOpen ? <X width="22" height="22" /> : <Menu width="22" height="22" />}
             </button>
           </div>
         </div>
       </nav>
 
       {mobileMenuOpen && (
-        <div className="fixed top-20 left-0 right-0 bg-white/98 backdrop-blur-lg p-8 z-40 shadow-xl animate-slideInFromTop md:hidden">
-          <div className="flex flex-col gap-6">
-            <Link to="/" onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold text-slate-900 hover:text-primary-600 transition-colors">Home</Link>
-            <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold text-slate-900 hover:text-primary-600 transition-colors">About</Link>
-            <Link to="/blog" onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold text-slate-900 hover:text-primary-600 transition-colors">Blog</Link>
-            <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold text-slate-900 hover:text-primary-600 transition-colors">Contact</Link>
-            <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold text-slate-500 hover:text-slate-700 transition-colors">Admin</Link>
+        <div className="fixed top-[60px] md:top-[72px] left-0 right-0 bottom-0 bg-white/98 backdrop-blur-lg z-40 shadow-xl animate-slideInFromTop md:hidden">
+          <div className="flex flex-col gap-2 p-4">
+            <Link to="/" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 rounded-xl text-lg font-semibold text-slate-900 hover:bg-slate-100 transition-colors">Home</Link>
+            <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 rounded-xl text-lg font-semibold text-slate-900 hover:bg-slate-100 transition-colors">About</Link>
+            <Link to="/blog" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 rounded-xl text-lg font-semibold text-slate-900 hover:bg-slate-100 transition-colors">Blog</Link>
+            <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 rounded-xl text-lg font-semibold text-slate-900 hover:bg-slate-100 transition-colors">Contact</Link>
+            <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 rounded-xl text-lg font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors">Admin</Link>
           </div>
         </div>
       )}
       
       <main id="main-content" className="pt-0 transition-all duration-300">{children}</main>
       
-      <footer className="bg-slate-900 text-white py-16">
+      <footer className="bg-slate-900 text-white py-12 md:py-16">
         <div className="container">
-          <div className="flex justify-center gap-6 mb-8">
+          <div className="flex justify-center gap-4 md:gap-6 mb-6 md:mb-8">
             {[
               { label: "GitHub", url: "https://github.com/erimo4real", icon: GitHub },
               { label: "Email", url: "mailto:eromoxlx@gmail.com", icon: Mail }
@@ -119,22 +119,22 @@ function Layout({ children }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={social.label}
-                className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center text-2xl transition-all duration-300 border-2 border-transparent hover:bg-white/20 hover:border-white/30 hover:-translate-y-1"
+                className="w-12 h-12 md:w-14 md:h-14 bg-white/10 rounded-full flex items-center justify-center transition-all duration-300 border-2 border-transparent hover:bg-white/20 hover:border-white/30 hover:-translate-y-1"
               >
-                <social.icon width="22" height="22" />
+                <social.icon width="20" height="20" />
               </a>
             ))}
           </div>
           
-          <div className="flex justify-center gap-8 mb-8 flex-wrap">
-            <Link to="/" className="text-white/70 hover:text-white transition-colors">Home</Link>
-            <Link to="/about" className="text-white/70 hover:text-white transition-colors">About</Link>
-            <Link to="/blog" className="text-white/70 hover:text-white transition-colors">Blog</Link>
-            <Link to="/contact" className="text-white/70 hover:text-white transition-colors">Contact</Link>
-            <Link to="/projects" className="text-white/70 hover:text-white transition-colors">Projects</Link>
+          <div className="flex justify-center gap-4 md:gap-8 mb-6 md:mb-8 flex-wrap">
+            <Link to="/" className="text-sm md:text-base text-white/70 hover:text-white transition-colors">Home</Link>
+            <Link to="/about" className="text-sm md:text-base text-white/70 hover:text-white transition-colors">About</Link>
+            <Link to="/blog" className="text-sm md:text-base text-white/70 hover:text-white transition-colors">Blog</Link>
+            <Link to="/contact" className="text-sm md:text-base text-white/70 hover:text-white transition-colors">Contact</Link>
+            <Link to="/projects" className="text-sm md:text-base text-white/70 hover:text-white transition-colors">Projects</Link>
           </div>
 
-          <p className="text-center text-white/50 text-sm">
+          <p className="text-center text-white/50 text-xs md:text-sm">
             © {new Date().getFullYear()} Portfolio. Crafted by Erimo
           </p>
         </div>

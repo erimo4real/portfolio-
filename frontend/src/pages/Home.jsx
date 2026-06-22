@@ -230,18 +230,17 @@ export default function Home() {
       {/* Floating Let's Talk Button */}
       <Link
         to="/contact"
-        className="fixed bottom-8 right-8 z-50 bg-gradient-to-r from-primary-600 to-purple-600 text-white px-6 py-4 rounded-full font-bold shadow-2xl hover:shadow-3xl hover:scale-110 transition-all flex items-center gap-2 animate-bounce"
+        className="fixed bottom-4 md:bottom-8 right-4 md:right-8 z-50 bg-gradient-to-r from-primary-600 to-purple-600 text-white px-4 md:px-6 py-3 md:py-4 rounded-full font-bold shadow-2xl hover:shadow-3xl hover:scale-110 transition-all flex items-center gap-2 animate-bounce text-sm md:text-base"
       >
-        
         <span className="hidden sm:inline">Let's Talk</span>
       </Link>
 
       {/* Hero Section */}
       <section className="min-h-screen flex items-center bg-gradient-to-br from-primary-600 via-purple-600 to-pink-500 relative overflow-hidden">
         {/* Floating Circles */}
-        <div className="absolute w-96 h-96 bg-white/10 rounded-full -top-48 -right-48 animate-float"></div>
-        <div className="absolute w-72 h-72 bg-white/10 rounded-full -bottom-36 -left-36 animate-float" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute w-48 h-48 bg-white/5 rounded-full top-1/2 left-1/2 animate-float" style={{ animationDelay: '4s' }}></div>
+        <div className="absolute w-48 md:w-96 h-48 md:h-96 bg-white/10 rounded-full -top-24 md:-top-48 -right-24 md:-right-48 animate-float"></div>
+        <div className="absolute w-36 md:w-72 h-36 md:h-72 bg-white/10 rounded-full -bottom-18 md:-bottom-36 -left-18 md:-left-36 animate-float" style={{ animationDelay: '2s' }}></div>
+        <div className="hidden md:block absolute w-48 h-48 bg-white/5 rounded-full top-1/2 left-1/2 animate-float" style={{ animationDelay: '4s' }}></div>
 
         <div className="container relative z-10">
           <div className="grid md:grid-cols-2 gap-16 items-center">
@@ -250,12 +249,12 @@ export default function Home() {
                 Hey, I'm {profile?.name?.split(' ')[0] || "there"}!
               </div>
               
-              <h1 className="text-white mb-2 leading-tight text-4xl md:text-5xl lg:text-6xl font-bold">
+              <h1 className="text-white mb-2 leading-tight font-bold" style={{ fontSize: "clamp(1.8rem, 8vw, 4rem)" }}>
                 {profile?.headline?.split('|')[0] || "Creative Developer"}
               </h1>
               
               {/* Typing Animation */}
-              <div className="text-2xl md:text-3xl text-white/90 mb-6 h-12 flex items-center">
+              <div className="text-lg sm:text-xl md:text-2xl text-white/90 mb-6 h-12 flex items-center">
                 <span className="mr-2">I'm a</span>
                 <span className="text-amber-300 font-semibold">
                   {roleText}
@@ -263,7 +262,7 @@ export default function Home() {
                 </span>
               </div>
 
-              <p className="text-xl text-white/90 mb-8 leading-relaxed">
+              <p className="text-base md:text-lg text-white/90 mb-6 md:mb-8 leading-relaxed">
                 {profile?.bioMarkdown?.substring(0, 150) || "I craft beautiful digital experiences that make a difference. Let's build something amazing together!"}
               </p>
 
@@ -279,16 +278,16 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="flex gap-4 flex-wrap">
+              <div className="flex gap-3 md:gap-4 flex-wrap">
                 <button 
                   onClick={() => scrollToSection('projects')}
-                  className="bg-white text-primary-600 px-8 py-4 rounded-xl font-semibold inline-flex items-center gap-2 hover:shadow-2xl hover:-translate-y-1 transition-all"
+                  className="bg-white text-primary-600 px-6 md:px-8 py-3 md:py-4 rounded-xl font-semibold inline-flex items-center gap-2 hover:shadow-2xl hover:-translate-y-1 transition-all text-sm md:text-base"
                 >
-                  View My Work <ArrowRight width="18" height="18" />
+                  View My Work <ArrowRight width="16" height="16" />
                 </button>
                 <Link 
                   to="/contact" 
-                  className="bg-white/20 text-white px-8 py-4 rounded-xl font-semibold border-2 border-white/30 backdrop-blur-sm hover:bg-white/30 transition-all"
+                  className="bg-white/20 text-white px-6 md:px-8 py-3 md:py-4 rounded-xl font-semibold border-2 border-white/30 backdrop-blur-sm hover:bg-white/30 transition-all text-sm md:text-base"
                 >
                   Hire Me
                 </Link>
@@ -334,17 +333,17 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
             {services.map((service, index) => (
               <div 
                 key={index}
-                className="group p-8 rounded-2xl bg-gradient-to-br from-slate-50 to-white border-2 border-transparent hover:border-primary-200 hover:shadow-2xl transition-all hover:-translate-y-2"
+                className="group p-6 md:p-8 rounded-2xl bg-gradient-to-br from-slate-50 to-white border-2 border-transparent hover:border-primary-200 hover:shadow-2xl transition-all hover:-translate-y-2"
               >
                 <div className="text-primary-600 mb-4 transform group-hover:scale-110 transition-transform">
-                  <service.icon width="40" height="40" />
+                  <service.icon width="32" height="32" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-3">{service.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{service.description}</p>
+                <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-3">{service.title}</h3>
+                <p className="text-sm md:text-base text-slate-600 leading-relaxed">{service.description}</p>
               </div>
             ))}
           </div>
@@ -373,13 +372,13 @@ export default function Home() {
             </div>
           ) : skills && Object.keys(skills).length > 0 ? (
             <>
-              <div className="flex gap-4 justify-center mb-12 flex-wrap">
+              <div className="flex gap-2 md:gap-4 justify-center mb-8 md:mb-12 flex-wrap">
                 {["Frontend", "Backend", "Mobile", "DevOps", "Tooling"].map((category) => (
                   skills[category] && skills[category].length > 0 && (
                     <button
                       key={category}
                       onClick={() => setActiveSkillCategory(category)}
-                      className={`px-6 py-3 rounded-full font-semibold transition-all ${
+                      className={`px-4 md:px-6 py-2 md:py-3 rounded-full font-semibold transition-all text-sm md:text-base ${
                         activeSkillCategory === category
                           ? 'bg-primary-600 text-white shadow-lg'
                           : 'bg-transparent text-slate-600 border-2 border-slate-200 hover:border-primary-600'
@@ -395,7 +394,7 @@ export default function Home() {
                 {skills[activeSkillCategory]?.map((skill) => (
                   <div 
                     key={skill.id} 
-                    className="bg-gradient-to-r from-primary-600 to-purple-600 text-white px-8 py-4 rounded-full text-base font-semibold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
+                    className="bg-gradient-to-r from-primary-600 to-purple-600 text-white px-5 md:px-8 py-2 md:py-4 rounded-full text-sm md:text-base font-semibold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
                   >
                     {skill.name}
                   </div>
@@ -444,7 +443,7 @@ export default function Home() {
               ))}
             </div>
           ) : visibleProjects && visibleProjects.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {visibleProjects.slice(0, 6).map((p, index) => {
                 const badge = getStatusBadge(p.status);
                 return (
@@ -467,11 +466,11 @@ export default function Home() {
                           </div>
                         )}
                       </div>
-                      <div className="p-8">
-                        <h3 className="text-slate-900 mb-3 text-2xl group-hover:text-primary-600 transition-colors">
+                      <div className="p-4 md:p-6">
+                        <h3 className="text-slate-900 mb-2 md:mb-3 text-lg md:text-xl group-hover:text-primary-600 transition-colors">
                           {p.title}
                         </h3>
-                        <p className="text-slate-600 mb-6 leading-relaxed">
+                          <p className="text-slate-600 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
                           {p.descriptionMarkdown?.substring(0, 120)}...
                         </p>
                         {p.techStack && p.techStack.length > 0 && (
@@ -510,13 +509,13 @@ export default function Home() {
       {/* Resume Section */}
       <section className="bg-white">
         <div className="container">
-          <div className="bg-gradient-to-br from-primary-600 via-purple-600 to-pink-500 rounded-3xl p-12 md:p-16 text-center text-white relative overflow-hidden">
+          <div className="bg-gradient-to-br from-primary-600 via-purple-600 to-pink-500 rounded-2xl md:rounded-3xl p-6 md:p-12 lg:p-16 text-center text-white relative overflow-hidden">
             <div className="absolute w-72 h-72 bg-white/10 rounded-full -top-36 -right-36"></div>
             <div className="absolute w-48 h-48 bg-white/10 rounded-full -bottom-24 -left-24"></div>
             
             {resume?.path ? (
               <>
-                <h2 className="text-white mb-4 relative z-10 text-3xl font-bold">
+                <h2 className="text-white mb-4 relative z-10 text-2xl md:text-3xl lg:text-4xl font-bold">
                   Download My Resume
                 </h2>
                 <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto relative z-10 leading-relaxed">
@@ -525,7 +524,7 @@ export default function Home() {
                 <a 
                   href={resume.path} 
                   download 
-                  className="inline-flex items-center gap-3 bg-white text-primary-600 px-6 sm:px-10 py-4 sm:py-5 rounded-xl font-bold text-lg shadow-2xl hover:shadow-3xl hover:-translate-y-1 transition-all relative z-10"
+                  className="inline-flex items-center gap-2 md:gap-3 bg-white text-primary-600 px-4 sm:px-6 md:px-10 py-3 md:py-5 rounded-xl font-bold text-sm md:text-lg shadow-2xl hover:shadow-3xl hover:-translate-y-1 transition-all relative z-10"
                 >
                   <FileText width="24" height="24" />
                   Download Resume
@@ -565,18 +564,18 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
               {blogs.slice(0, 3).map((blog, index) => (
                 <Link key={blog.id} to={`/blog/${blog.slug}`} className="group">
                   <article className="card h-full hover:shadow-2xl">
                     <div 
-                      className={`w-16 h-16 bg-gradient-to-br ${
+                      className={`w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br ${
                         index % 3 === 0 ? 'from-primary-600 to-purple-600' : 
                         index % 3 === 1 ? 'from-pink-500 to-red-500' : 
                         'from-cyan-500 to-blue-500'
-                      } rounded-xl flex items-center justify-center text-3xl mb-6`}
+                      } rounded-xl flex items-center justify-center mb-4`}
                     >
-                      
+                      <FileText width="20" height="20" />
                     </div>
                     {blog.createdAt && (
                       <div className="text-sm text-slate-500 mb-4">
@@ -587,10 +586,10 @@ export default function Home() {
                         })}
                       </div>
                     )}
-                    <h3 className="text-slate-900 mb-4 text-2xl leading-tight group-hover:text-primary-600 transition-colors">
+                    <h3 className="text-slate-900 mb-2 md:mb-4 text-lg md:text-xl leading-tight group-hover:text-primary-600 transition-colors">
                       {blog.title}
                     </h3>
-                    <p className="text-slate-600 mb-6 leading-relaxed">
+                    <p className="text-slate-600 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
                       {blog.markdown?.substring(0, 120)}...
                     </p>
                     <div className="text-primary-600 font-semibold inline-flex items-center gap-2 group-hover:gap-4 transition-all">
@@ -604,7 +603,7 @@ export default function Home() {
             <div className="text-center">
               <Link 
                 to="/blog" 
-                className="inline-flex items-center gap-2 px-8 py-4 bg-white text-primary-600 rounded-xl font-semibold border-2 border-slate-200 hover:border-primary-600 hover:shadow-lg transition-all"
+                className="inline-flex items-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-white text-primary-600 rounded-xl font-semibold border-2 border-slate-200 hover:border-primary-600 hover:shadow-lg transition-all text-sm md:text-base"
               >
                 View All Posts <ArrowRight width="16" height="16" />
               </Link>
@@ -631,15 +630,15 @@ export default function Home() {
 
           <div className="max-w-4xl mx-auto relative">
             {/* Testimonial Card */}
-            <div className="card min-h-[400px] flex flex-col justify-center text-center relative overflow-hidden">
+            <div className="card min-h-[250px] md:min-h-[350px] flex flex-col justify-center text-center relative overflow-hidden">
               <div className="absolute top-8 left-8 text-7xl text-slate-100 leading-none">"</div>
               
               <div className="animate-fadeIn relative z-10">
-                <div className="w-20 h-20 bg-gradient-to-br from-primary-600 to-purple-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-8 shadow-xl">
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-primary-600 to-purple-600 rounded-full flex items-center justify-center text-2xl md:text-4xl mx-auto mb-4 md:mb-8 shadow-xl">
                   {testimonials[currentTestimonial].avatar}
                 </div>
                 
-                <p className="text-slate-600 text-xl leading-relaxed mb-8 italic max-w-3xl mx-auto">
+                  <p className="text-slate-600 text-base md:text-lg leading-relaxed mb-6 md:mb-8 italic max-w-3xl mx-auto">
                   {testimonials[currentTestimonial].text}
                 </p>
                 
@@ -715,7 +714,7 @@ export default function Home() {
         className={`bg-slate-50 py-20 ${fadeInClass('cta')}`}
       >
         <div className="container">
-          <div className="bg-gradient-to-br from-primary-600 via-purple-600 to-pink-500 rounded-3xl p-12 md:p-20 text-center text-white relative overflow-hidden">
+          <div className="bg-gradient-to-br from-primary-600 via-purple-600 to-pink-500 rounded-2xl md:rounded-3xl p-6 md:p-12 lg:p-20 text-center text-white relative overflow-hidden">
             <div className="absolute w-72 h-72 bg-white/10 rounded-full -top-36 -right-36"></div>
             <div className="absolute w-48 h-48 bg-white/10 rounded-full -bottom-24 -left-24"></div>
             
@@ -728,13 +727,13 @@ export default function Home() {
             <div className="flex gap-4 justify-center flex-wrap relative z-10">
               <Link 
                 to="/contact" 
-                className="inline-flex items-center gap-2 bg-white text-primary-600 px-6 sm:px-10 py-4 sm:py-5 rounded-xl font-bold text-lg shadow-2xl hover:shadow-3xl hover:-translate-y-1 transition-all"
+                className="inline-flex items-center gap-2 bg-white text-primary-600 px-4 sm:px-6 md:px-10 py-3 md:py-5 rounded-xl font-bold text-sm md:text-lg shadow-2xl hover:shadow-3xl hover:-translate-y-1 transition-all"
               >
                 Start a Conversation
               </Link>
               <Link 
                 to="/projects" 
-                className="inline-flex items-center gap-2 bg-white/20 text-white px-6 sm:px-10 py-4 sm:py-5 rounded-xl font-bold text-lg border-2 border-white/30 backdrop-blur-sm hover:bg-white/30 transition-all"
+                className="inline-flex items-center gap-2 bg-white/20 text-white px-4 sm:px-6 md:px-10 py-3 md:py-5 rounded-xl font-bold text-sm md:text-lg border-2 border-white/30 backdrop-blur-sm hover:bg-white/30 transition-all"
               >
                 See My Work
               </Link>

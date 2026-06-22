@@ -67,39 +67,39 @@ export default function About() {
   return (
     <div>
       <section style={{
-        minHeight: "60vh",
+        minHeight: "50vh",
         display: "flex",
         alignItems: "center",
         background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         position: "relative",
         overflow: "hidden",
-        paddingTop: "80px"
+        paddingTop: "4rem"
       }}>
         {/* Animated Background Elements */}
-        <div style={{
+        <div className="about-hero-circle" style={{
           position: "absolute",
-          width: "500px",
-          height: "500px",
+          width: "clamp(200px, 50vw, 500px)",
+          height: "clamp(200px, 50vw, 500px)",
           background: "rgba(255,255,255,0.1)",
           borderRadius: "50%",
-          top: "-250px",
-          right: "-250px",
+          top: "calc(-1 * clamp(100px, 25vw, 250px))",
+          right: "calc(-1 * clamp(100px, 25vw, 250px))",
           animation: "float 6s ease-in-out infinite"
         }}></div>
-        <div style={{
+        <div className="about-hero-circle" style={{
           position: "absolute",
-          width: "300px",
-          height: "300px",
+          width: "clamp(150px, 30vw, 300px)",
+          height: "clamp(150px, 30vw, 300px)",
           background: "rgba(255,255,255,0.1)",
           borderRadius: "50%",
-          bottom: "-150px",
-          left: "-150px",
+          bottom: "calc(-1 * clamp(75px, 15vw, 150px))",
+          left: "calc(-1 * clamp(75px, 15vw, 150px))",
           animation: "float 8s ease-in-out infinite"
         }}></div>
-        <div style={{
+        <div className="about-hero-circle" style={{
           position: "absolute",
-          width: "200px",
-          height: "200px",
+          width: "clamp(100px, 20vw, 200px)",
+          height: "clamp(100px, 20vw, 200px)",
           background: "rgba(255,255,255,0.05)",
           borderRadius: "50%",
           top: "50%",
@@ -113,7 +113,7 @@ export default function About() {
             <h1 style={{ color: "white", marginBottom: "1.5rem" }}>
               About Me
             </h1>
-            <p style={{ fontSize: "1.25rem", color: "rgba(255,255,255,0.9)", lineHeight: "1.8" }}>
+            <p style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)", color: "rgba(255,255,255,0.9)", lineHeight: "1.8" }}>
               Get to know more about my journey, skills, and what drives me
             </p>
           </div>
@@ -125,7 +125,7 @@ export default function About() {
           <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))",
-            gap: "4rem",
+            gap: "clamp(2rem, 5vw, 4rem)",
             alignItems: "center"
           }}>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} className="fade-in-scale">
@@ -221,30 +221,30 @@ export default function About() {
               <h2 style={{ marginBottom: "1.5rem" }}>
                 <span className="text-gradient">Passionate About Building Great Software</span>
               </h2>
-              <p style={{ fontSize: "1.125rem", color: "#64748b", marginBottom: "1.5rem", lineHeight: "1.8" }}>
+              <p style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.125rem)", color: "#64748b", marginBottom: "1.5rem", lineHeight: "1.8" }}>
                 {profile?.bioMarkdown || "I'm a full-stack developer who loves creating elegant solutions to complex problems. With a focus on clean code and user experience, I bring ideas to life through modern web technologies."}
               </p>
-              <p style={{ fontSize: "1.125rem", color: "#64748b", marginBottom: "2rem", lineHeight: "1.8" }}>
+              <p style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.125rem)", color: "#64748b", marginBottom: "2rem", lineHeight: "1.8" }}>
                 When I'm not coding, you'll find me exploring new technologies, contributing to open source, or sharing knowledge with the developer community.
               </p>
 
               <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap", marginBottom: "2rem" }}>
                 <div>
-                  <div style={{ fontSize: "2.5rem", fontWeight: "800", color: "#6366f1", marginBottom: "0.5rem" }}>
-                    {visibleProjects.length}+
-                  </div>
+                <div style={{ fontSize: "clamp(1.75rem, 5vw, 2.5rem)", fontWeight: "800", color: "#6366f1", marginBottom: "0.5rem" }}>
+                  {visibleProjects.length}+
+                </div>
                   <div style={{ color: "#64748b", fontWeight: "600" }}>Projects Completed</div>
                 </div>
                 <div>
-                  <div style={{ fontSize: "2.5rem", fontWeight: "800", color: "#6366f1", marginBottom: "0.5rem" }}>
-                    {Object.values(skills || {}).flat().length}+
-                  </div>
+                <div style={{ fontSize: "clamp(1.75rem, 5vw, 2.5rem)", fontWeight: "800", color: "#6366f1", marginBottom: "0.5rem" }}>
+                  {Object.values(skills || {}).flat().length}+
+                </div>
                   <div style={{ color: "#64748b", fontWeight: "600" }}>Technologies</div>
                 </div>
                 <div>
-                  <div style={{ fontSize: "2.5rem", fontWeight: "800", color: "#6366f1", marginBottom: "0.5rem" }}>
-                    {blogs?.length || 0}+
-                  </div>
+                <div style={{ fontSize: "clamp(1.75rem, 5vw, 2.5rem)", fontWeight: "800", color: "#6366f1", marginBottom: "0.5rem" }}>
+                  {blogs?.length || 0}+
+                </div>
                   <div style={{ color: "#64748b", fontWeight: "600" }}>Blog Posts</div>
                 </div>
               </div>
@@ -259,7 +259,7 @@ export default function About() {
             <h2 style={{ marginBottom: "1rem" }}>
               <span className="text-gradient">Skills & Expertise</span>
             </h2>
-            <p style={{ fontSize: "1.125rem", color: "#64748b", maxWidth: "600px", margin: "0 auto" }}>
+            <p style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.125rem)", color: "#64748b", maxWidth: "600px", margin: "0 auto" }}>
               Technologies and tools I use to bring ideas to life
             </p>
           </div>
@@ -272,7 +272,7 @@ export default function About() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))", gap: "2rem" }}>
               {["Frontend", "Backend", "Mobile", "DevOps", "Tooling"].map((category, idx) =>
                 skills[category] && skills[category].length > 0 && (
-                  <div key={category} className="card hover-lift" style={{ padding: "2rem", animationDelay: `${idx * 0.1}s` }}>
+                  <div key={category} className="card hover-lift" style={{ padding: "clamp(1.25rem, 3vw, 2rem)", animationDelay: `${idx * 0.1}s` }}>
                     <h3 style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
                       <span style={{
                         width: "50px",
@@ -346,18 +346,20 @@ export default function About() {
               gap: "0.5rem",
               background: "white",
               color: "#667eea",
-              padding: "1rem 2rem",
+              padding: "0.75rem 1.5rem",
               borderRadius: "12px",
               fontWeight: "700",
               textDecoration: "none",
               position: "relative",
-              zIndex: 1
+              zIndex: 1,
+              fontSize: "clamp(0.9rem, 2.5vw, 1rem)"
             }}>
               Get In Touch <span>→</span>
             </Link>
           </div>
         </div>
       </section>
+      <style>{`@media (max-width: 480px) { .about-hero-circle { display: none; } }`}</style>
     </div>
   );
 }

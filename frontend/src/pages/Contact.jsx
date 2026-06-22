@@ -25,32 +25,32 @@ export default function Contact() {
   return (
     <div>
       <section style={{
-        minHeight: "60vh",
+        minHeight: "50vh",
         display: "flex",
         alignItems: "center",
         background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         position: "relative",
         overflow: "hidden",
-        paddingTop: "80px"
+        paddingTop: "4rem"
       }}>
         <div style={{
           position: "absolute",
-          width: "500px",
-          height: "500px",
+          width: "clamp(200px, 50vw, 500px)",
+          height: "clamp(200px, 50vw, 500px)",
           background: "rgba(255,255,255,0.1)",
           borderRadius: "50%",
-          top: "-250px",
-          right: "-250px",
+          top: "calc(-1 * clamp(100px, 25vw, 250px))",
+          right: "calc(-1 * clamp(100px, 25vw, 250px))",
           animation: "float 6s ease-in-out infinite"
         }}></div>
         <div style={{
           position: "absolute",
-          width: "300px",
-          height: "300px",
+          width: "clamp(150px, 30vw, 300px)",
+          height: "clamp(150px, 30vw, 300px)",
           background: "rgba(255,255,255,0.1)",
           borderRadius: "50%",
-          bottom: "-150px",
-          left: "-150px",
+          bottom: "calc(-1 * clamp(75px, 15vw, 150px))",
+          left: "calc(-1 * clamp(75px, 15vw, 150px))",
           animation: "float 8s ease-in-out infinite"
         }}></div>
 
@@ -71,14 +71,14 @@ export default function Contact() {
           <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))",
-            gap: "4rem",
+            gap: "clamp(2rem, 5vw, 4rem)",
             alignItems: "start"
           }}>
             <div>
               <h2 style={{ marginBottom: "1.5rem" }}>
                 <span className="text-gradient">Let's Work Together</span>
               </h2>
-              <p style={{ fontSize: "1.125rem", color: "#64748b", marginBottom: "2rem", lineHeight: "1.8" }}>
+              <p style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.125rem)", color: "#64748b", marginBottom: "1.5rem", lineHeight: "1.8" }}>
                 I'm always interested in hearing about new projects and opportunities. Whether you have a question or just want to say hi, feel free to reach out!
               </p>
 
@@ -98,7 +98,7 @@ export default function Contact() {
                     <Mail width="24" height="24" style={{ color: "white" }} />
                   </div>
                   <div>
-                    <h3 style={{ marginBottom: "0.5rem", fontSize: "1.25rem" }}>Email</h3>
+                    <h3 style={{ marginBottom: "0.5rem", fontSize: "clamp(1rem, 3vw, 1.25rem)" }}>Email</h3>
                     <p style={{ color: "#64748b" }}>eromoxlx@gmail.com</p>
                   </div>
                 </div>
@@ -118,7 +118,7 @@ export default function Contact() {
                     <Phone width="24" height="24" style={{ color: "white" }} />
                   </div>
                   <div>
-                    <h3 style={{ marginBottom: "0.5rem", fontSize: "1.25rem" }}>Phone</h3>
+                    <h3 style={{ marginBottom: "0.5rem", fontSize: "clamp(1rem, 3vw, 1.25rem)" }}>Phone</h3>
                     <p style={{ color: "#64748b" }}>08138213326</p>
                   </div>
                 </div>
@@ -138,7 +138,7 @@ export default function Contact() {
                     <MapPin width="24" height="24" style={{ color: "white" }} />
                   </div>
                   <div>
-                    <h3 style={{ marginBottom: "0.5rem", fontSize: "1.25rem" }}>Location</h3>
+                    <h3 style={{ marginBottom: "0.5rem", fontSize: "clamp(1rem, 3vw, 1.25rem)" }}>Location</h3>
                     <p style={{ color: "#64748b" }}>Lagos, LA</p>
                   </div>
                 </div>

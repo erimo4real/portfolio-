@@ -20,7 +20,7 @@ export default function BlogDetail() {
         display: "flex", 
         alignItems: "center", 
         justifyContent: "center",
-        paddingTop: "6rem"
+        paddingTop: "4rem"
       }}>
         <div className="spinner"></div>
       </div>
@@ -74,22 +74,22 @@ export default function BlogDetail() {
       {/* Hero Section */}
       {!detail.image && (
       <section style={{
-        minHeight: "60vh",
+        minHeight: "50vh",
         display: "flex",
         alignItems: "center",
         background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        paddingTop: "6rem",
+        paddingTop: "4rem",
         position: "relative",
         overflow: "hidden"
       }}>
         <div style={{
           position: "absolute",
-          width: "500px",
-          height: "500px",
+          width: "clamp(200px, 50vw, 500px)",
+          height: "clamp(200px, 50vw, 500px)",
           background: "rgba(255,255,255,0.1)",
           borderRadius: "50%",
-          top: "-250px",
-          right: "-250px"
+          top: "calc(-1 * clamp(100px, 25vw, 250px))",
+          right: "calc(-1 * clamp(100px, 25vw, 250px))"
         }}></div>
         
         <div className="container" style={{ maxWidth: "900px", position: "relative", zIndex: 1 }}>
@@ -152,7 +152,7 @@ export default function BlogDetail() {
       {detail.image && (
         <div style={{
           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-          padding: "3rem 0 4rem"
+          padding: "2rem 0 3rem"
         }}>
           <div className="container" style={{ maxWidth: "900px", position: "relative", zIndex: 1 }}>
             <Link to="/blog" style={{ 
@@ -197,7 +197,7 @@ export default function BlogDetail() {
       {detail.videoEmbedUrl && (
         <div style={{ 
           maxWidth: "900px", 
-          margin: "-4rem auto 3rem", 
+          margin: "-2rem auto 2rem", 
           position: "relative", 
           zIndex: 10,
           padding: "0 1.5rem"
@@ -288,7 +288,7 @@ export default function BlogDetail() {
       )}
 
       {/* Content Section */}
-      <section style={{ background: "#f8fafc", padding: "5rem 0" }}>
+      <section style={{ background: "#f8fafc", padding: "clamp(3rem, 8vw, 5rem) 0" }}>
         <div className="container" style={{ maxWidth: "800px" }}>
           <article className="card" style={{
             padding: "clamp(1.5rem, 4vw, 4rem)",
@@ -398,9 +398,9 @@ export default function BlogDetail() {
 
           {/* Back to Blog */}
           <div style={{ 
-            marginTop: "4rem", 
+            marginTop: "clamp(2rem, 6vw, 4rem)", 
             textAlign: "center",
-            padding: "3rem",
+            padding: "clamp(1.5rem, 4vw, 3rem)",
             background: "white",
             borderRadius: "20px"
           }}>
@@ -418,11 +418,12 @@ export default function BlogDetail() {
                 gap: "0.75rem",
                 background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                 color: "white",
-                padding: "1rem 2rem",
+                padding: "0.75rem 1.5rem",
                 borderRadius: "12px",
                 fontWeight: "600",
                 textDecoration: "none",
-                transition: "all 0.3s"
+                transition: "all 0.3s",
+                fontSize: "clamp(0.9rem, 2.5vw, 1rem)"
               }}
             >
               <span>←</span> Back to All Posts

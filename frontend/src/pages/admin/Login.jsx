@@ -111,12 +111,12 @@ export default function AdminLogin() {
       background: "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
       backgroundSize: "200% 200%",
       animation: "gradientShift 15s ease infinite",
-      padding: "4rem 2rem 2rem 2rem",
+      padding: "4rem 1rem 2rem",
       position: "relative",
       overflow: "hidden"
     }}>
       {/* Animated Background Elements */}
-      <div style={{
+      <div className="login-circle-1" style={{
         position: "absolute",
         width: "600px",
         height: "600px",
@@ -127,7 +127,7 @@ export default function AdminLogin() {
         animation: "float 8s ease-in-out infinite",
         filter: "blur(40px)"
       }}></div>
-      <div style={{
+      <div className="login-circle-2" style={{
         position: "absolute",
         width: "400px",
         height: "400px",
@@ -138,7 +138,7 @@ export default function AdminLogin() {
         animation: "float 6s ease-in-out infinite reverse",
         filter: "blur(30px)"
       }}></div>
-      <div style={{
+      <div className="login-circle-3" style={{
         position: "absolute",
         width: "300px",
         height: "300px",
@@ -270,9 +270,10 @@ export default function AdminLogin() {
                 transform: `translateX(-50%) ${isPasswordFocused ? 'translateY(-10px)' : 'translateY(0)'}`,
                 width: "44px",
                 height: "35px",
-                border: "9px solid white",
-                borderBottom: "none",
-                borderRadius: "22px 22px 0 0",
+                  border: "9px solid white",
+                  borderBottom: "none",
+                  borderRadius: "22px 22px 0 0",
+                  boxSizing: "border-box",
                 transition: "all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
                 boxShadow: isPasswordFocused ? "0 0 20px rgba(16, 185, 129, 0.5)" : "none"
               }}></div>
@@ -873,6 +874,10 @@ export default function AdminLogin() {
           div[style*="min-height: 600px"] {
             min-height: auto !important;
           }
+          .login-circle-1, .login-circle-2, .login-circle-3 { display: none; }
+        }
+        @media (max-width: 480px) {
+          .lock-shackle { border-width: 6px; width: 32px; height: 26px; }
         }
       `}</style>
     </div>

@@ -15,19 +15,16 @@ export default function BlogList() {
   return (
     <div>
       <style>{`
-        @media (max-width: 768px) {
-          .blog-card-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
+        .blog-card-grid { padding: clamp(1.5rem, 3vw, 3rem); display: grid; gap: clamp(1rem, 3vw, 3rem); align-items: center; }
+        @media (max-width: 768px) { .blog-card-grid { grid-template-columns: 1fr; } }
       `}</style>
       {/* Hero Section */}
       <section style={{
-        minHeight: "60vh",
+        minHeight: "50vh",
         display: "flex",
         alignItems: "center",
         background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        paddingTop: "6rem"
+        paddingTop: "4rem"
       }}>
         <div className="container" style={{ textAlign: "center" }}>
           <div style={{
@@ -47,10 +44,11 @@ export default function BlogList() {
             Thoughts & Insights
           </h1>
           <p style={{ 
-            fontSize: "1.25rem", 
+            fontSize: "clamp(1rem, 2.5vw, 1.25rem)", 
             color: "rgba(255,255,255,0.9)",
             maxWidth: "700px",
-            margin: "0 auto"
+            margin: "0 auto",
+            padding: "0 1rem"
           }}>
             Exploring web development, design patterns, and everything in between
           </p>
@@ -58,7 +56,7 @@ export default function BlogList() {
       </section>
 
       {/* Blog Posts */}
-      <section style={{ background: "#f8fafc", padding: "5rem 0" }}>
+      <section style={{ background: "#f8fafc", padding: "clamp(3rem, 8vw, 5rem) 0" }}>
         <div className="container" style={{ maxWidth: "1000px" }}>
           {status === "loading" && (
             <div style={{ textAlign: "center", padding: "4rem 0" }}>
@@ -90,11 +88,7 @@ export default function BlogList() {
                   style={{ textDecoration: "none" }}
                 >
                   <article className="card blog-card-grid" style={{
-                    padding: "clamp(1.5rem, 3vw, 3rem)",
-                    display: "grid",
-                    gridTemplateColumns: index % 2 === 0 ? "2fr 1fr" : "1fr 2fr",
-                    gap: "clamp(1rem, 3vw, 3rem)",
-                    alignItems: "center"
+                    gridTemplateColumns: index % 2 === 0 ? "2fr 1fr" : "1fr 2fr"
                   }}>
                     <div style={{ order: index % 2 === 0 ? 1 : 2 }}>
                       <div style={{ 
@@ -136,7 +130,7 @@ export default function BlogList() {
                       <p style={{ 
                         color: "#64748b", 
                         marginBottom: "1.5rem",
-                        fontSize: "1.125rem",
+                          fontSize: "clamp(0.95rem, 2.5vw, 1.125rem)",
                         lineHeight: "1.7"
                       }}>
                         {b.markdown?.substring(0, 180)}...
@@ -154,13 +148,13 @@ export default function BlogList() {
                     </div>
                     <div style={{ 
                       order: index % 2 === 0 ? 2 : 1,
-                      height: "250px",
+                      height: "clamp(180px, 30vw, 250px)",
                       borderRadius: "16px",
                       overflow: "hidden",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      fontSize: "4rem",
+                      fontSize: "clamp(2.5rem, 8vw, 4rem)",
                       background: b.image ? 'none' : `linear-gradient(135deg, ${index % 3 === 0 ? '#667eea' : index % 3 === 1 ? '#f093fb' : '#4facfe'} 0%, ${index % 3 === 0 ? '#764ba2' : index % 3 === 1 ? '#f5576c' : '#00f2fe'} 100%)`
                     }}>
                       {b.image ? (
