@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { getApiUrl } from "../lib/api.js";
 import { FileText, ArrowRight, Code, Monitor, Zap, Star, Check } from "../shared/components/Icons.jsx";
 import CodeBlock from "../shared/components/CodeBlock.jsx";
+import ProjectCard from "../shared/components/ProjectCard.jsx";
 import {
   fadeUp,
   scaleIn,
@@ -179,15 +180,6 @@ export default function Home() {
     (p.published === true || p.published === undefined) &&
     (p.status === "completed" || p.status === "in_progress")
   ) || [];
-
-  const getStatusBadge = (status) => {
-    const badges = {
-      completed: { label: "✓ Completed", color: "text-emerald-700", bg: "bg-emerald-100" },
-      in_progress: { label: "In Progress", color: "text-amber-700", bg: "bg-amber-100" },
-      idea: { label: "Idea", color: "text-indigo-700", bg: "bg-indigo-100" }
-    };
-    return badges[status] || badges.completed;
-  }
 
   const headline = profile?.headline?.split('|')[0] || "Creative Developer";
   const firstName = profile?.name?.split(' ')[0] || "there";
@@ -491,60 +483,11 @@ export default function Home() {
               viewport={viewPort}
               className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
             >
-              {visibleProjects.slice(0, 6).map((p, index) => {
-                const badge = getStatusBadge(p.status);
-                return (
+              {visibleProjects.slice(0, 6).map((p, index) => (
                   <motion.div key={p.id} variants={scaleIn}>
-                    <Link to={`/projects/${p.slug}`} className="group block h-full">
-                      <div className="relative h-full rounded-2xl overflow-hidden bg-white/60 backdrop-blur-md border border-white/60 shadow-lg transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-2">
-                        {/* gradient glow on hover */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary-500/0 via-purple-500/0 to-pink-500/0 group-hover:from-primary-500/10 group-hover:via-purple-500/10 group-hover:to-pink-500/20 transition-all duration-500 pointer-events-none z-10"></div>
-
-                        <div
-                          className="w-full h-56 md:h-64 bg-cover bg-center relative img-hover-zoom"
-                          style={{
-                            backgroundImage: p.images?.[0]?.path
-                              ? `url(${p.images[0].path})`
-                              : `linear-gradient(135deg, ${index % 2 === 0 ? '#667eea' : '#f093fb'} 0%, ${index % 2 === 0 ? '#764ba2' : '#f5576c'} 100%)`
-                          }}
-                        >
-                          <div className={`absolute top-4 left-4 ${badge.bg} ${badge.color} px-4 py-2 rounded-full text-xs font-bold backdrop-blur-sm`}>
-                            {badge.label}
-                          </div>
-                          {p.featured && (
-                            <div className="absolute top-4 right-4 bg-amber-400 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                              Featured
-                            </div>
-                          )}
-                        </div>
-                        <div className="p-4 md:p-6">
-                          <h3 className="text-slate-900 mb-2 md:mb-3 text-lg md:text-xl group-hover:text-primary-600 transition-colors">
-                            {p.title}
-                          </h3>
-                          <p className="text-slate-600 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
-                            {p.descriptionMarkdown?.substring(0, 120)}...
-                          </p>
-                          {p.techStack && p.techStack.length > 0 && (
-                            <div className="flex flex-wrap gap-2 mb-4">
-                              {p.techStack.slice(0, 4).map((tech, i) => (
-                                <span
-                                  key={i}
-                                  className="bg-white/80 backdrop-blur-sm text-slate-700 px-3 py-1.5 rounded-lg text-sm font-medium border border-slate-200/60 shadow-sm"
-                                >
-                                  {tech}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                          <div className="text-primary-600 font-semibold flex items-center gap-2 group-hover:gap-4 transition-all">
-                            View Project <ArrowRight width="16" height="16" />
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
+                    <ProjectCard project={p} index={index} />
                   </motion.div>
-                );
-              })}
+                ))}
             </motion.div>
           ) : (
             <div className="text-center py-16">

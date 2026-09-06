@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { fetchProjectDetail } from "../store/slices/projects.js";
 import { marked } from "marked";
+import PageHero from "../shared/components/PageHero.jsx";
+import { ArrowLeft, GitHub, ExternalLink } from "../shared/components/Icons.jsx";
+import { fadeUp, scaleIn, staggerContainer, viewPort } from "../lib/animations.js";
 
 export default function ProjectDetail() {
   const { slug } = useParams();
@@ -15,317 +19,203 @@ export default function ProjectDetail() {
 
   if (!detail) {
     return (
-      <div style={{ 
-        minHeight: "100vh", 
-        display: "flex", 
-        alignItems: "center", 
-        justifyContent: "center",
-        paddingTop: "6rem"
-      }}>
+      <div className="min-h-screen flex items-center justify-center pt-16">
         <div className="spinner"></div>
       </div>
     );
   }
 
+  const renderMarkdown = (md) => (
+    <div
+      className="blog-article"
+      dangerouslySetInnerHTML={{ __html: marked.parse(md || "") }}
+    />
+  );
+
   return (
     <div>
-      <style>{`
-        @media (max-width: 768px) {
-          .project-content-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
-      {/* Hero Section */}
-      <section style={{
-        minHeight: "60vh",
-        display: "flex",
-        alignItems: "center",
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        paddingTop: "6rem",
-        position: "relative",
-        overflow: "hidden"
-      }}>
-        <div style={{
-          position: "absolute",
-          width: "400px",
-          height: "400px",
-          background: "rgba(255,255,255,0.1)",
-          borderRadius: "50%",
-          top: "-200px",
-          right: "-200px"
-        }}></div>
-        
-        <div className="container" style={{ position: "relative", zIndex: 1 }}>
-          <Link to="/" style={{ 
-            color: "rgba(255,255,255,0.9)", 
-            marginBottom: "2rem", 
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            fontWeight: "600",
-            textDecoration: "none"
-          }}>
-            <span>←</span> Back to Home
-          </Link>
-          <div style={{ maxWidth: "800px" }}>
-            <h1 style={{ 
-              color: "white", 
-              marginBottom: "1.5rem",
-              fontSize: "clamp(2rem, 5vw, 3.5rem)"
-            }}>
-              {detail.title}
-            </h1>
-            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center" }}>
-              {detail.status && (
-                <span style={{
-                  background: "rgba(255,255,255,0.2)",
-                  padding: "0.625rem 1.25rem",
-                  borderRadius: "50px",
-                  fontSize: "0.875rem",
-                  fontWeight: "600",
-                  textTransform: "capitalize",
-                  backdropFilter: "blur(10px)",
-                  color: "white"
-                }}>
-                  {detail.status.replace("_", " ")}
-                </span>
-              )}
-              {detail.featured && (
-                <span style={{
-                  background: "#fbbf24",
-                  padding: "0.625rem 1.25rem",
-                  borderRadius: "50px",
-                  fontSize: "0.875rem",
-                  fontWeight: "600",
-                  color: "white"
-                }}>
-                  Featured
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        badge="Project"
+        title={detail.title}
+        backLink={{ to: "/", label: "Back to Home" }}
+        subtitle={detail.status && (
+          detail.status
+            .replace("_", " ")
+            .replace(/\w\S*/g, (w) => w.charAt(0).toUpperCase() + w.slice(1))
+        )}
+      />
 
       {/* Content Section */}
-      <section style={{ background: "#f8fafc", padding: "5rem 0" }}>
-        <div className="container" style={{ maxWidth: "1200px" }}>
+      <section className="bg-slate-50 py-16 md:py-24">
+        <div className="container max-w-6xl">
+          {/* Badges */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            className="flex items-center justify-center gap-3 flex-wrap -mt-4 mb-10"
+          >
+            {detail.status && (
+              <span className="bg-gradient-to-r from-primary-600 via-purple-600 to-pink-500 text-white px-5 py-2 rounded-full text-sm font-semibold shadow-lg">
+                {detail.status.replace("_", " ").replace(/\w\S*/g, (w) => w.charAt(0).toUpperCase() + w.slice(1))}
+              </span>
+            )}
+            {detail.featured && (
+              <span className="bg-amber-400 text-white px-5 py-2 rounded-full text-sm font-semibold shadow-lg">
+                ★ Featured
+              </span>
+            )}
+          </motion.div>
+
           {/* Images Gallery */}
           {detail.images && detail.images.length > 0 && (
-            <div className="project-image-grid" style={{
-              display: "grid",
-              gridTemplateColumns: detail.images.length === 1 ? "1fr" : "repeat(auto-fit, minmax(min(280px, 100%), 1fr))",
-              gap: "2rem",
-              marginBottom: "4rem"
-            }}>
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewPort}
+              className={`grid gap-6 md:gap-8 mb-12 ${
+                detail.images.length === 1 ? "grid-cols-1" : "md:grid-cols-2"
+              }`}
+            >
               {detail.images.map((img, i) => (
-                <div key={i} style={{
-                  borderRadius: "20px",
-                  overflow: "hidden",
-                  boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
-                  transition: "transform 0.3s"
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.02)"}
-                onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}>
-                  <img 
-                    src={img.path} 
+                <motion.div
+                  key={i}
+                  variants={scaleIn}
+                  className="rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all"
+                >
+                  <img
+                    src={img.path}
                     alt={`${detail.title} screenshot ${i + 1}`}
                     loading="lazy"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      display: "block"
-                    }}
+                    className="w-full object-cover block img-hover-zoom"
                   />
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
 
-          <div className="project-content-grid" style={{
-            display: "grid",
-            gridTemplateColumns: "2fr 1fr",
-            gap: "3rem"
-          }}>
+          <div className="grid lg:grid-cols-[2fr_1fr] gap-8 lg:gap-10">
             {/* Main Content */}
-            <div>
-              {/* Description */}
-              <div className="card" style={{ padding: "clamp(1.5rem, 3vw, 3rem)", marginBottom: "2rem" }}>
-                <h2 style={{ 
-                  marginBottom: "2rem",
-                  fontSize: "clamp(1.5rem, 4vw, 2rem)",
-                  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text"
-                }}>
-                  About This Project
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewPort}
+              className="space-y-6"
+            >
+              <div className="card">
+                <h2 className="mb-6">
+                  <span className="gradient-text">About This Project</span>
                 </h2>
-                <div 
-                  style={{ 
-                    lineHeight: "1.8",
-                    color: "#475569",
-                    fontSize: "1.125rem"
-                  }}
-                  dangerouslySetInnerHTML={{ __html: marked.parse(detail.descriptionMarkdown || "") }} 
-                />
+                {renderMarkdown(detail.descriptionMarkdown)}
               </div>
 
-              {/* Understanding */}
               {detail.understanding && (
-                <div className="card" style={{ padding: "clamp(1.5rem, 3vw, 3rem)", marginBottom: "2rem" }}>
-                  <h2 style={{ 
-                    marginBottom: "2rem",
-                    fontSize: "clamp(1.5rem, 4vw, 2rem)",
-                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text"
-                  }}>
-                    Understanding
+                <div className="card">
+                  <h2 className="mb-6">
+                    <span className="gradient-text">Understanding</span>
                   </h2>
-                  <div 
-                    style={{ 
-                      lineHeight: "1.8",
-                      color: "#475569",
-                      fontSize: "1.125rem"
-                    }}
-                    dangerouslySetInnerHTML={{ __html: marked.parse(detail.understanding || "") }} 
-                  />
+                  {renderMarkdown(detail.understanding)}
                 </div>
               )}
 
-              {/* Contribution */}
               {detail.contribution && (
-                <div className="card" style={{ padding: "clamp(1.5rem, 3vw, 3rem)", marginBottom: "2rem" }}>
-                  <h2 style={{ 
-                    marginBottom: "2rem",
-                    fontSize: "clamp(1.5rem, 4vw, 2rem)",
-                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text"
-                  }}>
-                    My Contribution
+                <div className="card">
+                  <h2 className="mb-6">
+                    <span className="gradient-text">My Contribution</span>
                   </h2>
-                  <div 
-                    style={{ 
-                      lineHeight: "1.8",
-                      color: "#475569",
-                      fontSize: "1.125rem"
-                    }}
-                    dangerouslySetInnerHTML={{ __html: marked.parse(detail.contribution || "") }} 
-                  />
+                  {renderMarkdown(detail.contribution)}
                 </div>
               )}
 
               {/* Links */}
-              <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+              <div className="flex gap-4 flex-wrap pt-2">
                 {detail.githubUrl && (
-                  <a 
+                  <a
                     href={detail.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "0.75rem",
-                      background: "#0f172a",
-                      color: "white",
-                      padding: "1rem 2rem",
-                      borderRadius: "12px",
-                      fontWeight: "600",
-                      textDecoration: "none",
-                      transition: "all 0.3s"
-                    }}
+                    className="inline-flex items-center gap-3 bg-slate-900 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all"
                   >
-                    View Code
+                    <GitHub width="20" height="20" /> View Code
                   </a>
                 )}
                 {detail.demoUrl && (
-                  <a 
+                  <a
                     href={detail.demoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "0.75rem",
-                      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                      color: "white",
-                      padding: "1rem 2rem",
-                      borderRadius: "12px",
-                      fontWeight: "600",
-                      textDecoration: "none",
-                      transition: "all 0.3s"
-                    }}
+                    className="inline-flex items-center gap-3 bg-gradient-to-r from-primary-600 via-purple-600 to-pink-500 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all"
                   >
-                    Live Demo
+                    <ExternalLink width="20" height="20" /> Live Demo
                   </a>
                 )}
               </div>
-            </div>
+            </motion.div>
 
             {/* Sidebar */}
-            <div>
-              {/* Tech Stack */}
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewPort}
+              className="space-y-6 lg:sticky lg:top-24 self-start"
+            >
               {detail.techStack && detail.techStack.length > 0 && (
-                <div className="card" style={{ padding: "2rem", marginBottom: "2rem" }}>
-                  <h3 style={{ 
-                    marginBottom: "1.5rem",
-                    fontSize: "1.25rem",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem"
-                  }}>
+                <motion.div variants={scaleIn} className="card">
+                  <h3 className="mb-5 flex items-center gap-2.5">
                     Tech Stack
                   </h3>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                  <div className="flex flex-col gap-3">
                     {detail.techStack.map((tech, i) => (
-                      <div key={i} style={{
-                        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                        color: "white",
-                        padding: "0.75rem 1rem",
-                        borderRadius: "10px",
-                        fontWeight: "600",
-                        textAlign: "center",
-                        fontSize: "0.9375rem"
-                      }}>
+                      <div
+                        key={i}
+                        className="bg-gradient-to-r from-primary-600 via-purple-600 to-pink-500 text-white px-4 py-3 rounded-xl font-semibold text-center shadow-md"
+                      >
                         {tech}
                       </div>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               )}
 
-              {/* Project Info */}
-              <div className="card" style={{ 
-                padding: "2rem",
-                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                color: "white"
-              }}>
-                <h3 style={{ 
-                  marginBottom: "1rem",
-                  fontSize: "1.25rem",
-                  color: "white"
-                }}>
-                  Project Info
-                </h3>
-                <div style={{ fontSize: "0.9375rem", lineHeight: "2" }}>
-                  <div style={{ marginBottom: "0.5rem" }}>
-                    <strong>Status:</strong> {detail.status?.replace("_", " ") || "N/A"}
+              <motion.div
+                variants={scaleIn}
+                className="card bg-gradient-to-br from-primary-600 via-purple-600 to-pink-500 text-white border-0"
+              >
+                <h3 className="mb-4 text-white">Project Info</h3>
+                <div className="text-sm md:text-base space-y-2">
+                  <div className="flex items-center justify-between py-2 border-t border-white/20">
+                    <span className="text-white/80 font-medium">Status</span>
+                    <strong className="capitalize">{detail.status?.replace("_", " ") || "N/A"}</strong>
                   </div>
                   {detail.featured && (
-                    <div>
-                      <strong>Featured:</strong> Yes
+                    <div className="flex items-center justify-between py-2 border-t border-white/20">
+                      <span className="text-white/80 font-medium">Featured</span>
+                      <strong>Yes</strong>
                     </div>
                   )}
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
+
+          {/* Back to Home */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewPort}
+            className="mt-12 text-center"
+          >
+            <Link
+              to="/"
+              className="inline-flex items-center gap-3 text-primary-600 hover:text-primary-700 font-bold text-lg transition-colors"
+            >
+              <ArrowLeft width="20" height="20" /> Back to All Projects
+            </Link>
+          </motion.div>
         </div>
       </section>
     </div>

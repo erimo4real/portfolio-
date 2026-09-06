@@ -1,126 +1,69 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp } from "../lib/animations.js";
+import { ArrowLeft } from "../shared/components/Icons.jsx";
 
 export default function NotFound() {
   return (
-    <div style={{
-      minHeight: "100vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-      padding: "2rem",
-      position: "relative",
-      overflow: "hidden"
-    }}>
-      {/* Animated Background */}
-      <div style={{
-        position: "absolute",
-        width: "600px",
-        height: "600px",
-        background: "rgba(255,255,255,0.1)",
-        borderRadius: "50%",
-        top: "-300px",
-        right: "-300px",
-        animation: "float 8s ease-in-out infinite"
-      }}></div>
-      <div style={{
-        position: "absolute",
-        width: "400px",
-        height: "400px",
-        background: "rgba(255,255,255,0.1)",
-        borderRadius: "50%",
-        bottom: "-200px",
-        left: "-200px",
-        animation: "float 6s ease-in-out infinite reverse"
-      }}></div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-600 via-purple-600 to-pink-500 p-8 relative overflow-hidden">
+      {/* Floating circles */}
+      <div className="absolute w-[600px] h-[600px] bg-white/10 rounded-full -top-72 -right-72 animate-float"></div>
+      <div className="absolute w-[400px] h-[400px] bg-white/10 rounded-full -bottom-48 -left-48 animate-float" style={{ animationDelay: '2s' }}></div>
+      <div className="hidden md:block absolute w-64 h-64 bg-white/5 rounded-full top-1/3 left-1/4 animate-float" style={{ animationDelay: '4s' }}></div>
 
-      {/* Content */}
-      <div style={{
-        textAlign: "center",
-        position: "relative",
-        zIndex: 1,
-        maxWidth: "600px"
-      }}>
-        <div style={{
-          fontSize: "clamp(6rem, 15vw, 10rem)",
-          fontWeight: "900",
-          color: "white",
-          marginBottom: "1rem",
-          lineHeight: "1",
-          animation: "fadeInUp 0.6s ease-out"
-        }}>
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+        className="text-center relative z-10 max-w-xl"
+      >
+        <motion.div
+          variants={fadeUp}
+          className="text-white font-black leading-none mb-4"
+          style={{ fontSize: "clamp(6rem, 15vw, 10rem)" }}
+        >
           404
-        </div>
-        
-        <div style={{
-          width: "80px",
-          height: "80px",
-          margin: "0 auto 1.5rem",
-          borderRadius: "50%",
-          background: "rgba(255,255,255,0.15)",
-          animation: "fadeInUp 0.6s ease-out 0.2s both"
-        }}></div>
+        </motion.div>
 
-        <h1 style={{
-          color: "white",
-          marginBottom: "1rem",
-          fontSize: "clamp(2rem, 5vw, 3rem)",
-          animation: "fadeInUp 0.6s ease-out 0.3s both"
-        }}>
+        <motion.div
+          variants={fadeUp}
+          className="w-20 h-20 mx-auto mb-6 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center text-4xl"
+        >
+          ⚠
+        </motion.div>
+
+        <motion.h1
+          variants={fadeUp}
+          className="text-white mb-4"
+          style={{ fontSize: "clamp(2rem, 5vw, 3rem)" }}
+        >
           Page Not Found
-        </h1>
+        </motion.h1>
 
-        <p style={{
-          fontSize: "1.25rem",
-          color: "rgba(255,255,255,0.9)",
-          marginBottom: "3rem",
-          lineHeight: "1.8",
-          animation: "fadeInUp 0.6s ease-out 0.4s both"
-        }}>
+        <motion.p
+          variants={fadeUp}
+          className="text-white/90 text-lg md:text-xl mb-10 leading-relaxed"
+        >
           Oops! The page you're looking for doesn't exist. It might have been moved or deleted.
-        </p>
+        </motion.p>
 
-        <div style={{
-          display: "flex",
-          gap: "1rem",
-          justifyContent: "center",
-          flexWrap: "wrap",
-          animation: "fadeInUp 0.6s ease-out 0.5s both"
-        }}>
-          <Link to="/" style={{
-            background: "white",
-            color: "#667eea",
-            padding: "1rem 2rem",
-            borderRadius: "12px",
-            fontWeight: "700",
-            textDecoration: "none",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            fontSize: "1.125rem",
-            boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
-            transition: "all 0.3s"
-          }}>
-            ← Back to Home
+        <motion.div variants={fadeUp} className="flex gap-4 justify-center flex-wrap">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2.5 bg-white text-primary-600 px-8 py-4 rounded-xl font-bold text-lg shadow-2xl hover:-translate-y-1 transition-all"
+          >
+            <ArrowLeft width="20" height="20" /> Back to Home
           </Link>
 
-          <Link to="/blog" style={{
-            background: "rgba(255,255,255,0.2)",
-            color: "white",
-            padding: "1rem 2rem",
-            borderRadius: "12px",
-            fontWeight: "700",
-            border: "2px solid rgba(255,255,255,0.3)",
-            textDecoration: "none",
-            backdropFilter: "blur(10px)",
-            fontSize: "1.125rem",
-            transition: "all 0.3s"
-          }}>
+          <Link
+            to="/blog"
+            className="inline-flex items-center gap-2.5 bg-white/20 text-white px-8 py-4 rounded-xl font-bold text-lg border-2 border-white/30 backdrop-blur-sm hover:bg-white/30 transition-all"
+          >
             View Blog
           </Link>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }

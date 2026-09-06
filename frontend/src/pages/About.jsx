@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { fetchProfile } from "../store/slices/profile.js";
 import { getSkills } from "../features/skills/application/getSkills.ts";
 import { fetchProjects } from "../store/slices/projects.js";
 import { fetchBlogs } from "../store/slices/blog.js";
 import { getApiUrl } from "../lib/api.js";
+import PageHero from "../shared/components/PageHero.jsx";
+import SectionHeading from "../shared/components/SectionHeading.jsx";
+import { fadeUp, scaleIn, staggerContainer, viewPort } from "../lib/animations.js";
 
 const getImageUrl = (path) => {
   if (!path) return null;
@@ -16,7 +20,6 @@ const getImageUrl = (path) => {
 export default function About() {
   const dispatch = useDispatch();
   const profile = useSelector((s) => s.profile.data);
-  const profileStatus = useSelector((s) => s.profile.status);
   const [skills, setSkills] = useState(null);
   const [skillsStatus, setSkillsStatus] = useState("idle");
   const projects = useSelector((s) => s.projects.list);
@@ -26,17 +29,14 @@ export default function About() {
     dispatch(fetchProfile());
     dispatch(fetchProjects());
     dispatch(fetchBlogs());
-    
-    // Fetch skills using the new approach
+
     (async () => {
       try {
         setSkillsStatus("loading");
         const skillsData = await getSkills();
-        
-        // Check if skillsData is already grouped (object) or needs grouping (array)
+
         let groupedSkills = {};
         if (Array.isArray(skillsData)) {
-          // Group skills by category
           groupedSkills = skillsData.reduce((acc, skill) => {
             if (!acc[skill.category]) {
               acc[skill.category] = [];
@@ -45,7 +45,6 @@ export default function About() {
             return acc;
           }, {});
         } else if (typeof skillsData === 'object' && skillsData !== null) {
-          // Already grouped by the backend
           groupedSkills = skillsData;
         } else {
           console.error("Expected skillsData to be an array or object, got:", typeof skillsData, skillsData);
@@ -59,307 +58,188 @@ export default function About() {
     })();
   }, [dispatch]);
 
-  const visibleProjects = projects?.filter(p => 
+  const visibleProjects = projects?.filter(p =>
     (p.published === true || p.published === undefined) &&
     (p.status === "completed" || p.status === "in_progress")
   ) || [];
 
   return (
     <div>
-      <section style={{
-        minHeight: "50vh",
-        display: "flex",
-        alignItems: "center",
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        position: "relative",
-        overflow: "hidden",
-        paddingTop: "4rem"
-      }}>
-        {/* Animated Background Elements */}
-        <div className="about-hero-circle" style={{
-          position: "absolute",
-          width: "clamp(200px, 50vw, 500px)",
-          height: "clamp(200px, 50vw, 500px)",
-          background: "rgba(255,255,255,0.1)",
-          borderRadius: "50%",
-          top: "calc(-1 * clamp(100px, 25vw, 250px))",
-          right: "calc(-1 * clamp(100px, 25vw, 250px))",
-          animation: "float 6s ease-in-out infinite"
-        }}></div>
-        <div className="about-hero-circle" style={{
-          position: "absolute",
-          width: "clamp(150px, 30vw, 300px)",
-          height: "clamp(150px, 30vw, 300px)",
-          background: "rgba(255,255,255,0.1)",
-          borderRadius: "50%",
-          bottom: "calc(-1 * clamp(75px, 15vw, 150px))",
-          left: "calc(-1 * clamp(75px, 15vw, 150px))",
-          animation: "float 8s ease-in-out infinite"
-        }}></div>
-        <div className="about-hero-circle" style={{
-          position: "absolute",
-          width: "clamp(100px, 20vw, 200px)",
-          height: "clamp(100px, 20vw, 200px)",
-          background: "rgba(255,255,255,0.05)",
-          borderRadius: "50%",
-          top: "50%",
-          left: "20%",
-          animation: "float 7s ease-in-out infinite",
-          animationDelay: "2s"
-        }}></div>
+      <PageHero
+        badge="About Me"
+        title="About Me"
+        subtitle="Get to know more about my journey, skills, and what drives me"
+      />
 
-        <div className="container" style={{ position: "relative", zIndex: 1 }}>
-          <div style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto" }}>
-            <h1 style={{ color: "white", marginBottom: "1.5rem" }}>
-              About Me
-            </h1>
-            <p style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)", color: "rgba(255,255,255,0.9)", lineHeight: "1.8" }}>
-              Get to know more about my journey, skills, and what drives me
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section style={{ background: "white" }}>
+      {/* Story Section */}
+      <section className="py-20 bg-white">
         <div className="container">
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))",
-            gap: "clamp(2rem, 5vw, 4rem)",
-            alignItems: "center"
-          }}>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} className="fade-in-scale">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <motion.div
+              variants={scaleIn}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewPort}
+              className="flex justify-center"
+            >
               {profile?.imagePath ? (
-                <div style={{ position: "relative", width: "min(400px, 90vw)", height: "min(400px, 90vw)", margin: "0 auto" }}>
-                  <div style={{
-                    position: "absolute",
-                    inset: "-20px",
-                    background: "linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3))",
-                    borderRadius: "50%",
-                    animation: "pulseRing 3s ease-in-out infinite"
-                  }}></div>
-                  <div style={{
-                    position: "absolute",
-                    inset: "-40px",
-                    background: "rgba(102, 126, 234, 0.1)",
-                    borderRadius: "50%",
-                    animation: "pulseRing 3s ease-in-out infinite",
-                    animationDelay: "1s"
-                  }}></div>
-                  <img loading="lazy" src={getImageUrl(profile.imagePath)} alt="Profile" style={{
-                    width: "100%",
-                    height: "100%",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                    border: "10px solid white",
-                    position: "relative",
-                    zIndex: 1,
-                    boxShadow: "0 30px 60px rgba(0,0,0,0.2)"
-                  }} className="hover-scale" />
+                <div className="relative w-64 md:w-80">
+                  <div className="absolute inset-0 -m-5 bg-gradient-to-br from-primary-200 to-purple-200 rounded-full"></div>
+                  <div className="absolute inset-0 -m-2 bg-gradient-to-br from-primary-400/50 to-purple-400/50 rounded-full animate-pulse-slow"></div>
+                  <img
+                    src={getImageUrl(profile.imagePath)}
+                    alt="Profile"
+                    loading="lazy"
+                    className="w-full h-auto aspect-square rounded-full object-cover border-8 border-white relative z-10 shadow-2xl hover-scale"
+                  />
                 </div>
               ) : (
-                <div style={{ position: "relative", width: "min(400px, 90vw)", height: "min(400px, 90vw)", margin: "0 auto" }}>
-                  <div style={{
-                    position: "absolute",
-                    inset: "-20px",
-                    background: "linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3))",
-                    borderRadius: "50%",
-                    animation: "pulseRing 3s ease-in-out infinite"
-                  }}></div>
-                  <div style={{
-                    position: "absolute",
-                    inset: "-40px",
-                    background: "rgba(102, 126, 234, 0.1)",
-                    borderRadius: "50%",
-                    animation: "pulseRing 3s ease-in-out infinite",
-                    animationDelay: "1s"
-                  }}></div>
-                  <div style={{
-                    width: "100%",
-                    height: "100%",
-                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    overflow: "hidden",
-                    position: "relative",
-                    zIndex: 1,
-                    boxShadow: "0 30px 60px rgba(0,0,0,0.2)"
-                  }}>
-                    <img 
-                      src="/images/about-profile.jpg" 
-                      alt="Profile"
-                      loading="lazy"
-                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                      className="hover-scale"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        if (e.target.parentElement) {
-                          e.target.parentElement.innerHTML = '<span style="font-size: clamp(4rem, 15vw, 8rem);">Developer</span>';
-                        }
-                      }}
-                    />
-                  </div>
+                <div className="w-64 md:w-80 aspect-square bg-gradient-to-br from-primary-100 to-purple-100 rounded-full flex items-center justify-center">
+                  <span className="text-6xl md:text-8xl">Developer</span>
                 </div>
               )}
-            </div>
+            </motion.div>
 
             <div>
-              <div style={{
-                display: "inline-block",
-                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                color: "white",
-                padding: "0.5rem 1rem",
-                borderRadius: "50px",
-                fontSize: "0.875rem",
-                fontWeight: "600",
-                marginBottom: "1.5rem"
-              }}>
-                My Story
-              </div>
-              <h2 style={{ marginBottom: "1.5rem" }}>
-                <span className="text-gradient">Passionate About Building Great Software</span>
-              </h2>
-              <p style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.125rem)", color: "#64748b", marginBottom: "1.5rem", lineHeight: "1.8" }}>
-                {profile?.bioMarkdown || "I'm a full-stack developer who loves creating elegant solutions to complex problems. With a focus on clean code and user experience, I bring ideas to life through modern web technologies."}
-              </p>
-              <p style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.125rem)", color: "#64748b", marginBottom: "2rem", lineHeight: "1.8" }}>
-                When I'm not coding, you'll find me exploring new technologies, contributing to open source, or sharing knowledge with the developer community.
-              </p>
+              <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewPort}>
+                <span className="inline-block bg-gradient-to-r from-primary-600 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6 shadow-lg">
+                  My Story
+                </span>
+              </motion.div>
 
-              <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap", marginBottom: "2rem" }}>
-                <div>
-                <div style={{ fontSize: "clamp(1.75rem, 5vw, 2.5rem)", fontWeight: "800", color: "#6366f1", marginBottom: "0.5rem" }}>
-                  {visibleProjects.length}+
-                </div>
-                  <div style={{ color: "#64748b", fontWeight: "600" }}>Projects Completed</div>
-                </div>
-                <div>
-                <div style={{ fontSize: "clamp(1.75rem, 5vw, 2.5rem)", fontWeight: "800", color: "#6366f1", marginBottom: "0.5rem" }}>
-                  {Object.values(skills || {}).flat().length}+
-                </div>
-                  <div style={{ color: "#64748b", fontWeight: "600" }}>Technologies</div>
-                </div>
-                <div>
-                <div style={{ fontSize: "clamp(1.75rem, 5vw, 2.5rem)", fontWeight: "800", color: "#6366f1", marginBottom: "0.5rem" }}>
-                  {blogs?.length || 0}+
-                </div>
-                  <div style={{ color: "#64748b", fontWeight: "600" }}>Blog Posts</div>
-                </div>
-              </div>
+              <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewPort}>
+                <h2 className="mb-6">
+                  <span className="gradient-text">Passionate About Building Great Software</span>
+                </h2>
+              </motion.div>
+
+              <motion.p
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewPort}
+                className="text-slate-600 mb-6 leading-relaxed text-base md:text-lg"
+              >
+                {profile?.bioMarkdown || "I'm a full-stack developer who loves creating elegant solutions to complex problems. With a focus on clean code and user experience, I bring ideas to life through modern web technologies."}
+              </motion.p>
+              <motion.p
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewPort}
+                className="text-slate-600 mb-10 leading-relaxed text-base md:text-lg"
+              >
+                When I'm not coding, you'll find me exploring new technologies, contributing to open source, or sharing knowledge with the developer community.
+              </motion.p>
+
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewPort}
+                className="flex flex-wrap gap-10 md:gap-16"
+              >
+                {[
+                  { value: `${visibleProjects.length}+`, label: "Projects Completed" },
+                  { value: `${Object.values(skills || {}).flat().length}+`, label: "Technologies" },
+                  { value: `${blogs?.length || 0}+`, label: "Blog Posts" }
+                ].map((stat) => (
+                  <motion.div key={stat.label} variants={fadeUp}>
+                    <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-purple-600 mb-1">
+                      {stat.value}
+                    </div>
+                    <div className="text-slate-500 font-semibold">{stat.label}</div>
+                  </motion.div>
+                ))}
+              </motion.div>
             </div>
           </div>
         </div>
       </section>
 
-      <section style={{ background: "#f8fafc" }}>
+      {/* Skills Section */}
+      <section className="bg-slate-50 py-20 border-t border-slate-100">
         <div className="container">
-          <div style={{ textAlign: "center", marginBottom: "4rem" }}>
-            <h2 style={{ marginBottom: "1rem" }}>
-              <span className="text-gradient">Skills & Expertise</span>
-            </h2>
-            <p style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.125rem)", color: "#64748b", maxWidth: "600px", margin: "0 auto" }}>
-              Technologies and tools I use to bring ideas to life
-            </p>
-          </div>
+          <SectionHeading
+            title="Skills & Expertise"
+            subtitle="Technologies and tools I use to bring ideas to life"
+          />
 
           {skillsStatus === "loading" ? (
-            <div style={{ textAlign: "center", padding: "3rem" }}>
+            <div className="text-center py-12">
               <div className="spinner"></div>
             </div>
           ) : skills && Object.keys(skills).length > 0 ? (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))", gap: "2rem" }}>
-              {["Frontend", "Backend", "Mobile", "DevOps", "Tooling"].map((category, idx) =>
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewPort}
+              className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+            >
+              {["Frontend", "Backend", "Mobile", "DevOps", "Tooling"].map((category) =>
                 skills[category] && skills[category].length > 0 && (
-                  <div key={category} className="card hover-lift" style={{ padding: "clamp(1.25rem, 3vw, 2rem)", animationDelay: `${idx * 0.1}s` }}>
-                    <h3 style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                      <span style={{
-                        width: "50px",
-                        height: "50px",
-                        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                        borderRadius: "12px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: "1.5rem"
-                      }}>
-                        {category}
+                  <motion.div
+                    key={category}
+                    variants={scaleIn}
+                    className="card hover:-translate-y-2 hover:shadow-2xl"
+                  >
+                    <h3 className="mb-6 flex items-center gap-3">
+                      <span className="w-12 h-12 bg-gradient-to-br from-primary-600 to-purple-600 rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-lg">
+                        {category[0]}
                       </span>
                       {category}
                     </h3>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
+                    <div className="flex flex-wrap gap-3">
                       {skills[category].map((skill) => (
-                        <span key={skill.id} style={{
-                          background: "#f1f5f9",
-                          color: "#475569",
-                          padding: "0.5rem 1rem",
-                          borderRadius: "8px",
-                          fontSize: "0.9375rem",
-                          fontWeight: "500"
-                        }}>
+                        <span
+                          key={skill.id}
+                          className="bg-slate-100 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors"
+                        >
                           {skill.name}
                         </span>
                       ))}
                     </div>
-                  </div>
+                  </motion.div>
                 )
               )}
-            </div>
+            </motion.div>
           ) : (
-            <div style={{ textAlign: "center", padding: "3rem", color: "#64748b" }}>
+            <div className="text-center py-12 text-slate-600">
               <p>No skills added yet. Add some from the admin panel!</p>
             </div>
           )}
         </div>
       </section>
 
-      <section style={{ background: "white" }}>
+      {/* CTA Section */}
+      <motion.section
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewPort}
+        className="bg-white py-20"
+      >
         <div className="container">
-          <div style={{
-            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-            borderRadius: "24px",
-            padding: "clamp(2rem, 5vw, 4rem)",
-            textAlign: "center",
-            color: "white",
-            position: "relative",
-            overflow: "hidden"
-          }}>
-            <div style={{
-              position: "absolute",
-              width: "200px",
-              height: "200px",
-              background: "rgba(255,255,255,0.1)",
-              borderRadius: "50%",
-              top: "-100px",
-              right: "-100px"
-            }}></div>
-            <h2 style={{ color: "white", marginBottom: "1rem", position: "relative", zIndex: 1 }}>
+          <div className="bg-gradient-to-br from-primary-600 via-purple-600 to-pink-500 rounded-2xl md:rounded-3xl p-8 md:p-12 lg:p-16 text-center text-white relative overflow-hidden">
+            <div className="absolute w-72 h-72 bg-white/10 rounded-full -top-36 -right-36 animate-float"></div>
+            <div className="absolute w-48 h-48 bg-white/10 rounded-full -bottom-24 -left-24 animate-float" style={{ animationDelay: '2s' }}></div>
+
+            <h2 className="text-white mb-4 relative z-10 text-3xl md:text-4xl font-bold">
               Let's Build Something Amazing
             </h2>
-            <p style={{ color: "rgba(255,255,255,0.9)", marginBottom: "2rem", lineHeight: "1.8", position: "relative", zIndex: 1, maxWidth: "600px", margin: "0 auto 2rem" }}>
+            <p className="text-white/90 mb-10 max-w-2xl mx-auto relative z-10 leading-relaxed text-lg">
               I'm always interested in hearing about new projects and opportunities. Whether you have a question or just want to say hi, feel free to reach out!
             </p>
-            <Link to="/contact" style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              background: "white",
-              color: "#667eea",
-              padding: "0.75rem 1.5rem",
-              borderRadius: "12px",
-              fontWeight: "700",
-              textDecoration: "none",
-              position: "relative",
-              zIndex: 1,
-              fontSize: "clamp(0.9rem, 2.5vw, 1rem)"
-            }}>
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-3 bg-white text-primary-600 px-8 md:px-10 py-4 md:py-5 rounded-xl font-bold text-lg shadow-2xl hover:shadow-3xl hover:-translate-y-1 transition-all relative z-10"
+            >
               Get In Touch <span>→</span>
             </Link>
           </div>
         </div>
-      </section>
-      <style>{`@media (max-width: 480px) { .about-hero-circle { display: none; } }`}</style>
+      </motion.section>
     </div>
   );
 }

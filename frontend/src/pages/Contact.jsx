@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { motion } from "framer-motion";
 import { submitContact } from "../store/slices/contact.js";
+import PageHero from "../shared/components/PageHero.jsx";
+import SectionHeading from "../shared/components/SectionHeading.jsx";
 import { Mail, Phone, MapPin, AlertTriangle } from "../shared/components/Icons.jsx";
+import { fadeUp, scaleIn, viewPort } from "../lib/animations.js";
 
 export default function Contact() {
   const dispatch = useDispatch();
@@ -22,271 +26,131 @@ export default function Contact() {
     }
   }
 
+  const contactItems = [
+    { icon: <Mail width="24" height="24" />, label: "Email", value: "eromoxlx@gmail.com", href: "mailto:eromoxlx@gmail.com" },
+    { icon: <Phone width="24" height="24" />, label: "Phone", value: "08138213326", href: "tel:08138213326" },
+    { icon: <MapPin width="24" height="24" />, label: "Location", value: "Lagos, LA", href: null }
+  ];
+
   return (
     <div>
-      <section style={{
-        minHeight: "50vh",
-        display: "flex",
-        alignItems: "center",
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        position: "relative",
-        overflow: "hidden",
-        paddingTop: "4rem"
-      }}>
-        <div style={{
-          position: "absolute",
-          width: "clamp(200px, 50vw, 500px)",
-          height: "clamp(200px, 50vw, 500px)",
-          background: "rgba(255,255,255,0.1)",
-          borderRadius: "50%",
-          top: "calc(-1 * clamp(100px, 25vw, 250px))",
-          right: "calc(-1 * clamp(100px, 25vw, 250px))",
-          animation: "float 6s ease-in-out infinite"
-        }}></div>
-        <div style={{
-          position: "absolute",
-          width: "clamp(150px, 30vw, 300px)",
-          height: "clamp(150px, 30vw, 300px)",
-          background: "rgba(255,255,255,0.1)",
-          borderRadius: "50%",
-          bottom: "calc(-1 * clamp(75px, 15vw, 150px))",
-          left: "calc(-1 * clamp(75px, 15vw, 150px))",
-          animation: "float 8s ease-in-out infinite"
-        }}></div>
+      <PageHero
+        badge="Contact"
+        title="Get In Touch"
+        subtitle="Have a project in mind? Let's create something amazing together!"
+      />
 
-        <div className="container" style={{ position: "relative", zIndex: 1 }}>
-          <div style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto" }}>
-            <h1 style={{ color: "white", marginBottom: "1.5rem" }}>
-              Get In Touch
-            </h1>
-            <p style={{ fontSize: "1.25rem", color: "rgba(255,255,255,0.9)", lineHeight: "1.8" }}>
-              Have a project in mind? Let's create something amazing together!
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section style={{ background: "white" }}>
+      <section className="bg-white py-16 md:py-24">
         <div className="container">
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))",
-            gap: "clamp(2rem, 5vw, 4rem)",
-            alignItems: "start"
-          }}>
-            <div>
-              <h2 style={{ marginBottom: "1.5rem" }}>
-                <span className="text-gradient">Let's Work Together</span>
-              </h2>
-              <p style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.125rem)", color: "#64748b", marginBottom: "1.5rem", lineHeight: "1.8" }}>
-                I'm always interested in hearing about new projects and opportunities. Whether you have a question or just want to say hi, feel free to reach out!
-              </p>
+          <div className="grid lg:grid-cols-[1fr_1.2fr] gap-10 md:gap-14 items-start">
+            {/* Contact Info */}
+            <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewPort}>
+              <SectionHeading
+                title="Let's Work Together"
+                subtitle="I'm always interested in hearing about new projects and opportunities. Whether you have a question or just want to say hi, feel free to reach out!"
+                align="left"
+              />
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-                <div style={{ display: "flex", alignItems: "start", gap: "1rem" }}>
-                  <div style={{
-                    width: "50px",
-                    height: "50px",
-                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                    borderRadius: "12px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "1.5rem",
-                    flexShrink: 0
-                  }}>
-                    <Mail width="24" height="24" style={{ color: "white" }} />
+              <div className="flex flex-col gap-5">
+                {contactItems.map((item) => (
+                  <div key={item.label} className="flex items-start gap-4 p-4 md:p-5 rounded-2xl bg-slate-50 border border-slate-100 hover:shadow-lg transition-shadow">
+                    <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-primary-600 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg flex-shrink-0">
+                      {item.icon}
+                    </div>
+                    <div>
+                      <h3 className="mb-1 text-lg font-bold text-slate-900">{item.label}</h3>
+                      {item.href ? (
+                        <a href={item.href} className="text-slate-600 hover:text-primary-600 transition-colors">
+                          {item.value}
+                        </a>
+                      ) : (
+                        <p className="text-slate-600">{item.value}</p>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <h3 style={{ marginBottom: "0.5rem", fontSize: "clamp(1rem, 3vw, 1.25rem)" }}>Email</h3>
-                    <p style={{ color: "#64748b" }}>eromoxlx@gmail.com</p>
-                  </div>
-                </div>
-
-                <div style={{ display: "flex", alignItems: "start", gap: "1rem" }}>
-                  <div style={{
-                    width: "50px",
-                    height: "50px",
-                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                    borderRadius: "12px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "1.5rem",
-                    flexShrink: 0
-                  }}>
-                    <Phone width="24" height="24" style={{ color: "white" }} />
-                  </div>
-                  <div>
-                    <h3 style={{ marginBottom: "0.5rem", fontSize: "clamp(1rem, 3vw, 1.25rem)" }}>Phone</h3>
-                    <p style={{ color: "#64748b" }}>08138213326</p>
-                  </div>
-                </div>
-
-                <div style={{ display: "flex", alignItems: "start", gap: "1rem" }}>
-                  <div style={{
-                    width: "50px",
-                    height: "50px",
-                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                    borderRadius: "12px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "1.5rem",
-                    flexShrink: 0
-                  }}>
-                    <MapPin width="24" height="24" style={{ color: "white" }} />
-                  </div>
-                  <div>
-                    <h3 style={{ marginBottom: "0.5rem", fontSize: "clamp(1rem, 3vw, 1.25rem)" }}>Location</h3>
-                    <p style={{ color: "#64748b" }}>Lagos, LA</p>
-                  </div>
-                </div>
+                ))}
               </div>
 
-              <div style={{ marginTop: "3rem" }}>
-                <h3 style={{ marginBottom: "1rem" }}>Contact</h3>
+              <div className="mt-8">
                 <a
                   href="mailto:eromoxlx@gmail.com"
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    padding: "1rem 2rem",
-                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                    color: "white",
-                    borderRadius: "12px",
-                    textDecoration: "none",
-                    fontSize: "1.125rem",
-                    fontWeight: "600"
-                  }}
+                  className="inline-flex items-center gap-3 bg-gradient-to-r from-primary-600 via-purple-600 to-pink-500 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all"
                 >
-                  Email Me
+                  Email Me <span>→</span>
                 </a>
               </div>
-            </div>
+            </motion.div>
 
-            <div>
+            {/* Form */}
+            <motion.div variants={scaleIn} initial="hidden" whileInView="visible" viewport={viewPort}>
               {contactStatus === "success" ? (
-                <div className="card scale-in" style={{ padding: "clamp(2rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3rem)", textAlign: "center" }}>
-                  <div style={{
-                    width: "100px",
-                    height: "100px",
-                    background: "linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)",
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    margin: "0 auto 2rem",
-                    boxShadow: "0 10px 30px rgba(16, 185, 129, 0.3)",
-                    animation: "scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)"
-                  }}>
-                    <img 
-                      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0iIzEwYjk4MSI+PHBhdGggZD0iTTE2IDJjNi42NyAwIDExLjMzIDUuNjMgMTEuMzMgMTIuMDBMMTYgMjJsLTUuMzMtNS4zM0gxNi41NkMxMC42NyAyNi41NiA2LjMzIDIwLjY3IDYgMTRDMCA3LjMzIDQuMzMgNS42NyA1LjMzIDRWNEM1LjMzIDIgNi42NyAxIDEuMzMgMUMxMCAxIDIuNjcgMi41NiA0LjMzIDQuNTdMMTYgMTJjNy4zNyAwIDEzLjY3IDYuMzAgMTMuNjcgMTMuMDBMMTYgMjJ6Ii8+PC9zdmc+" 
-                      alt="Success"
-                      style={{ width: "50px", height: "50px", objectFit: "contain" }}
-                    />
-                  </div>
-                  <h3 style={{ marginBottom: "1rem", color: "#10b981" }}>Message Sent Successfully!</h3>
-                  <p style={{ color: "#64748b", fontSize: "1.125rem", marginBottom: "2rem" }}>
+                <div className="card p-8 md:p-12 text-center">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                    className="w-24 h-24 bg-gradient-to-br from-emerald-100 to-teal-200 rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl"
+                  >
+                    <span className="text-5xl">✓</span>
+                  </motion.div>
+                  <h3 className="mb-3 text-emerald-600 text-2xl">Message Sent Successfully!</h3>
+                  <p className="text-slate-600 text-lg mb-8">
                     Thanks for reaching out! I'll get back to you as soon as possible.
                   </p>
-                  <button 
+                  <button
                     onClick={() => setContactStatus("idle")}
-                    style={{
-                      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                      color: "white",
-                      padding: "1rem 2rem",
-                      borderRadius: "12px",
-                      fontWeight: "600",
-                      border: "none",
-                      cursor: "pointer",
-                      transition: "all 0.3s ease"
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.transform = "translateY(-2px)";
-                      e.target.style.boxShadow = "0 10px 20px rgba(102, 126, 234, 0.4)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.transform = "translateY(0)";
-                      e.target.style.boxShadow = "none";
-                    }}
+                    className="btn bg-gradient-to-r from-primary-600 to-purple-600 text-white hover:shadow-xl hover:-translate-y-0.5 transition-all"
                   >
                     Send Another Message
                   </button>
                 </div>
               ) : (
-                <form onSubmit={onSubmit} className="card fade-in-up" style={{ padding: "clamp(2rem, 5vw, 3rem)" }}>
-                  <h3 style={{ marginBottom: "1.5rem" }}>Send Me a Message</h3>
-                  
+                <form onSubmit={onSubmit} className="card p-6 md:p-10">
+                  <h3 className="mb-6 text-2xl font-bold text-slate-900">Send Me a Message</h3>
+
                   {contactStatus === "error" && (
-                    <div style={{
-                      background: "#fee2e2",
-                      color: "#991b1b",
-                      padding: "1rem",
-                      borderRadius: "12px",
-                      marginBottom: "1.5rem",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.5rem",
-                      animation: "shake 0.5s ease-in-out"
-                    }}>
-                      <AlertTriangle width="18" height="18" />
+                    <div className="flex items-center gap-2 bg-red-50 text-red-700 px-4 py-4 rounded-xl border border-red-200 mb-6">
+                      <AlertTriangle width="20" height="20" />
                       Failed to send message. Please try again.
                     </div>
                   )}
-                  
-                  <div style={{ marginBottom: "1.5rem" }}>
-                    <label>Your Name</label>
-                    <input name="name" placeholder="John Doe" required />
+
+                  <div className="mb-5">
+                    <label className="block mb-2 font-semibold text-slate-800">Your Name</label>
+                    <input name="name" placeholder="John Doe" required className="w-full" />
                   </div>
-                  
-                  <div style={{ marginBottom: "1.5rem" }}>
-                    <label>Email Address</label>
-                    <input name="email" type="email" placeholder="john@example.com" required />
+
+                  <div className="mb-5">
+                    <label className="block mb-2 font-semibold text-slate-800">Email Address</label>
+                    <input name="email" type="email" placeholder="john@example.com" required className="w-full" />
                   </div>
-                  
-                  <div style={{ marginBottom: "2rem" }}>
-                    <label>Message</label>
-                    <textarea name="message" placeholder="Tell me about your project or just say hi!" rows={6} required />
+
+                  <div className="mb-7">
+                    <label className="block mb-2 font-semibold text-slate-800">Message</label>
+                    <textarea name="message" placeholder="Tell me about your project or just say hi!" rows={6} required className="w-full" />
                   </div>
-                  
-                  <button 
-                    type="submit" 
+
+                  <button
+                    type="submit"
                     disabled={contactStatus === "loading"}
-                    style={{ 
-                      width: "100%", 
-                      padding: "1.25rem", 
-                      fontSize: "1.125rem",
-                      background: contactStatus === "loading" ? "#94a3b8" : "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                      cursor: contactStatus === "loading" ? "not-allowed" : "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "0.5rem"
-                    }}
+                    className={`w-full px-6 py-4 text-lg font-bold rounded-xl flex items-center justify-center gap-2 transition-all ${
+                      contactStatus === "loading"
+                        ? "bg-slate-400 text-white cursor-not-allowed"
+                        : "bg-gradient-to-r from-primary-600 via-purple-600 to-pink-500 text-white shadow-lg hover:shadow-2xl hover:-translate-y-0.5"
+                    }`}
                   >
                     {contactStatus === "loading" ? (
                       <>
-                        <div style={{
-                          width: "20px",
-                          height: "20px",
-                          border: "3px solid rgba(255,255,255,0.3)",
-                          borderTopColor: "white",
-                          borderRadius: "50%",
-                          animation: "spin 0.8s linear infinite"
-                        }}></div>
+                        <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
                         Sending...
                       </>
                     ) : (
-                      <>
-                        Send Message
-                      </>
+                      <>Send Message</>
                     )}
                   </button>
                 </form>
               )}
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>

@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { fetchBlogDetail } from "../store/slices/blog.js";
 import { marked } from "marked";
+import PageHero from "../shared/components/PageHero.jsx";
+import { ArrowLeft } from "../shared/components/Icons.jsx";
+import { fadeUp, viewPort } from "../lib/animations.js";
 
 export default function BlogDetail() {
   const { slug } = useParams();
@@ -15,13 +19,7 @@ export default function BlogDetail() {
 
   if (!detail) {
     return (
-      <div style={{ 
-        minHeight: "100vh", 
-        display: "flex", 
-        alignItems: "center", 
-        justifyContent: "center",
-        paddingTop: "4rem"
-      }}>
+      <div className="min-h-screen flex items-center justify-center pt-16">
         <div className="spinner"></div>
       </div>
     );
@@ -31,254 +29,58 @@ export default function BlogDetail() {
     <div>
       {/* Cover Image */}
       {detail.image && (
-        <div style={{
-          height: "clamp(250px, 50vh, 500px)",
-          overflow: "hidden",
-          position: "relative"
-        }}>
-          <img 
-            src={detail.image} 
+        <div className="h-[38vh] md:h-[50vh] overflow-hidden relative">
+          <img
+            src={detail.image}
             alt={detail.title}
             loading="lazy"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover"
-            }}
+            className="w-full h-full object-cover"
           />
-          <div style={{
-            position: "absolute",
-            inset: 0,
-            background: "linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.7))"
-          }}></div>
-          {/* Image badge */}
-          <div style={{
-            position: "absolute",
-            bottom: "1.5rem",
-            left: "1.5rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            padding: "0.5rem 1rem",
-            background: "rgba(255,255,255,0.2)",
-            backdropFilter: "blur(10px)",
-            borderRadius: "20px",
-            color: "white",
-            fontSize: "0.85rem"
-          }}>
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent/10 via-black/20 to-black/70"></div>
+          <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-md rounded-full text-white text-sm">
             Cover Image
           </div>
         </div>
       )}
 
-      {/* Hero Section */}
-      {!detail.image && (
-      <section style={{
-        minHeight: "50vh",
-        display: "flex",
-        alignItems: "center",
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        paddingTop: "4rem",
-        position: "relative",
-        overflow: "hidden"
-      }}>
-        <div style={{
-          position: "absolute",
-          width: "clamp(200px, 50vw, 500px)",
-          height: "clamp(200px, 50vw, 500px)",
-          background: "rgba(255,255,255,0.1)",
-          borderRadius: "50%",
-          top: "calc(-1 * clamp(100px, 25vw, 250px))",
-          right: "calc(-1 * clamp(100px, 25vw, 250px))"
-        }}></div>
-        
-        <div className="container" style={{ maxWidth: "900px", position: "relative", zIndex: 1 }}>
-          <Link to="/blog" style={{ 
-            color: "rgba(255,255,255,0.9)", 
-            marginBottom: "2rem", 
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            fontWeight: "600",
-            textDecoration: "none"
-          }}>
-            <span>←</span> Back to Blog
-          </Link>
-          <div>
-            <div style={{
-              display: "inline-block",
-              background: "rgba(255,255,255,0.2)",
-              padding: "0.5rem 1rem",
-              borderRadius: "50px",
-              color: "white",
-              fontSize: "0.75rem",
-              fontWeight: "700",
-              marginBottom: "1.5rem",
-              backdropFilter: "blur(10px)",
-              textTransform: "uppercase",
-              letterSpacing: "0.05em"
-            }}>
-              Blog Post
-            </div>
-            <h1 style={{ 
-              color: "white", 
-              marginBottom: "1.5rem",
-              fontSize: "clamp(2rem, 5vw, 3.5rem)",
-              lineHeight: "1.1"
-            }}>
-              {detail.title}
-            </h1>
-            {detail.createdAt && (
-              <div style={{ 
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem",
-                color: "rgba(255,255,255,0.9)",
-                fontSize: "1rem"
-              }}>
-                {new Date(detail.createdAt).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-      )}
-
-      {/* Title bar when there's a cover image */}
-      {detail.image && (
-        <div style={{
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-          padding: "2rem 0 3rem"
-        }}>
-          <div className="container" style={{ maxWidth: "900px", position: "relative", zIndex: 1 }}>
-            <Link to="/blog" style={{ 
-              color: "rgba(255,255,255,0.9)", 
-              marginBottom: "1.5rem", 
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              fontWeight: "600",
-              textDecoration: "none"
-            }}>
-              <span>←</span> Back to Blog
-            </Link>
-            <h1 style={{ 
-              color: "white", 
-              fontSize: "clamp(1.75rem, 4vw, 3rem)",
-              lineHeight: "1.1"
-            }}>
-              {detail.title}
-            </h1>
-            {detail.createdAt && (
-              <div style={{ 
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem",
-                color: "rgba(255,255,255,0.9)",
-                fontSize: "1rem",
-                marginTop: "1rem"
-              }}>
-                {new Date(detail.createdAt).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Hero */}
+      <PageHero
+        compact
+        badge="Blog Post"
+        title={detail.title}
+        backLink={{ to: "/blog", label: "Back to Blog" }}
+        subtitle={detail.createdAt
+          ? new Date(detail.createdAt).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })
+          : undefined}
+      />
 
       {/* Video Embed */}
       {detail.videoEmbedUrl && (
-        <div style={{ 
-          maxWidth: "900px", 
-          margin: "-2rem auto 2rem", 
-          position: "relative", 
-          zIndex: 10,
-          padding: "0 1.5rem"
-        }}>
-          <div style={{
-            background: "white",
-            borderRadius: "24px",
-            overflow: "hidden",
-            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255,255,255,0.1)"
-          }}>
-            {/* Video Header */}
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "1rem 1.5rem",
-              borderBottom: "1px solid #e2e8f0",
-              background: "linear-gradient(to right, #f8fafc, #ffffff)"
-            }}>
-              <div style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.75rem"
-              }}>
-                <div style={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "12px",
-                  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "white",
-                  fontSize: "1.25rem"
-                }}>
+        <div className="max-w-3xl mx-auto -mt-16 relative z-10 px-4 md:px-6">
+          <div className="bg-white rounded-3xl overflow-hidden shadow-2xl">
+            <div className="flex items-center justify-between p-4 md:p-5 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-600 via-purple-600 to-pink-500 flex items-center justify-center text-white text-lg shadow-lg">
                   ▶
                 </div>
                 <div>
-                  <div style={{
-                    fontWeight: "700",
-                    color: "#1e293b",
-                    fontSize: "0.95rem"
-                  }}>Video</div>
-                  <div style={{
-                    fontSize: "0.8rem",
-                    color: "#64748b"
-                  }}>Watch the video below</div>
+                  <div className="font-bold text-slate-900 text-sm">Video</div>
+                  <div className="text-xs text-slate-500">Watch the video below</div>
                 </div>
               </div>
-              <div style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.5rem 1rem",
-                background: "#f1f5f9",
-                borderRadius: "20px",
-                fontSize: "0.8rem",
-                color: "#64748b"
-              }}>
-                <span>Embedded Video</span>
+              <div className="hidden md:flex items-center gap-2 px-4 py-2 bg-slate-100 rounded-full text-xs text-slate-500">
+                Embedded Video
               </div>
             </div>
-            {/* Video Container */}
-            <div className="video-wrapper" style={{
-              position: "relative",
-              paddingBottom: "56.25%",
-              height: 0,
-              overflow: "hidden",
-              background: "#000"
-            }}>
-              <iframe 
+            <div className="video-wrapper relative pb-[56.25%] h-0 overflow-hidden bg-black">
+              <iframe
                 src={detail.videoEmbedUrl}
                 title="Video embed"
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  border: "none"
-                }}
+                className="absolute top-0 left-0 w-full h-full border-0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               ></iframe>
@@ -287,148 +89,39 @@ export default function BlogDetail() {
         </div>
       )}
 
-      {/* Content Section */}
-      <section style={{ background: "#f8fafc", padding: "clamp(3rem, 8vw, 5rem) 0" }}>
-        <div className="container" style={{ maxWidth: "800px" }}>
-          <article className="card" style={{
-            padding: "clamp(1.5rem, 4vw, 4rem)",
-            fontSize: "clamp(1rem, 1.5vw, 1.125rem)",
-            lineHeight: "1.9"
-          }}>
-            <style>{`
-              article iframe {
-                max-width: 100%;
-                border-radius: 12px;
-                margin: 2rem 0;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-              }
-              
-              article img {
-                max-width: 100%;
-                border-radius: 12px;
-                margin: 2rem 0;
-              }
-              
-              article pre {
-                background: #f1f5f9;
-                padding: 1.5rem;
-                border-radius: 12px;
-                overflow-x: auto;
-                margin: 2rem 0;
-              }
-              
-              article code {
-                background: #f1f5f9;
-                padding: 0.25rem 0.5rem;
-                border-radius: 6px;
-                font-size: 0.9em;
-                font-family: 'Courier New', monospace;
-              }
-              
-              article pre code {
-                background: transparent;
-                padding: 0;
-              }
-              
-              article h2 {
-                margin-top: 3rem;
-                margin-bottom: 1rem;
-                color: #0f172a;
-              }
-              
-              article h3 {
-                margin-top: 2rem;
-                margin-bottom: 0.75rem;
-                color: #0f172a;
-              }
-              
-              article ul, article ol {
-                margin: 1.5rem 0;
-                padding-left: 2rem;
-              }
-              
-              article li {
-                margin: 0.5rem 0;
-              }
-              
-              article blockquote {
-                border-left: 4px solid #667eea;
-                padding-left: 1.5rem;
-                margin: 2rem 0;
-                font-style: italic;
-                color: #64748b;
-              }
-              
-              article a {
-                color: #667eea;
-                text-decoration: none;
-                font-weight: 600;
-              }
-              
-              article a:hover {
-                text-decoration: underline;
-              }
-              
-              /* Responsive video wrapper */
-              article .video-wrapper {
-                position: relative;
-                padding-bottom: 56.25%; /* 16:9 aspect ratio */
-                height: 0;
-                overflow: hidden;
-                margin: 2rem 0;
-                border-radius: 12px;
-              }
-              
-              article .video-wrapper iframe {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                margin: 0;
-              }
-            `}</style>
-            <div 
-              style={{ 
-                color: "#475569"
-              }}
-              dangerouslySetInnerHTML={{ __html: marked.parse(detail.markdown || "") }} 
+      {/* Content */}
+      <section className="bg-slate-50 py-16 md:py-24">
+        <div className="container max-w-3xl">
+          <motion.article
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewPort}
+            className="card p-6 md:p-12 md:p-16"
+          >
+            <div
+              className="blog-article"
+              dangerouslySetInnerHTML={{ __html: marked.parse(detail.markdown || "") }}
             />
-          </article>
+          </motion.article>
 
           {/* Back to Blog */}
-          <div style={{ 
-            marginTop: "clamp(2rem, 6vw, 4rem)", 
-            textAlign: "center",
-            padding: "clamp(1.5rem, 4vw, 3rem)",
-            background: "white",
-            borderRadius: "20px"
-          }}>
-            <h3 style={{ marginBottom: "1rem" }}>
-              Enjoyed this article?
-            </h3>
-            <p style={{ marginBottom: "2rem", color: "#64748b" }}>
-              Check out more posts on my blog
-            </p>
-            <Link 
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewPort}
+            className="mt-10 md:mt-14 text-center bg-white rounded-3xl border border-slate-100 shadow-sm p-8 md:p-12"
+          >
+            <h3 className="mb-2">Enjoyed this article?</h3>
+            <p className="mb-8 text-slate-500">Check out more posts on my blog</p>
+            <Link
               to="/blog"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.75rem",
-                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                color: "white",
-                padding: "0.75rem 1.5rem",
-                borderRadius: "12px",
-                fontWeight: "600",
-                textDecoration: "none",
-                transition: "all 0.3s",
-                fontSize: "clamp(0.9rem, 2.5vw, 1rem)"
-              }}
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-primary-600 via-purple-600 to-pink-500 text-white px-8 py-4 rounded-xl font-bold shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all"
             >
-              <span>←</span> Back to All Posts
+              <ArrowLeft width="18" height="18" /> Back to All Posts
             </Link>
-          </div>
+          </motion.div>
         </div>
       </section>
     </div>
