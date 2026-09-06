@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { motion, AnimatePresence } from "framer-motion";
 import { fetchProfile } from "../store/slices/profile.js";
 import { getSkills } from "../features/skills/application/getSkills.ts";
 import { fetchProjects } from "../store/slices/projects.js";
@@ -7,7 +8,14 @@ import { fetchResume } from "../store/slices/resume.js";
 import { fetchBlogs } from "../store/slices/blog.js";
 import { Link } from "react-router-dom";
 import { getApiUrl } from "../lib/api.js";
-import { FileText, ArrowRight, Code, Monitor, Zap, Star, Check, User } from "../shared/components/Icons.jsx";
+import { FileText, ArrowRight, Code, Monitor, Zap, Star, Check } from "../shared/components/Icons.jsx";
+import CodeBlock from "../shared/components/CodeBlock.jsx";
+import {
+  fadeUp,
+  scaleIn,
+  staggerContainer,
+  viewPort
+} from "../lib/animations.js";
 
 const getImageUrl = (path) => {
   if (!path) return null;
@@ -22,53 +30,20 @@ const typingRoles = [
   "Web Application Builder"
 ];
 
-
-function useScrollAnimation() {
-  const [visibleSections, setVisibleSections] = useState({});
-  const sectionRefs = useRef({});
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisibleSections((prev) => ({
-              ...prev,
-              [entry.target.dataset.section]: true
-            }));
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    Object.values(sectionRefs.current).forEach((ref) => {
-      if (ref) observer.observe(ref);
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
-  return [visibleSections, sectionRefs];
-}
-
 export default function Home() {
   const dispatch = useDispatch();
   const profile = useSelector((s) => s.profile.data);
-  const profileStatus = useSelector((s) => s.profile.status);
   const [skills, setSkills] = useState(null);
   const [skillsStatus, setSkillsStatus] = useState("idle");
   const projects = useSelector((s) => s.projects.list);
   const projectsStatus = useSelector((s) => s.projects.status);
   const blogs = useSelector((s) => s.blog.list);
-  const blogsStatus = useSelector((s) => s.blog.status);
   const resume = useSelector((s) => s.resume.data);
   const [activeSkillCategory, setActiveSkillCategory] = useState("Frontend");
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [currentRole, setCurrentRole] = useState(0);
   const [roleText, setRoleText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
-  const [visibleSections, sectionRefs] = useScrollAnimation();
 
   const services = [
     {
@@ -131,17 +106,14 @@ export default function Home() {
     dispatch(fetchProjects());
     dispatch(fetchResume());
     dispatch(fetchBlogs());
-    
-    // Fetch skills using the new approach
+
     (async () => {
       try {
         setSkillsStatus("loading");
         const skillsData = await getSkills();
-        
-        // Check if skillsData is already grouped (object) or needs grouping (array)
+
         let groupedSkills = {};
         if (Array.isArray(skillsData)) {
-          // Group skills by category
           groupedSkills = skillsData.reduce((acc, skill) => {
             if (!acc[skill.category]) {
               acc[skill.category] = [];
@@ -150,7 +122,6 @@ export default function Home() {
             return acc;
           }, {});
         } else if (typeof skillsData === 'object' && skillsData !== null) {
-          // Already grouped by the backend
           groupedSkills = skillsData;
         } else {
           console.error("Expected skillsData to be an array or object, got:", typeof skillsData, skillsData);
@@ -204,26 +175,22 @@ export default function Home() {
     setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
-  const visibleProjects = projects?.filter(p => 
+  const visibleProjects = projects?.filter(p =>
     (p.published === true || p.published === undefined) &&
     (p.status === "completed" || p.status === "in_progress")
   ) || [];
 
   const getStatusBadge = (status) => {
     const badges = {
-      completed: { label: "✓ Completed", color: "text-emerald-600", bg: "bg-emerald-50" },
-      in_progress: { label: "In Progress", color: "text-amber-600", bg: "bg-amber-50" },
-      idea: { label: "Idea", color: "text-indigo-600", bg: "bg-indigo-50" }
+      completed: { label: "✓ Completed", color: "text-emerald-700", bg: "bg-emerald-100" },
+      in_progress: { label: "In Progress", color: "text-amber-700", bg: "bg-amber-100" },
+      idea: { label: "Idea", color: "text-indigo-700", bg: "bg-indigo-100" }
     };
     return badges[status] || badges.completed;
   }
 
-  const fadeInClass = (section) => 
-    `transition-all duration-700 ${
-      visibleSections[section] 
-        ? "opacity-100 translate-y-0" 
-        : "opacity-0 translate-y-8"
-    }`;
+  const headline = profile?.headline?.split('|')[0] || "Creative Developer";
+  const firstName = profile?.name?.split(' ')[0] || "there";
 
   return (
     <div>
@@ -244,30 +211,36 @@ export default function Home() {
 
         <div className="container relative z-10">
           <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div className="fade-in-up">
-              <div className="inline-block bg-white/20 px-4 py-2 rounded-full text-white text-sm font-semibold mb-6 backdrop-blur-sm">
-                Hey, I'm {profile?.name?.split(' ')[0] || "there"}!
-              </div>
-              
-              <h1 className="text-white mb-2 leading-tight font-bold" style={{ fontSize: "clamp(1.8rem, 8vw, 4rem)" }}>
-                {profile?.headline?.split('|')[0] || "Creative Developer"}
-              </h1>
-              
+            {/* Left: staggered text entrance */}
+            <motion.div variants={staggerContainer} initial="hidden" animate="visible">
+              <motion.div variants={fadeUp} className="inline-block bg-white/20 px-4 py-2 rounded-full text-white text-sm font-semibold mb-6 backdrop-blur-sm">
+                Hey, I'm {firstName}!
+              </motion.div>
+
+              <motion.h1
+                variants={fadeUp}
+                className="glitch text-white mb-2 leading-tight font-bold"
+                data-text={headline}
+                style={{ fontSize: "clamp(1.8rem, 8vw, 4rem)" }}
+              >
+                {headline}
+              </motion.h1>
+
               {/* Typing Animation */}
-              <div className="text-lg sm:text-xl md:text-2xl text-white/90 mb-6 h-12 flex items-center">
+              <motion.div variants={fadeUp} className="text-lg sm:text-xl md:text-2xl text-white/90 mb-6 h-12 flex items-center">
                 <span className="mr-2">I'm a</span>
                 <span className="text-amber-300 font-semibold">
                   {roleText}
                   <span className="animate-pulse">|</span>
                 </span>
-              </div>
+              </motion.div>
 
-              <p className="text-base md:text-lg text-white/90 mb-6 md:mb-8 leading-relaxed">
+              <motion.p variants={fadeUp} className="text-base md:text-lg text-white/90 mb-6 md:mb-8 leading-relaxed">
                 {profile?.bioMarkdown?.substring(0, 150) || "I craft beautiful digital experiences that make a difference. Let's build something amazing together!"}
-              </p>
+              </motion.p>
 
               {/* Social Proof Badges */}
-              <div className="flex flex-wrap gap-4 mb-8">
+              <motion.div variants={fadeUp} className="flex flex-wrap gap-4 mb-8">
                 <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2">
                   <Star width="18" height="18" />
                   <span className="text-white font-semibold">5+ Projects Completed</span>
@@ -276,52 +249,98 @@ export default function Home() {
                   <Check width="18" height="18" />
                   <span className="text-white font-semibold">Clean Code</span>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="flex gap-3 md:gap-4 flex-wrap">
-                <button 
+              <motion.div variants={fadeUp} className="flex gap-3 md:gap-4 flex-wrap">
+                <button
                   onClick={() => scrollToSection('projects')}
                   className="bg-white text-primary-600 px-6 md:px-8 py-3 md:py-4 rounded-xl font-semibold inline-flex items-center gap-2 hover:shadow-2xl hover:-translate-y-1 transition-all text-sm md:text-base"
                 >
                   View My Work <ArrowRight width="16" height="16" />
                 </button>
-                <Link 
-                  to="/contact" 
+                <Link
+                  to="/contact"
                   className="bg-white/20 text-white px-6 md:px-8 py-3 md:py-4 rounded-xl font-semibold border-2 border-white/30 backdrop-blur-sm hover:bg-white/30 transition-all text-sm md:text-base"
                 >
                   Hire Me
                 </Link>
-              </div>
-            </div>
-            
-            <div className="flex justify-center items-center">
+              </motion.div>
+            </motion.div>
+
+            {/* Right: floating profile + code window */}
+            <div className="relative flex flex-col items-center gap-8 lg:gap-10">
               {profile?.imagePath ? (
-                <div className="relative w-full max-w-md aspect-square">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.85, y: 30 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative w-48 sm:w-56 md:w-64"
+                >
                   <div className="absolute inset-0 -m-5 bg-gradient-to-br from-white/30 to-white/10 rounded-full animate-pulse-slow"></div>
-                  <img 
-                    src={getImageUrl(profile.imagePath)} 
-                    alt="Profile" 
+                  <img
+                    src={getImageUrl(profile.imagePath)}
+                    alt="Profile"
                     loading="lazy"
-                    className="w-full h-full rounded-full object-cover border-8 border-white/20 relative z-10 shadow-2xl"
+                    className="w-full h-auto aspect-square rounded-full object-cover border-8 border-white/20 relative z-10 shadow-2xl animate-float"
                   />
-                </div>
+
+                  {/* Floating status card */}
+                  <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.8, duration: 0.6 }}
+                    className="absolute -right-6 top-6 z-20 bg-white/95 backdrop-blur-md rounded-2xl px-4 py-3 shadow-2xl animate-float"
+                    style={{ animationDelay: '1s' }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                      </span>
+                      <span className="text-xs font-bold text-slate-800">Available for work</span>
+                    </div>
+                    <div className="text-[11px] text-slate-500 mt-1">React • Node • Mongo</div>
+                  </motion.div>
+
+                  {/* Floating stats chip */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 1, duration: 0.6 }}
+                    className="absolute -left-8 bottom-8 z-20 bg-white/95 backdrop-blur-md rounded-2xl px-4 py-3 shadow-2xl animate-float"
+                    style={{ animationDelay: '2s' }}
+                  >
+                    <div className="text-base font-extrabold text-slate-800">2+ Years</div>
+                    <div className="text-[11px] text-slate-500">Coding Experience</div>
+                  </motion.div>
+                </motion.div>
               ) : (
-                <div className="w-full max-w-md aspect-square bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">
-                  <span className="text-8xl">Profile</span>
-                </div>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.8 }}
+                  className="w-48 sm:w-56 md:w-64 aspect-square bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm"
+                >
+                  <span className="text-6xl">Profile</span>
+                </motion.div>
               )}
+
+              {/* Syntax-highlighted code window */}
+              <div className="w-full max-w-md lg:-mt-4 animate-code-float">
+                <CodeBlock />
+              </div>
             </div>
           </div>
         </div>
-
-
       </section>
 
       {/* Services Section */}
-      <section 
-        ref={(el) => (sectionRefs.current.services = el)}
-        data-section="services"
-        className={`py-20 bg-white ${fadeInClass('services')}`}
+      <motion.section
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewPort}
+        className="py-20 bg-white"
       >
         <div className="container">
           <div className="text-center mb-16">
@@ -333,10 +352,17 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewPort}
+            className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8"
+          >
             {services.map((service, index) => (
-              <div 
+              <motion.div
                 key={index}
+                variants={scaleIn}
                 className="group p-6 md:p-8 rounded-2xl bg-gradient-to-br from-slate-50 to-white border-2 border-transparent hover:border-primary-200 hover:shadow-2xl transition-all hover:-translate-y-2"
               >
                 <div className="text-primary-600 mb-4 transform group-hover:scale-110 transition-transform">
@@ -344,17 +370,19 @@ export default function Home() {
                 </div>
                 <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-3">{service.title}</h3>
                 <p className="text-sm md:text-base text-slate-600 leading-relaxed">{service.description}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Skills Section */}
-      <section 
-        ref={(el) => (sectionRefs.current.skills = el)}
-        data-section="skills"
-        className={`bg-white py-20 ${fadeInClass('skills')}`}
+      <motion.section
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewPort}
+        className="bg-white py-20 border-t border-slate-100"
       >
         <div className="container">
           <div className="text-center mb-16">
@@ -390,16 +418,27 @@ export default function Home() {
                 ))}
               </div>
 
-              <div className="flex flex-wrap gap-4 justify-center max-w-4xl mx-auto">
-                {skills[activeSkillCategory]?.map((skill) => (
-                  <div 
-                    key={skill.id} 
-                    className="bg-gradient-to-r from-primary-600 to-purple-600 text-white px-5 md:px-8 py-2 md:py-4 rounded-full text-sm md:text-base font-semibold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
-                  >
-                    {skill.name}
-                  </div>
-                ))}
-              </div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeSkillCategory}
+                  initial={{ opacity: 0, y: 12, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -12, scale: 0.98 }}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  className="flex flex-wrap gap-4 justify-center max-w-4xl mx-auto"
+                >
+                  {skills[activeSkillCategory]?.map((skill) => (
+                    <motion.span
+                      key={skill.id}
+                      whileHover={{ y: -4, scale: 1.05 }}
+                      transition={{ duration: 0.2 }}
+                      className="bg-gradient-to-r from-primary-600 to-purple-600 text-white px-5 md:px-8 py-2 md:py-4 rounded-full text-sm md:text-base font-semibold shadow-lg hover:shadow-xl cursor-default"
+                    >
+                      {skill.name}
+                    </motion.span>
+                  ))}
+                </motion.div>
+              </AnimatePresence>
             </>
           ) : (
             <div className="text-center py-12 text-slate-600">
@@ -407,14 +446,16 @@ export default function Home() {
             </div>
           )}
         </div>
-      </section>
+      </motion.section>
 
       {/* Projects Section */}
-      <section 
-        id="projects" 
-        ref={(el) => (sectionRefs.current.projects = el)}
-        data-section="projects"
-        className={`bg-slate-50 py-20 ${fadeInClass('projects')}`}
+      <motion.section
+        id="projects"
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewPort}
+        className="bg-slate-50 py-20"
       >
         <div className="container">
           <div className="text-center mb-16">
@@ -443,57 +484,68 @@ export default function Home() {
               ))}
             </div>
           ) : visibleProjects && visibleProjects.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewPort}
+              className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+            >
               {visibleProjects.slice(0, 6).map((p, index) => {
                 const badge = getStatusBadge(p.status);
                 return (
-                  <Link key={p.id} to={`/projects/${p.slug}`} className="group">
-                    <div className="card h-full overflow-hidden p-0 hover:shadow-2xl">
-                      <div 
-                        className="w-full h-64 bg-cover bg-center relative"
-                        style={{
-                          backgroundImage: p.images?.[0]?.path 
-                            ? `url(${p.images[0].path})` 
-                            : `linear-gradient(135deg, ${index % 2 === 0 ? '#667eea' : '#f093fb'} 0%, ${index % 2 === 0 ? '#764ba2' : '#f5576c'} 100%)`
-                        }}
-                      >
-                        <div className={`absolute top-4 left-4 ${badge.bg} ${badge.color} px-4 py-2 rounded-full text-xs font-bold backdrop-blur-sm`}>
-                          {badge.label}
-                        </div>
-                        {p.featured && (
-                          <div className="absolute top-4 right-4 bg-amber-400 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                            Featured
+                  <motion.div key={p.id} variants={scaleIn}>
+                    <Link to={`/projects/${p.slug}`} className="group block h-full">
+                      <div className="relative h-full rounded-2xl overflow-hidden bg-white/60 backdrop-blur-md border border-white/60 shadow-lg transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-2">
+                        {/* gradient glow on hover */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary-500/0 via-purple-500/0 to-pink-500/0 group-hover:from-primary-500/10 group-hover:via-purple-500/10 group-hover:to-pink-500/20 transition-all duration-500 pointer-events-none z-10"></div>
+
+                        <div
+                          className="w-full h-56 md:h-64 bg-cover bg-center relative img-hover-zoom"
+                          style={{
+                            backgroundImage: p.images?.[0]?.path
+                              ? `url(${p.images[0].path})`
+                              : `linear-gradient(135deg, ${index % 2 === 0 ? '#667eea' : '#f093fb'} 0%, ${index % 2 === 0 ? '#764ba2' : '#f5576c'} 100%)`
+                          }}
+                        >
+                          <div className={`absolute top-4 left-4 ${badge.bg} ${badge.color} px-4 py-2 rounded-full text-xs font-bold backdrop-blur-sm`}>
+                            {badge.label}
                           </div>
-                        )}
-                      </div>
-                      <div className="p-4 md:p-6">
-                        <h3 className="text-slate-900 mb-2 md:mb-3 text-lg md:text-xl group-hover:text-primary-600 transition-colors">
-                          {p.title}
-                        </h3>
+                          {p.featured && (
+                            <div className="absolute top-4 right-4 bg-amber-400 text-white px-4 py-2 rounded-full text-sm font-semibold">
+                              Featured
+                            </div>
+                          )}
+                        </div>
+                        <div className="p-4 md:p-6">
+                          <h3 className="text-slate-900 mb-2 md:mb-3 text-lg md:text-xl group-hover:text-primary-600 transition-colors">
+                            {p.title}
+                          </h3>
                           <p className="text-slate-600 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
-                          {p.descriptionMarkdown?.substring(0, 120)}...
-                        </p>
-                        {p.techStack && p.techStack.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mb-4">
-                            {p.techStack.slice(0, 4).map((tech, i) => (
-                              <span 
-                                key={i} 
-                                className="bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg text-sm font-medium"
-                              >
-                                {tech}
-                              </span>
-                            ))}
+                            {p.descriptionMarkdown?.substring(0, 120)}...
+                          </p>
+                          {p.techStack && p.techStack.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mb-4">
+                              {p.techStack.slice(0, 4).map((tech, i) => (
+                                <span
+                                  key={i}
+                                  className="bg-white/80 backdrop-blur-sm text-slate-700 px-3 py-1.5 rounded-lg text-sm font-medium border border-slate-200/60 shadow-sm"
+                                >
+                                  {tech}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          <div className="text-primary-600 font-semibold flex items-center gap-2 group-hover:gap-4 transition-all">
+                            View Project <ArrowRight width="16" height="16" />
                           </div>
-                        )}
-                        <div className="text-primary-600 font-semibold flex items-center gap-2 group-hover:gap-4 transition-all">
-                          View Project <ArrowRight width="16" height="16" />
                         </div>
                       </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  </motion.div>
                 );
               })}
-            </div>
+            </motion.div>
           ) : (
             <div className="text-center py-16">
               <div className="text-6xl mb-4"></div>
@@ -504,15 +556,21 @@ export default function Home() {
             </div>
           )}
         </div>
-      </section>
+      </motion.section>
 
       {/* Resume Section */}
-      <section className="bg-white">
+      <motion.section
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewPort}
+        className="bg-white"
+      >
         <div className="container">
           <div className="bg-gradient-to-br from-primary-600 via-purple-600 to-pink-500 rounded-2xl md:rounded-3xl p-6 md:p-12 lg:p-16 text-center text-white relative overflow-hidden">
-            <div className="absolute w-72 h-72 bg-white/10 rounded-full -top-36 -right-36"></div>
-            <div className="absolute w-48 h-48 bg-white/10 rounded-full -bottom-24 -left-24"></div>
-            
+            <div className="absolute w-72 h-72 bg-white/10 rounded-full -top-36 -right-36 animate-float"></div>
+            <div className="absolute w-48 h-48 bg-white/10 rounded-full -bottom-24 -left-24 animate-float" style={{ animationDelay: '2s' }}></div>
+
             {resume?.path ? (
               <>
                 <h2 className="text-white mb-4 relative z-10 text-2xl md:text-3xl lg:text-4xl font-bold">
@@ -521,14 +579,15 @@ export default function Home() {
                 <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto relative z-10 leading-relaxed">
                   Get a detailed look at my experience, skills, and qualifications
                 </p>
-                <a 
-                  href={resume.path} 
-                  download 
-                  className="inline-flex items-center gap-2 md:gap-3 bg-white text-primary-600 px-4 sm:px-6 md:px-10 py-3 md:py-5 rounded-xl font-bold text-sm md:text-lg shadow-2xl hover:shadow-3xl hover:-translate-y-1 transition-all relative z-10"
+                <motion.a
+                  href={resume.path}
+                  download
+                  whileHover={{ y: -4, scale: 1.03 }}
+                  className="inline-flex items-center gap-2 md:gap-3 bg-white text-primary-600 px-4 sm:px-6 md:px-10 py-3 md:py-5 rounded-xl font-bold text-sm md:text-lg shadow-2xl relative z-10"
                 >
                   <FileText width="24" height="24" />
                   Download Resume
-                </a>
+                </motion.a>
               </>
             ) : (
               <>
@@ -538,22 +597,27 @@ export default function Home() {
                 <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto relative z-10 leading-relaxed">
                   I'm currently updating my resume. Check back soon or feel free to reach out!
                 </p>
-                <Link 
+                <Link
                   to="/contact"
-                  className="inline-flex items-center gap-3 bg-white text-primary-600 px-10 py-5 rounded-xl font-bold text-lg shadow-2xl hover:shadow-3xl hover:-translate-y-1 transition-all relative z-10"
+                  className="inline-flex items-center gap-3 bg-white text-primary-600 px-10 py-5 rounded-xl font-bold text-lg shadow-2xl relative z-10"
                 >
-                  
                   Contact Me
                 </Link>
               </>
             )}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Blog Preview Section */}
       {blogs && blogs.length > 0 && (
-        <section className="bg-slate-50">
+        <motion.section
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewPort}
+          className="bg-slate-50"
+        >
           <div className="container">
             <div className="text-center mb-16">
               <h2 className="mb-4">
@@ -564,59 +628,69 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewPort}
+              className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12"
+            >
               {blogs.slice(0, 3).map((blog, index) => (
-                <Link key={blog.id} to={`/blog/${blog.slug}`} className="group">
-                  <article className="card h-full hover:shadow-2xl">
-                    <div 
-                      className={`w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br ${
-                        index % 3 === 0 ? 'from-primary-600 to-purple-600' : 
-                        index % 3 === 1 ? 'from-pink-500 to-red-500' : 
-                        'from-cyan-500 to-blue-500'
-                      } rounded-xl flex items-center justify-center mb-4`}
-                    >
-                      <FileText width="20" height="20" />
-                    </div>
-                    {blog.createdAt && (
-                      <div className="text-sm text-slate-500 mb-4">
-                        {new Date(blog.createdAt).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric'
-                        })}
+                <motion.div key={blog.id} variants={scaleIn}>
+                  <Link to={`/blog/${blog.slug}`} className="group block h-full">
+                    <article className="card h-full hover:shadow-2xl">
+                      <div
+                        className={`w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br ${
+                          index % 3 === 0 ? 'from-primary-600 to-purple-600' :
+                          index % 3 === 1 ? 'from-pink-500 to-red-500' :
+                          'from-cyan-500 to-blue-500'
+                        } rounded-xl flex items-center justify-center mb-4`}
+                      >
+                        <FileText width="20" height="20" />
                       </div>
-                    )}
-                    <h3 className="text-slate-900 mb-2 md:mb-4 text-lg md:text-xl leading-tight group-hover:text-primary-600 transition-colors">
-                      {blog.title}
-                    </h3>
-                    <p className="text-slate-600 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
-                      {blog.markdown?.substring(0, 120)}...
-                    </p>
-                    <div className="text-primary-600 font-semibold inline-flex items-center gap-2 group-hover:gap-4 transition-all">
-                      Read More <ArrowRight width="16" height="16" />
-                    </div>
-                  </article>
-                </Link>
+                      {blog.createdAt && (
+                        <div className="text-sm text-slate-500 mb-4">
+                          {new Date(blog.createdAt).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </div>
+                      )}
+                      <h3 className="text-slate-900 mb-2 md:mb-4 text-lg md:text-xl leading-tight group-hover:text-primary-600 transition-colors">
+                        {blog.title}
+                      </h3>
+                      <p className="text-slate-600 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
+                        {blog.markdown?.substring(0, 120)}...
+                      </p>
+                      <div className="text-primary-600 font-semibold inline-flex items-center gap-2 group-hover:gap-4 transition-all">
+                        Read More <ArrowRight width="16" height="16" />
+                      </div>
+                    </article>
+                  </Link>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
 
             <div className="text-center">
-              <Link 
-                to="/blog" 
+              <Link
+                to="/blog"
                 className="inline-flex items-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-white text-primary-600 rounded-xl font-semibold border-2 border-slate-200 hover:border-primary-600 hover:shadow-lg transition-all text-sm md:text-base"
               >
                 View All Posts <ArrowRight width="16" height="16" />
               </Link>
             </div>
           </div>
-        </section>
+        </motion.section>
       )}
 
       {/* Testimonials Section */}
-      <section 
-        ref={(el) => (sectionRefs.current.testimonials = el)}
-        data-section="testimonials"
-        className={`bg-white py-20 ${fadeInClass('testimonials')}`}
+      <motion.section
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewPort}
+        className="bg-white py-20"
       >
         <div className="container">
           <div className="text-center mb-16">
@@ -632,25 +706,34 @@ export default function Home() {
             {/* Testimonial Card */}
             <div className="card min-h-[250px] md:min-h-[350px] flex flex-col justify-center text-center relative overflow-hidden">
               <div className="absolute top-8 left-8 text-7xl text-slate-100 leading-none">"</div>
-              
-              <div className="animate-fadeIn relative z-10">
-                <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-primary-600 to-purple-600 rounded-full flex items-center justify-center text-2xl md:text-4xl mx-auto mb-4 md:mb-8 shadow-xl">
-                  {testimonials[currentTestimonial].avatar}
-                </div>
-                
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentTestimonial}
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -24 }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative z-10"
+                >
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-primary-600 to-purple-600 rounded-full flex items-center justify-center text-2xl md:text-4xl mx-auto mb-4 md:mb-8 shadow-xl">
+                    {testimonials[currentTestimonial].avatar}
+                  </div>
+
                   <p className="text-slate-600 text-base md:text-lg leading-relaxed mb-6 md:mb-8 italic max-w-3xl mx-auto">
-                  {testimonials[currentTestimonial].text}
-                </p>
-                
-                <div>
-                  <div className="font-bold text-slate-900 mb-2 text-xl">
-                    {testimonials[currentTestimonial].name}
+                    {testimonials[currentTestimonial].text}
+                  </p>
+
+                  <div>
+                    <div className="font-bold text-slate-900 mb-2 text-xl">
+                      {testimonials[currentTestimonial].name}
+                    </div>
+                    <div className="text-base text-slate-600">
+                      {testimonials[currentTestimonial].role} at {testimonials[currentTestimonial].company}
+                    </div>
                   </div>
-                  <div className="text-base text-slate-600">
-                    {testimonials[currentTestimonial].role} at {testimonials[currentTestimonial].company}
-                  </div>
-                </div>
-              </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
 
             {/* Desktop Navigation Arrows */}
@@ -677,8 +760,8 @@ export default function Home() {
                   key={index}
                   onClick={() => setCurrentTestimonial(index)}
                   className={`h-3 rounded-md transition-all ${
-                    currentTestimonial === index 
-                      ? 'w-10 bg-gradient-to-r from-primary-600 to-purple-600' 
+                    currentTestimonial === index
+                      ? 'w-10 bg-gradient-to-r from-primary-600 to-purple-600'
                       : 'w-3 bg-slate-300'
                   }`}
                   aria-label={`Go to testimonial ${index + 1}`}
@@ -705,19 +788,21 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Call to Action Section */}
-      <section 
-        ref={(el) => (sectionRefs.current.cta = el)}
-        data-section="cta"
-        className={`bg-slate-50 py-20 ${fadeInClass('cta')}`}
+      <motion.section
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewPort}
+        className="bg-slate-50 py-20"
       >
         <div className="container">
           <div className="bg-gradient-to-br from-primary-600 via-purple-600 to-pink-500 rounded-2xl md:rounded-3xl p-6 md:p-12 lg:p-20 text-center text-white relative overflow-hidden">
             <div className="absolute w-72 h-72 bg-white/10 rounded-full -top-36 -right-36"></div>
             <div className="absolute w-48 h-48 bg-white/10 rounded-full -bottom-24 -left-24"></div>
-            
+
             <h2 className="text-white mb-4 relative z-10 text-4xl font-bold">
               Let's Build Something Amazing Together!
             </h2>
@@ -725,14 +810,14 @@ export default function Home() {
               Have a project in mind? I'd love to hear about it. Let's discuss how I can help bring your vision to life.
             </p>
             <div className="flex gap-4 justify-center flex-wrap relative z-10">
-              <Link 
-                to="/contact" 
+              <Link
+                to="/contact"
                 className="inline-flex items-center gap-2 bg-white text-primary-600 px-4 sm:px-6 md:px-10 py-3 md:py-5 rounded-xl font-bold text-sm md:text-lg shadow-2xl hover:shadow-3xl hover:-translate-y-1 transition-all"
               >
                 Start a Conversation
               </Link>
-              <Link 
-                to="/projects" 
+              <Link
+                to="/projects"
                 className="inline-flex items-center gap-2 bg-white/20 text-white px-4 sm:px-6 md:px-10 py-3 md:py-5 rounded-xl font-bold text-sm md:text-lg border-2 border-white/30 backdrop-blur-sm hover:bg-white/30 transition-all"
               >
                 See My Work
@@ -740,7 +825,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }

@@ -1,0 +1,25 @@
+# Erimo — Full-Stack Developer
+
+> Portfolio site for Erimo, a full-stack developer specializing in React, Node.js, and modern web applications. Based in Lagos, Nigeria.
+
+## Core facts
+
+- **Name:** Erimo
+- **Role:** Full-Stack Developer
+- **Stack:** React, Node.js (Express), MongoDB, JWT, Redux Toolkit, TailwindCSS, Vite
+- **Services:** Web Development, Responsive Design, Performance Optimization
+- **Contact email:** eromoxlx@gmail.com
+- **Location:** Lagos, Nigeria
+
+## Key pages
+
+- Home: https://erimo-portfolio.netlify.app/ — hero, services, skills, featured projects, resume, blog preview, testimonials
+- Projects: https://erimo-portfolio.netlify.app/projects — project showcase with status badges (completed / in progress)
+- Blog: https://erimo-portfolio.netlify.app/blog — articles and tutorials (video support for YouTube, TikTok, Instagram, etc.)
+- Skills: https://erimo-portfolio.netlify.app/skills — skills organized by category (Frontend, Backend, Mobile, DevOps, Tooling)
+- Resume: https://erimo-portfolio.netlify.app/resume — downloadable resume
+- Contact: https://erimo-portfolio.netlify.app/contact — contact form, email, phone, location
+
+## About
+
+This is a personal portfolio and content management system: blog with rich media (incl. embedded videos), project showcase, skills index, testimonials slider, dark mode, and a secure admin dashboard for managing all content.

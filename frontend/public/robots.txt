@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Admin area is an SPA route, not crawlable, but keep bots out of it
+Disallow: /admin/
+
+Sitemap: https://erimo-portfolio.netlify.app/sitemap.xml
