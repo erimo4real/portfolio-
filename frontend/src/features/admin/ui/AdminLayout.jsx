@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../store/slices/auth';
+import { logout } from '../../../store/slices/auth.js';
 import { BarChart, FileText, File, Shield, LogOut, ArrowLeft, ArrowRight, Code, User, MessageSquare, Star } from '../../../shared/components/Icons.jsx';
 
 const AdminLayout = () => {
@@ -34,10 +34,14 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="flex h-screen bg-gradient-to-br from-slate-950 via-[#0b1120] to-slate-950 overflow-hidden">
+      {/* Ambient glow */}
+      <div className="fixed -top-40 -left-40 w-[36rem] h-[36rem] rounded-full bg-indigo-600/10 blur-[130px] pointer-events-none"></div>
+      <div className="fixed -bottom-48 -right-40 w-[32rem] h-[32rem] rounded-full bg-purple-600/10 blur-[130px] pointer-events-none"></div>
+
       {/* Sidebar */}
-      <aside 
-        className={`${isSidebarOpen ? 'w-72' : 'w-20'} bg-slate-900 text-white flex flex-col transition-all duration-300 ease-in-out shadow-2xl`}
+      <aside
+        className={`${isSidebarOpen ? 'w-72' : 'w-20'} relative bg-slate-900/90 text-white flex flex-col transition-all duration-300 ease-in-out shadow-2xl backdrop-blur border-r border-slate-800/60 z-20`}
       >
         {/* Logo Area */}
         <div className="p-6 border-b border-slate-800">
@@ -111,8 +115,8 @@ const AdminLayout = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto">
-        <div className="p-8 max-w-7xl mx-auto">
+      <main className="flex-1 overflow-y-auto relative">
+        <div className="p-6 lg:p-8 max-w-7xl mx-auto page-enter">
           <Outlet />
         </div>
       </main>

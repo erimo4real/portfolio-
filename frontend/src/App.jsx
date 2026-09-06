@@ -18,6 +18,7 @@ import BlogsAdmin from "./pages/admin/BlogsAdmin.jsx";
 import ProfileAdmin from "./pages/admin/ProfileAdmin.jsx";
 import ResumeAdmin from "./pages/admin/ResumeAdmin.jsx";
 import SkillsManagement from "./features/admin/ui/SkillsManagement.jsx";
+import AdminLayout from "./features/admin/ui/AdminLayout.jsx";
 import SkillsList from "./features/skills/ui/SkillsList.jsx";
 import ContactsAdmin from "./pages/admin/ContactsAdmin.jsx";
 import NotFound from "./pages/NotFound.jsx";
@@ -173,63 +174,23 @@ export default function App() {
       <Route path="/admin/forgot-password" element={<ForgotPassword />} />
       <Route path="/admin/reset-password" element={<ResetPassword />} />
       
-      {/* Admin Protected Routes - No Layout */}
+      {/* Admin Protected Routes - No Layout (AdminLayout provides shell) */}
       <Route
         path="/admin"
         element={
           <ProtectedRoute>
-            <AdminDashboard />
+            <AdminLayout />
           </ProtectedRoute>
         }
-      />
-      <Route
-        path="/admin/projects"
-        element={
-          <ProtectedRoute>
-            <ProjectsAdmin />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/blogs"
-        element={
-          <ProtectedRoute>
-            <BlogsAdmin />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/profile"
-        element={
-          <ProtectedRoute>
-            <ProfileAdmin />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/resume"
-        element={
-          <ProtectedRoute>
-            <ResumeAdmin />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/skills"
-        element={
-          <ProtectedRoute>
-            <SkillsManagement />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/contacts"
-        element={
-          <ProtectedRoute>
-            <ContactsAdmin />
-          </ProtectedRoute>
-        }
-      />
+      >
+        <Route index element={<AdminDashboard />} />
+        <Route path="projects" element={<ProjectsAdmin />} />
+        <Route path="blogs" element={<BlogsAdmin />} />
+        <Route path="profile" element={<ProfileAdmin />} />
+        <Route path="resume" element={<ResumeAdmin />} />
+        <Route path="skills" element={<SkillsManagement />} />
+        <Route path="contacts" element={<ContactsAdmin />} />
+      </Route>
       
       {/* 404 */}
       <Route path="*" element={<Layout><NotFound /></Layout>} />

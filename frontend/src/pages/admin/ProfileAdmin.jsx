@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { api, getApiUrl } from "../../lib/api.js";
-import { Link } from "react-router-dom";
+import { AdminHeader, Field } from "../../features/admin/ui/adminKit.jsx";
+import { User } from "../../shared/components/Icons.jsx";
 
 export default function ProfileAdmin() {
   const [profile, setProfile] = useState(null);
@@ -16,11 +17,7 @@ export default function ProfileAdmin() {
   };
 
   useEffect(() => {
-    return () => {
-      if (imagePreview) {
-        URL.revokeObjectURL(imagePreview);
-      }
-    };
+    return () => { if (imagePreview) URL.revokeObjectURL(imagePreview); };
   }, [imagePreview]);
 
   async function load() {
@@ -34,34 +31,22 @@ export default function ProfileAdmin() {
     }
   }
 
-  useEffect(() => {
-    load();
-  }, []);
+  useEffect(() => { load(); }, []);
 
   async function onSubmit(e) {
     e.preventDefault();
     setSaving(true);
-    
     const formElement = e.target;
     const headlineValue = formElement.elements['headline']?.value;
-    
     if (!headlineValue || headlineValue.trim() === '') {
       alert('Headline is required');
       setSaving(false);
       return;
     }
-    
     const fd = new FormData(formElement);
-    
     const imageInput = formElement.elements['image'];
-    if (!imageInput.files[0]) {
-      fd.delete('image');
-    }
-
-    if (removedImage && !imageInput.files[0]) {
-      fd.append('removeImage', 'true');
-    }
-    
+    if (!imageInput.files[0]) fd.delete('image');
+    if (removedImage && !imageInput.files[0]) fd.append('removeImage', 'true');
     try {
       if (profile?.id) {
         await api.put(`/profile/admin/${profile.id}`, fd);
@@ -72,8 +57,7 @@ export default function ProfileAdmin() {
       setImagePreview(null);
       alert("Profile saved!");
     } catch (err) {
-      console.error("Error saving profile:", err);
-      alert(`Error saving profile: ${err.response?.data?.message || err.message}`);
+      alert(`Error: ${err.response?.data?.message || err.message}`);
     } finally {
       setSaving(false);
     }
@@ -82,199 +66,97 @@ export default function ProfileAdmin() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (imagePreview) {
-        URL.revokeObjectURL(imagePreview);
-      }
-      const previewUrl = URL.createObjectURL(file);
-      setImagePreview(previewUrl);
+      if (imagePreview) URL.revokeObjectURL(imagePreview);
+      setImagePreview(URL.createObjectURL(file));
     } else {
       setImagePreview(null);
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-slate-200 border-t-indigo-600 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-500">Loading profile...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* Header */}
-      <div className="bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900">Profile Settings</h1>
-            <p className="text-slate-500 text-sm">Manage your portfolio profile</p>
-          </div>
-          <Link 
-            to="/admin" 
-            className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition-all"
-          >
-            ← Back to Dashboard
-          </Link>
-        </div>
-      </div>
+    <>
+      <AdminHeader
+        icon={<User width="24" height="24" />}
+        title="Profile Settings"
+        subtitle="Manage your portfolio profile"
+      />
 
-      <div className="max-w-7xl mx-auto px-8 py-8">
-        <form onSubmit={onSubmit} key={profile?.id || 'new'}>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Left Column - Form */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-              <h2 className="text-xl font-bold text-slate-800 mb-6">Profile Information</h2>
-              
-              <div className="space-y-5">
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Name</label>
-                  <input 
-                    name="name" 
-                    value={profile?.name || ""} 
-                    onChange={(e) => setProfile({...profile, name: e.target.value})}
-                    placeholder="e.g., John Doe"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all"
-                  />
-                  <p className="text-xs text-slate-500 mt-1">This appears in the hero section</p>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Headline</label>
-                  <input 
-                    name="headline" 
-                    value={profile?.headline || ""} 
-                    onChange={(e) => setProfile({...profile, headline: e.target.value})}
-                    placeholder="e.g., Full Stack Developer | UI/UX Designer"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all"
-                  />
-                  <p className="text-xs text-slate-500 mt-1">This appears as your main title</p>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Bio (Markdown)</label>
-                  <textarea 
-                    name="bioMarkdown" 
-                    value={profile?.bioMarkdown || ""} 
-                    onChange={(e) => setProfile({...profile, bioMarkdown: e.target.value})}
-                    rows={8} 
-                    placeholder="Write your bio in markdown..."
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all font-mono text-sm"
-                  />
-                  <p className="text-xs text-slate-500 mt-1">Use markdown for formatting</p>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Status</label>
-                  <select 
-                    name="status" 
-                    value={profile?.status || "draft"}
-                    onChange={(e) => setProfile({...profile, status: e.target.value})}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all"
-                  >
-                    <option value="draft">Draft</option>
-                    <option value="published">Published</option>
-                  </select>
-                </div>
-
-                <button 
-                  type="submit"
-                  disabled={saving}
-                  className="w-full bg-gradient-to-r from-primary-600 to-purple-600 text-white font-bold py-4 rounded-xl hover:shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {saving ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                      Saving...
-                    </span>
-                  ) : (
-                    "Save Profile"
-                  )}
-                </button>
-              </div>
+      <form onSubmit={onSubmit} key={profile?.id || 'new'}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Left - Form */}
+          <div className="admin-card p-6">
+            <h2 className="admin-section-title mb-6">Profile Information</h2>
+            <div className="space-y-5">
+              <Field label="Name" hint="Appears in the hero section">
+                <input name="name" value={profile?.name || ""} onChange={(e) => setProfile({...profile, name: e.target.value})} placeholder="e.g., John Doe" className="admin-input" />
+              </Field>
+              <Field label="Headline" hint="Your main title" required>
+                <input name="headline" value={profile?.headline || ""} onChange={(e) => setProfile({...profile, headline: e.target.value})} placeholder="Full Stack Developer | UI/UX Designer" className="admin-input" />
+              </Field>
+              <Field label="Bio (Markdown)" hint="Use markdown for formatting">
+                <textarea name="bioMarkdown" value={profile?.bioMarkdown || ""} onChange={(e) => setProfile({...profile, bioMarkdown: e.target.value})} rows={8} placeholder="Write your bio in markdown..." className="admin-textarea font-mono text-sm" />
+              </Field>
+              <Field label="Status">
+                <select name="status" value={profile?.status || "draft"} onChange={(e) => setProfile({...profile, status: e.target.value})} className="admin-select">
+                  <option value="draft">Draft</option>
+                  <option value="published">Published</option>
+                </select>
+              </Field>
+              <button type="submit" disabled={saving} className="admin-btn-primary w-full py-4">
+                {saving ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    Saving...
+                  </span>
+                ) : "Save Profile"}
+              </button>
             </div>
+          </div>
 
-            {/* Right Column - Image Preview */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-              <h2 className="text-xl font-bold text-slate-800 mb-6">Profile Image</h2>
-              
-              <div className="space-y-5">
-                {/* Image Preview - Shows new selection, existing image, or placeholder */}
-                <div className="relative">
-                  <div className="aspect-square max-w-xs mx-auto rounded-2xl overflow-hidden bg-slate-100">
-                    {imagePreview ? (
-                      <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
-                    ) : profile?.imagePath ? (
-                      <img src={getImageUrl(profile.imagePath)} alt="Current profile" className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <div className="text-center text-slate-400">
-                          
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <input 
-                    name="image" 
-                    type="file" 
-                    accept="image/*"
-                    className="hidden"
-                    id="profile-image-upload"
-                    onChange={handleImageChange}
-                  />
-                  <label 
-                    htmlFor="profile-image-upload" 
-                    className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium cursor-pointer hover:bg-primary-700 transition-colors shadow-lg"
-                  >
-                    {imagePreview ? "Change Image" : (profile?.imagePath ? "Change Image" : "Upload Image")}
-                  </label>
-                </div>
-
-                {/* Image Status */}
-                <div className="text-center mt-16 text-sm text-slate-500">
+          {/* Right - Image */}
+          <div className="admin-card p-6">
+            <h2 className="admin-section-title mb-6">Profile Image</h2>
+            <div className="space-y-5">
+              <div className="relative">
+                <div className="aspect-square max-w-xs mx-auto rounded-2xl overflow-hidden bg-slate-800 border border-slate-700">
                   {imagePreview ? (
-                    <span className="text-green-600">New image selected</span>
+                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
                   ) : profile?.imagePath ? (
-                    <span>Current image loaded from database</span>
+                    <img src={getImageUrl(profile.imagePath)} alt="Current" className="w-full h-full object-cover" />
                   ) : (
-                    <span>No image uploaded yet</span>
+                    <div className="w-full h-full flex items-center justify-center text-slate-500">
+                      <User width="64" height="64" />
+                    </div>
                   )}
                 </div>
-
-                {/* Remove Image Button */}
-                {(imagePreview || profile?.imagePath) && (
-                  <div className="text-center">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setImagePreview(null);
-                        setRemovedImage(true);
-                        setProfile({ ...profile, imagePath: null });
-                      }}
-                      className="text-red-500 text-sm hover:text-red-700"
-                    >
-                      Remove Image
-                    </button>
-                  </div>
-                )}
-
-                {/* Tips */}
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                  <h4 className="font-semibold text-amber-800 mb-2">Tips for a great photo</h4>
-                  <ul className="text-sm text-amber-700 space-y-1">
-                    <li>• Use a clear, well-lit photo</li>
-                    <li>• Show your face clearly</li>
-                    <li>• Use a square or 1:1 aspect ratio</li>
-                    <li>• Professional but friendly appearance</li>
-                  </ul>
+                <input name="image" type="file" accept="image/*" className="hidden" id="profile-image-upload" onChange={handleImageChange} />
+                <label htmlFor="profile-image-upload" className="absolute bottom-4 left-1/2 -translate-x-1/2 admin-btn-primary text-sm px-4 py-2 cursor-pointer">
+                  {imagePreview || profile?.imagePath ? "Change Image" : "Upload Image"}
+                </label>
+              </div>
+              <div className="text-center text-sm text-slate-400">
+                {imagePreview ? <span className="text-emerald-400">New image selected</span> : profile?.imagePath ? <span>Current image loaded</span> : <span>No image uploaded yet</span>}
+              </div>
+              {(imagePreview || profile?.imagePath) && (
+                <div className="text-center">
+                  <button type="button" onClick={() => { setImagePreview(null); setRemovedImage(true); setProfile({ ...profile, imagePath: null }); }} className="text-sm text-red-400 hover:text-red-300">
+                    Remove Image
+                  </button>
                 </div>
+              )}
+              <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4">
+                <h4 className="font-semibold text-amber-300 mb-2">Tips for a great photo</h4>
+                <ul className="text-sm text-amber-200/70 space-y-1">
+                  <li>Use a clear, well-lit photo</li>
+                  <li>Show your face clearly</li>
+                  <li>Square or 1:1 aspect ratio</li>
+                  <li>Professional but friendly</li>
+                </ul>
               </div>
             </div>
           </div>
-        </form>
-      </div>
-    </div>
+        </div>
+      </form>
+    </>
   );
 }

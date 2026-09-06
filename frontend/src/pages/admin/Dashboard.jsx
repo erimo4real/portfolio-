@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../store/slices/auth.js";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { api } from "../../lib/api.js";
-import NotificationBell from "../../shared/components/NotificationBell.jsx";
+import { AdminHeader, AdminStat } from "../../features/admin/ui/adminKit.jsx";
+import { BarChart, FileText, Star, Code, User, File, MessageSquare, Eye } from "../../shared/components/Icons.jsx";
 
 export default function AdminDashboard() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { admin } = useSelector((state) => state.auth);
   const [stats, setStats] = useState({
     projects: 0,
@@ -41,217 +38,78 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleLogout = async () => {
-    await dispatch(logout());
-    navigate("/admin/login");
-  };
-
-  const sections = [
-    { 
-      title: "Profile", 
-      path: "/admin/profile", 
-      description: "Manage your profile information",
-      color: "#6366f1",
-      bgColor: "#e0e7ff"
-    },
-    { 
-      title: "Skills", 
-      path: "/admin/skills", 
-      description: "Add and organize your skills",
-      color: "#8b5cf6",
-      bgColor: "#ede9fe",
-      count: stats.skills
-    },
-    { 
-      title: "Projects", 
-      path: "/admin/projects", 
-      description: "Showcase your work",
-      color: "#ec4899",
-      bgColor: "#fce7f3",
-      count: stats.projects
-    },
-    { 
-      title: "Blog", 
-      path: "/admin/blogs", 
-      description: "Write and publish blog posts",
-      color: "#f59e0b",
-      bgColor: "#fef3c7",
-      count: stats.blogs
-    },
-    { 
-      title: "Resume", 
-      path: "/admin/resume", 
-      description: "Upload and manage resumes",
-      color: "#10b981",
-      bgColor: "#d1fae5"
-    },
-    { 
-      title: "Contacts", 
-      path: "/admin/contacts", 
-      description: "View and manage contact messages",
-      color: "#3b82f6",
-      bgColor: "#dbeafe",
-      count: stats.messages.total
-    }
+  const quickStats = [
+    { label: "Total Views", value: stats.views, tone: "indigo", icon: <Eye width="24" height="24" /> },
+    { label: "Projects", value: stats.projects, tone: "pink", icon: <Star width="24" height="24" /> },
+    { label: "Blog Posts", value: stats.blogs, tone: "amber", icon: <FileText width="24" height="24" /> },
+    { label: "Messages", value: stats.messages.total, tone: "red", icon: <MessageSquare width="24" height="24" /> }
   ];
 
-  const quickStats = [
-    { label: "Total Views", value: stats.views, color: "#6366f1" },
-    { label: "Projects", value: stats.projects, color: "#ec4899" },
-    { label: "Blog Posts", value: stats.blogs, color: "#f59e0b" },
-    { label: "Messages", value: stats.messages.total, color: "#ef4444" }
+  const sections = [
+    { title: "Profile", path: "/admin/profile", description: "Manage your profile information", tone: "indigo", icon: <User width="24" height="24" />, count: undefined },
+    { title: "Skills", path: "/admin/skills", description: "Add and organize your skills", tone: "violet", icon: <Code width="24" height="24" />, count: stats.skills },
+    { title: "Projects", path: "/admin/projects", description: "Showcase your work", tone: "pink", icon: <Star width="24" height="24" />, count: stats.projects },
+    { title: "Blog", path: "/admin/blogs", description: "Write and publish blog posts", tone: "amber", icon: <FileText width="24" height="24" />, count: stats.blogs },
+    { title: "Resume", path: "/admin/resume", description: "Upload and manage resumes", tone: "emerald", icon: <File width="24" height="24" />, count: undefined },
+    { title: "Contacts", path: "/admin/contacts", description: "View and manage contact messages", tone: "blue", icon: <MessageSquare width="24" height="24" />, count: stats.messages.total }
   ];
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f1f5f9" }}>
-      {/* Header */}
-      <div style={{
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        padding: "clamp(1rem, 3vw, 2rem)"
-      }}>
-        <div style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "1rem",
-          justifyContent: "space-between",
-          alignItems: "center"
-        }}>
-          <div>
-            <h1 style={{ color: "white", fontSize: "clamp(1.25rem, 4vw, 2rem)", margin: 0 }}>
-              Welcome back, {admin?.name || 'Admin'}
-            </h1>
-            <p style={{ color: "rgba(255,255,255,0.8)", marginTop: "0.5rem" }}>
-              Manage your portfolio content
-            </p>
-          </div>
-          <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", alignItems: "center" }}>
-            <NotificationBell />
-            <Link to="/" style={{
-              padding: "0.75rem 1.25rem",
-              background: "rgba(255,255,255,0.2)",
-              borderRadius: "12px",
-              color: "white",
-              textDecoration: "none",
-              fontSize: "0.875rem",
-              whiteSpace: "nowrap"
-            }}>
+    <>
+      <AdminHeader
+        icon={<BarChart width="24" height="24" />}
+        title={`Welcome back, ${admin?.name || "Admin"}`}
+        subtitle="Manage your portfolio content"
+        actions={
+          <>
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-300 cursor-pointer transition-all duration-200 bg-slate-800/80 border border-slate-700 hover:bg-slate-700 hover:text-white"
+            >
               View Site
             </Link>
-            <button onClick={handleLogout} style={{
-              padding: "0.75rem 1.25rem",
-              background: "#ef4444",
-              borderRadius: "12px",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "0.875rem",
-              whiteSpace: "nowrap"
-            }}>
-              Logout
-            </button>
-          </div>
-        </div>
-      </div>
+            <Link
+              to="/admin/contacts"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 cursor-pointer transition-all duration-200 hover:brightness-110"
+            >
+              Messages
+              {stats.messages.unread > 0 && (
+                <span className="px-2 py-0.5 rounded-full text-xs bg-white/20">{stats.messages.unread}</span>
+              )}
+            </Link>
+          </>
+        }
+      />
 
       {/* Quick Stats */}
-      <div style={{ maxWidth: "1200px", margin: "-2rem auto 2rem", padding: "0 2rem", position: "relative", zIndex: 2 }}>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "1.5rem"
-        }}>
-          {quickStats.map((stat) => (
-            <div key={stat.label} style={{
-              background: "white",
-              borderRadius: "16px",
-              padding: "1.5rem",
-              boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-              display: "flex",
-              alignItems: "center",
-              gap: "1rem"
-            }}>
-              <div style={{
-                width: "56px",
-                height: "56px",
-                borderRadius: "14px",
-                background: stat.color + "20",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-              }}></div>
-              <div>
-                <p style={{ color: "#64748b", fontSize: "0.875rem", margin: 0 }}>{stat.label}</p>
-                <p style={{ color: "#0f172a", fontSize: "1.75rem", fontWeight: "800", margin: 0 }}>
-                  {loading ? '...' : stat.value}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {quickStats.map((stat) => (
+          <AdminStat key={stat.label} icon={stat.icon} label={stat.label} value={stat.value} tone={stat.tone} loading={loading} />
+        ))}
       </div>
 
       {/* Management Sections */}
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 2rem 3rem" }}>
-        <h2 style={{ marginBottom: "1.5rem", fontSize: "1.5rem", fontWeight: "700", color: "#0f172a" }}>
-          Management Sections
-        </h2>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "1.5rem"
-        }}>
-          {sections.map((section) => (
-            <Link key={section.path} to={section.path} style={{ textDecoration: "none" }}>
-              <div style={{
-                background: "white",
-                borderRadius: "20px",
-                padding: "1.75rem",
-                cursor: "pointer",
-                transition: "all 0.3s",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.08)"
-              }}>
-                <div style={{
-                  height: "4px",
-                  background: section.color,
-                  borderRadius: "4px",
-                  marginBottom: "1rem"
-                }}></div>
-                <div style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                  marginBottom: "1rem"
-                }}>
-                  <div style={{
-                    width: "60px",
-                    height: "60px",
-                    borderRadius: "16px",
-                    background: section.bgColor
-                  }}></div>
-                  {section.count !== undefined && (
-                    <span style={{
-                      background: section.bgColor,
-                      color: section.color,
-                      padding: "0.375rem 0.875rem",
-                      borderRadius: "20px",
-                      fontSize: "0.875rem",
-                      fontWeight: "700"
-                    }}>
-                      {section.count}
-                    </span>
-                  )}
+      <h2 className="text-lg font-bold text-white mb-4">Management Sections</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {sections.map((section) => (
+          <Link key={section.path} to={section.path} className="no-underline">
+            <div className="admin-card admin-card-hover group p-5 h-full">
+              <div className="flex items-center justify-between mb-4">
+                <div className="admin-chip bg-slate-800 text-slate-300 group-hover:text-white group-hover:bg-slate-700 transition-colors">
+                  {section.icon}
                 </div>
-                <h3 style={{ color: "#0f172a", fontSize: "1.25rem", fontWeight: "700", margin: "0 0 0.5rem" }}>
-                  {section.title}
-                </h3>
-                <p style={{ color: "#64748b", margin: 0 }}>{section.description}</p>
+                {section.count !== undefined && (
+                  <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700">
+                    {section.count}
+                  </span>
+                )}
               </div>
-            </Link>
-          ))}
-        </div>
+              <h3 className="text-base font-bold text-white mb-1">{section.title}</h3>
+              <p className="text-sm text-slate-400">{section.description}</p>
+            </div>
+          </Link>
+        ))}
       </div>
-    </div>
+    </>
   );
 }
