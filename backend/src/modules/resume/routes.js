@@ -25,7 +25,9 @@ const uploadToCloudinary = (fileBuffer, resourceType = 'image') => {
     cloudinary.uploader.upload_stream(
       {
         folder: "portfolio/resumes",
-        resource_type: resourceType
+        resource_type: resourceType,
+        use_filename: true,
+        unique_filename: true
       },
       (error, result) => {
         if (error) reject(error);

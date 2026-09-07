@@ -9,7 +9,50 @@ export default function ResumeAdmin() {
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewResume, setPreviewResume] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [previewError, setPreviewError] = useState(false);
   const fileInputRef = useRef(null);
+  const previewUrlRef = useRef(null);
+
+  function revokePreview() {
+    if (previewUrlRef.current) {
+      URL.revokeObjectURL(previewUrlRef.current);
+      previewUrlRef.current = null;
+    }
+  }
+
+  async function openPreview(r) {
+    setPreviewResume(r);
+    setPreviewUrl(null);
+    setPreviewError(false);
+    if (/\.pdf(\?|$)/i.test(r.path)) {
+      setPreviewUrl(r.path);
+      return;
+    }
+    setPreviewLoading(true);
+    try {
+      const res = await fetch(r.path);
+      if (!res.ok) throw new Error("fetch failed");
+      const buf = await res.arrayBuffer();
+      const blob = new Blob([buf], { type: "application/pdf" });
+      revokePreview();
+      previewUrlRef.current = URL.createObjectURL(blob);
+      setPreviewUrl(previewUrlRef.current);
+    } catch (err) {
+      console.error("Failed to load resume preview", err);
+      setPreviewError(true);
+    } finally {
+      setPreviewLoading(false);
+    }
+  }
+
+  function closePreview() {
+    revokePreview();
+    setPreviewUrl(null);
+    setPreviewError(false);
+    setPreviewResume(null);
+  }
 
   async function load() {
     try {
@@ -50,7 +93,7 @@ export default function ResumeAdmin() {
   async function onDelete(id) {
     if (confirm("Delete this resume?")) {
       await api.delete(`/resume/admin/${id}`);
-      if (previewResume?.id === id) setPreviewResume(null);
+      if (previewResume?.id === id) closePreview();
       await load();
     }
   }
@@ -148,7 +191,7 @@ export default function ResumeAdmin() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <button onClick={() => setPreviewResume(r)} className="admin-btn-ghost admin-btn-sm">Preview</button>
+                    <button onClick={() => openPreview(r)} className="admin-btn-ghost admin-btn-sm">Preview</button>
                     <a href={r.path} target="_blank" rel="noreferrer" className="admin-btn-ghost admin-btn-sm">View</a>
                     {!r.active && <button onClick={() => setActive(r.id)} className="admin-btn-primary admin-btn-sm">Set Active</button>}
                     <button onClick={() => onDelete(r.id)} className="admin-btn-danger admin-btn-sm">Delete</button>
@@ -176,17 +219,29 @@ export default function ResumeAdmin() {
                   </div>
                 </div>
               </div>
-              <button onClick={() => setPreviewResume(null)} className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+              <button onClick={closePreview} className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
                 <X width="24" height="24" />
               </button>
             </div>
             <div className="flex-1 overflow-hidden bg-white">
-              <iframe src={previewResume.path} className="w-full h-full" title="Resume Preview" />
+              {previewLoading ? (
+                <div className="flex flex-col items-center justify-center h-full bg-slate-100">
+                  <div className="w-10 h-10 border-4 border-slate-300 border-t-indigo-600 rounded-full animate-spin"></div>
+                  <div className="text-sm text-slate-500 mt-3">Loading preview...</div>
+                </div>
+              ) : previewError ? (
+                <div className="flex flex-col items-center justify-center h-full bg-slate-100">
+                  <div className="text-amber-600 font-medium">Could not load preview inline</div>
+                  <a href={previewResume.path} target="_blank" rel="noreferrer" className="mt-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm transition-colors">Open PDF in new tab</a>
+                </div>
+              ) : (
+                <iframe src={previewUrl} className="w-full h-full" title="Resume Preview" />
+              )}
             </div>
             <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-700 bg-slate-900">
-              <button onClick={() => setPreviewResume(null)} className="admin-btn-ghost">Close</button>
+              <button onClick={closePreview} className="admin-btn-ghost">Close</button>
               {!previewResume.active && (
-                <button onClick={() => { setActive(previewResume.id); setPreviewResume(null); }} className="admin-btn-primary bg-emerald-600 hover:bg-emerald-500">
+                <button onClick={() => { setActive(previewResume.id); closePreview(); }} className="admin-btn-primary bg-emerald-600 hover:bg-emerald-500">
                   Set as Active
                 </button>
               )}
