@@ -98,6 +98,31 @@ export default function ResumeAdmin() {
     }
   }
 
+  function downloadFileName(r) {
+    const base = (r.version || "resume").replace(/[^\w\- ]+/g, "").trim().replace(/\s+/g, "-") || "resume";
+    return `${base}.pdf`;
+  }
+
+  async function downloadResume(r) {
+    try {
+      const res = await fetch(r.path);
+      if (!res.ok) throw new Error("fetch failed");
+      const buf = await res.arrayBuffer();
+      const blob = new Blob([buf], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = downloadFileName(r);
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Failed to download resume", err);
+      alert("Could not download resume");
+    }
+  }
+
   async function setActive(id) {
     await api.post(`/resume/admin/${id}/activate`);
     await load();
@@ -193,6 +218,7 @@ export default function ResumeAdmin() {
                   <div className="flex items-center gap-2">
                     <button onClick={() => openPreview(r)} className="admin-btn-ghost admin-btn-sm">Preview</button>
                     <a href={r.path} target="_blank" rel="noreferrer" className="admin-btn-ghost admin-btn-sm">View</a>
+                    <button onClick={() => downloadResume(r)} className="admin-btn-ghost admin-btn-sm">Download</button>
                     {!r.active && <button onClick={() => setActive(r.id)} className="admin-btn-primary admin-btn-sm">Set Active</button>}
                     <button onClick={() => onDelete(r.id)} className="admin-btn-danger admin-btn-sm">Delete</button>
                   </div>
@@ -240,6 +266,7 @@ export default function ResumeAdmin() {
             </div>
             <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-700 bg-slate-900">
               <button onClick={closePreview} className="admin-btn-ghost">Close</button>
+              <button onClick={() => downloadResume(previewResume)} className="admin-btn-ghost">Download</button>
               {!previewResume.active && (
                 <button onClick={() => { setActive(previewResume.id); closePreview(); }} className="admin-btn-primary bg-emerald-600 hover:bg-emerald-500">
                   Set as Active

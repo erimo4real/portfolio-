@@ -20,13 +20,13 @@ cloudinary.config({
 });
 
 // Upload to Cloudinary
-const uploadToCloudinary = (fileBuffer, resourceType = 'image') => {
+const uploadToCloudinary = (fileBuffer, resourceType = 'image', filenameOverride = null) => {
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload_stream(
       {
         folder: "portfolio/resumes",
         resource_type: resourceType,
-        use_filename: true,
+        filename_override: filenameOverride,
         unique_filename: true
       },
       (error, result) => {
@@ -78,7 +78,8 @@ resumeRouter.post("/admin", requireAdmin, upload.single("file"), validate(resume
     
     let filePath;
     try {
-      const result = await uploadToCloudinary(req.file.buffer, 'raw');
+      const versionSlug = (version || "resume").trim().replace(/[^\w\- ]+/g, "").replace(/\s+/g, "-").replace(/-+/g, "-") || "resume";
+      const result = await uploadToCloudinary(req.file.buffer, 'raw', versionSlug);
       filePath = result.secure_url;
     } catch (uploadErr) {
       console.error('Cloudinary upload error:', uploadErr);
